@@ -13,6 +13,8 @@ services:
         condition: service_healthy
     ports:
       - "8000:8000"
+    environment:
+      - JWT_PASSPHRASE=1234 
     command: >
       bash -c "
         until pg_isready -h db -U symfony -d symfony_db; do

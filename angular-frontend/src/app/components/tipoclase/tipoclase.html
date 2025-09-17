@@ -1,0 +1,19 @@
+<label for="tipo" class="block mb-2">Selecciona un tipo de clase:</label>
+<select
+  id="tipo"
+  [(ngModel)]="tipoSeleccionado"
+  class="border rounded px-2 py-1 w-full"
+>
+  <option [ngValue]="null" disabled selected>-- Elige un tipo --</option>
+  <option *ngFor="let tipo of tipos" [ngValue]="tipo">
+    {{ tipo.nombre }} ({{ tipo.clases_totales }} clases)
+  </option>
+</select>
+
+<!-- Mostrar datos del tipo seleccionado -->
+<div *ngIf="tipoSeleccionado" class="mt-4 p-4 border rounded bg-gray-100">
+  <h3 class="font-bold mb-2">Tipo seleccionado:</h3>
+  <p><strong>ID:</strong> {{ tipoSeleccionado.id }}</p>
+  <p><strong>Nombre:</strong> {{ tipoSeleccionado.nombre }}</p>
+  <p><strong>Clases totales:</strong> {{ tipoSeleccionado.clases_totales }}</p>
+</div>

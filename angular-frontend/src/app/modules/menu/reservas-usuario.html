@@ -1,0 +1,37 @@
+ <section class="p-1 sm:p-10 bg-yellow-200 ">
+            <ng-container *ngIf="reservasUsuario.length > 0; else noReservasTpl">
+               <h2 class="text-xl sm:text-2xl font-bold text-center mb-3 sm:mb-4">Mis Reservas</h2>
+              <div class="w-full overflow-x-auto">
+                <table class="min-w-full table-fixed text-xs sm:text-sm bg-white rounded-lg overflow-hidden">
+                  <thead>
+                    <tr class="min-w-full table-fixed text-xs sm:text-sm text-left bg-yellow-200">
+                      <th class="pl-4"></th>
+                      <th class="pl-4">Clase</th>
+                      <th class="pl-4">Fecha</th>
+                      <th class="pl-4">Hora</th>
+                      <th class="pl-4">Acciones</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let r of reservasUsuario" class="text-black text-left hover:text-yellow-600 hover:bg-green-200 bg-yellow-200 w-full">         
+                      <td class="pl-4 py-2 whitespace-nowrap">{{ r.usuario_nombre }}</td>
+                      <td class="pl-4 whitespace-nowrap">{{ r.clase_nombre }}</td>
+                      <td class="pl-4 whitespace-nowrap">{{ r.fecha  | date:'dd/MM/yy' }}</td>
+                      <td class="pl-4 whitespace-nowrap">{{ r.hora }}</td>     
+                                <td class="pl-4">
+                                  <div class="flex flex-row gap-2">
+                                    <button (click)="eliminarReservaAlumno(r.reserva_id); $event.stopPropagation()"
+                                            class="px-2 py-1 rounded-full hover:bg-red-600 hover:text-white text-[11px] sm:text-xs">
+                                      ❌
+                                    </button>
+                                  </div>
+                    </td>       
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </ng-container>
+            <ng-template #noReservasTpl>
+              <div class="text-gray-500">Sin datos</div>
+            </ng-template>
+          </section>

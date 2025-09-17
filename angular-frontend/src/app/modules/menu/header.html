@@ -1,0 +1,22 @@
+
+  <header class="sticky top-0 z-50 bg- text-gray-500 backdrop-blur shadow bg-gradient-to-r from-emerald-500 to-blue-60 ">
+    <div class="max-w-7xl mx-auto h-14 px-4 flex items-center justify-between">
+      <!-- Izquierda: título / logo / enlace -->
+      <a routerLink="/menu5/reservasclase" class="font-bold tracking-wide">
+        DelfoServas
+      </a>
+
+      <!-- Derecha: usuario + botón -->
+      <div class="flex items-center gap-3">
+        <span *ngIf="user" class="text-gray-200 text-sm sm:text-base">
+          {{ user.nombre }}
+        </span>
+        <button
+          (click)="logout()"
+          class="bg-red-500 hover:bg-red-600 text-white font-semibold py-1.5 px-3 rounded-lg transition shadow"
+        >
+          Cerrar sesión
+        </button>
+      </div>
+    </div>
+  </header>

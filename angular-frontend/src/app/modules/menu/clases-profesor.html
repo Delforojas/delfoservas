@@ -1,0 +1,88 @@
+<!-- Mis Clases -->
+      <section 
+              class="p-4 sm:p-6 bg-yellow-200 rounded-xl shadow-lg">
+        <h2 class="text-xl sm:text-2xl font-bold text-center mb-3 sm:mb-4">Mis Clases</h2>
+
+        <div class="bg-yellow rounded shadow overflow-x-auto">
+          <table class="min-w-full table-fixed text-xs sm:text-sm">
+            <thead>
+              <tr class="text-black text-left">
+                <th class="pl-4">Clase</th>
+                <th class="pl-4 hidden md:table-cell">Sala</th>
+                <th class="pl-4">Fecha</th>
+                <th class="pl-4">Hora</th>
+                <th class="pl-4 hidden sm:table-cell">Plazas</th>
+                <th class="pl-4"></th>
+              </tr>
+            </thead>
+
+            <!-- Normalizamos padding/altura/linea entre filas -->
+            <tbody class="[&>tr>td]:px-4 [&>tr>td]:py-2 [&>tr]:border-b [&>tr:last-child]:border-0 [&>tr]:align-middle">
+
+              <ng-container *ngFor="let c of clasesprofe">
+                <!-- Fila normal (6 celdas = 6 columnas del thead) -->
+                <tr (click)="toggleTablaAlumnos(c.id)"
+                    class="cursor-pointer text-black text-left hover:bg-green-200 hover:text-yellow-700">
+                  <td class="pl-4">{{ c.nombre }}</td>
+
+                  <!-- Sala (solo MD+) -->
+                  <td class="pl-4 hidden md:table-cell whitespace-nowrap">
+                    {{ c.sala }}
+                  </td>
+
+                  <td class="pl-4 whitespace-nowrap">{{ c.fecha | date:'dd/MM/yyyy' }}</td>
+                  <td class="pl-4 whitespace-nowrap">{{ c.hora  | slice:0:5 }}</td>
+
+                  <!-- Plazas (solo SM+) -->
+                  <td class="pl-4 hidden sm:table-cell whitespace-nowrap">
+                    {{ c.plazas }}
+                  </td>
+
+                  <!-- Acciones -->
+                  <td class="pl-4">
+                    <div class="flex flex-row gap-2">
+                      <button (click)="eliminarClase(c.id); $event.stopPropagation()"
+                              class="px-2 py-1 rounded-full hover:bg-red-600 hover:text-white text-[11px] sm:text-xs">
+                        ❌
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+
+                <!-- Fila expandida (alumnos) -> colspan = 6 -->
+                <tr *ngIf="claseSeleccionadaId === c.id && mostrarTablaAlumnos">
+                  <td [attr.colspan]="6">
+                    <div *ngIf="cargandoAlumnos" class="text-blue-600">Cargando alumnos…</div>
+                    <div *ngIf="errorAlumnos" class="text-red-600">{{ errorAlumnos }}</div>
+
+                    <ng-container *ngIf="!cargandoAlumnos && !errorAlumnos">
+                      <table *ngIf="alumnos.length; else sinAlumnos" class="w-full text-xs bg-yellow-200">
+                        <tbody>
+                          <tr *ngFor="let a of alumnos" class="odd:bg-white even:bg-gray-50">
+                            <td class="p-0">
+                              <div class="flex justify-between items-center bg-black text-left text-yellow-200
+                                          hover:bg-green-300 hover:text-black p-2">
+                                <span class="whitespace-nowrap">{{ a.alumno_nombre }}</span>
+                                <button *ngIf="a.alumno_reservation_id != null"
+                                        (click)="eliminarAlumnoDeClase(a); $event.stopPropagation()"
+                                        [disabled]="eliminandoId === a.alumno_reservation_id"
+                                        class="px-3 py-1 rounded-full text-red-700 hover:bg-red-200 text-xs sm:text-sm">
+                                  {{ eliminandoId === a.alumno_reservation_id ? 'Borrando…' : 'Eliminar' }}
+                                </button>
+                              </div>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                      <ng-template #sinAlumnos>
+                        <div class="text-gray-500 p-2">No hay alumnos en esta clase.</div>
+                      </ng-template>
+                    </ng-container>
+                  </td>
+                </tr>
+              </ng-container>
+
+            </tbody>
+          </table>
+        </div>
+      </section>

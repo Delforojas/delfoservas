@@ -1,0 +1,318 @@
+<!-- Contenedor centrado -->
+<h1 class="text-3xl font-bold text-center my-6">PAGOS</h1>
+
+<div class="flex flex-col items-start gap-4 mb-4"></div>
+<div class="bg-yellow-50 p-6 rounded-xl shadow-md w-30% max-w-4xl">
+
+    <h2 class="text-lg font-semibold mb-4">PAGOS</h2>
+          <div class="flex flex-col items-start gap-2 mb-4 ">
+                      <button type="button"
+                        class="inline-flex items-center gap-2 
+                            bg-green-600 hover:bg-green-700 
+                            text-white font-medium 
+                            px-4 py-2 rounded-lg shadow 
+                           transition"
+                        (click)="toggleFormularioPagos()">
+                         💳 Introducir Pagos
+                      </button>
+                      <button type="button"
+                            class="text-blue-600 hover:underline"
+                            (click)="togglePagosGeneral()">
+                            Pagos General
+                      </button>
+                      <button type="button"
+                            class="text-blue-600 hover:underline"
+                            (click)="togglePagosUsuario()">
+                            Pagos Usuario
+                      </button>
+                      <button type="button"
+                          class="text-blue-600 hover:underline"
+                          (click)="togglePagosMes()">
+                          Pagos Mes
+                      </button>
+                      <button type="button"
+                          class="text-blue-600 hover:underline"
+                          (click)="toggleTipoClase()">
+                          Pagos Tipo Clase 
+                      </button>
+                       <button class="bg-purple-600 text-white px-3 py-1 rounded"
+        (click)="toggleMesyTipoClase()">
+  {{ mostrarMesTipo ? 'Ocultar filtro Mes+Tipo' : 'Abrir filtro Mes+Tipo' }}
+</button>
+<p class="text-xs text-gray-600 mt-1">mostrarMesTipo: {{ mostrarMesTipo }}</p>
+
+
+
+
+                      <!-- Introducir pagos-->
+                      <div *ngIf="mostrarFormularioPagos" class="mt-6 bg-green-600/60 rounded-xl shadow-inner p-4">
+                         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
+                            
+                            <!-- Fecha -->
+                            <div>
+                              <label class="block text-sm font-medium text-gray-700 mb-1">Fecha</label>
+                              <input
+                                type="date"
+                                [(ngModel)]="nuevaWallet.fecha"
+                                class="w-full border rounded-lg p-2 bg-white focus:outline-none focus:ring-2 focus:ring-yellow-300"
+                              />
+                            </div>
+
+                            <!-- Usuario -->
+                            <div>
+                              <label class="block text-sm font-medium text-gray-700 mb-1">Usuario</label>
+                              <select
+                                [(ngModel)]="nuevaWallet.usuario_id"
+                                class="w-full border rounded-lg p-2 bg-white focus:outline-none focus:ring-2 focus:ring-yellow-300"
+                              >
+                                <option [ngValue]="null" disabled>— Selecciona usuario —</option>
+                                <option *ngFor="let u of usuarios" [ngValue]="+u.id">
+                                  {{ u.nombre }} 
+                                </option>
+                              </select>
+                            </div>
+
+                            <!-- Tipo de clase -->
+                            <div>
+                              <label class="block text-sm font-medium text-gray-700 mb-1">Tipo de Clase</label>
+                              <select
+                                [(ngModel)]="nuevaWallet.tipoclase_id"
+                                class="w-full border rounded-lg p-2 bg-white focus:outline-none focus:ring-2 focus:ring-yellow-300"
+                              >
+                                <option [ngValue]="null" disabled>— Selecciona tipo de clase —</option>
+                                <option *ngFor="let t of tiposClase" [ngValue]="+t.id">
+                                  {{ t.nombre }}  Precio :  {{t.precio}} €
+                                </option>
+                              </select>
+                            </div>
+                          </div>
+
+                          <!-- Botón -->
+                          <div class="mt-4 flex justify-end">
+                            <button
+                              (click)="crearWallet()"
+                              class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg shadow transition">
+                              Pagar
+                            </button>
+                          </div>
+                        </div>
+                        <!-- Tabla de wallets General  -->
+                        <div *ngIf="mostrarPagosGeneral" class="mt-6 bg-green-500/60 rounded-xl shadow-inner p-4">
+
+                          <table class="w-full table-auto border-collapse">
+                            <thead>
+                              <tr class="bg-gray-100 text-left">
+                                <th class="border p-2">Wallet ID</th>
+                                <th class="border p-2">Nombre</th>
+                                <th class="border p-2">Email</th>
+                                <th class="border p-2">Tipo Clase</th>
+                                <th class="border p-2">Precio</th>
+                                <th class="border p-2">Mes</th>
+                                <th class="border p-2">Acciones</th>
+                              </tr>
+                            </thead>
+
+                            <tbody *ngIf="walletAll?.length; else noAllData">
+                              <tr *ngFor="let wa of walletAll" class="hover:bg-gray-50">
+                                <td class="border p-2">{{ wa.wallet_id }}</td>
+                                <td class="border p-2">{{ wa.usuario_nombre }}</td>
+                                <td class="border p-2">{{ wa.usuario_email }}</td>
+                                <td class="border p-2">{{ wa.tipoclase_nombre }} ({{ wa.tipoclase_id }})</td>
+                                <td class="border p-2">{{ wa.tipoclase_precio | currency:'EUR':'symbol':'1.0-0' }}</td>
+                                <td class="border p-2">{{ wa.mes }}</td>
+                                <td class="border p-2">
+                                  <button (click)="eliminarWallet(wa.wallet_id)"
+                                          class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">
+                                    Eliminar
+                                  </button>
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                          <ng-template #noAllData>
+                            <tr>
+                              <td class="p-4 text-gray-600 text-center" colspan="7">
+                                No hay Pagos aún.
+                              </td>
+                            </tr>
+                          </ng-template>
+
+                        </div>
+
+                       
+                        <!-- PAGOS USUARIO -->
+                        <!-- Div condicional -->
+                        <div *ngIf="mostrarPagosUsuario" class="mt-6 bg-green-600/60 rounded-xl shadow-inner p-4">
+
+                          <!-- Selector de usuario -->
+                          <label class="block text-sm font-medium text-gray-700 mb-1">Selecciona usuario</label>
+                          <select [(ngModel)]="usuarioSeleccionadoId"
+                                  (change)="onUsuarioSeleccionado()"
+                                  class="w-full border rounded-lg p-2 mb-4 bg-white focus:outline-none focus:ring-2 focus:ring-yellow-300">
+                            <option [ngValue]="null" disabled>— Selecciona usuario —</option>
+                            <option *ngFor="let u of usuarios" [ngValue]="u.id">
+                              {{ u.nombre }}
+                            </option>
+                          </select>
+              
+
+                          <!-- Tabla de pagos del usuario -->
+                          <div *ngIf="walletUser?.length; else noPagos" class="overflow-x-auto">
+                            <h3 class="text-lg font-semibold mb-2">  Pagos de {{ usuarioSeleccionado?.nombre }}</h3>
+                            <table class="w-full table-auto border-collapse">
+                              <thead>
+                                <tr class="bg-gray-100 text-left">
+                                  <th class="border p-2">Wallet ID</th>
+                                  <th class="border p-2">Tipo Clase</th>
+                                  <th class="border p-2">Precio</th>
+                                  <th class="border p-2">Mes</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr *ngFor="let w of walletUser;" class="hover:bg-gray-50">
+                                  <td class="border p-2">{{ w.wallet_id }}</td>
+                                  <td class="border p-2">{{ w.tipoclase_nombre }}</td>
+                                  <td class="border p-2">{{ w.tipoclase_precio }} €</td>
+                                  <td class="border p-2">{{ w.mes }}</td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
+
+                          <ng-template #noPagos>
+                            <div class="p-3 text-gray-500">Este usuario no tiene pagos (wallets).</div>
+                          </ng-template>
+                        </div>
+
+                        <!-- Bloque desplegable -->
+                        <div *ngIf="mostrarPagosMes" class="mt-6 bg-green-600/60 rounded-xl shadow-inner p-4">
+                          <label class="block text-sm font-medium text-gray-700 mb-1">Mes</label>
+                            <select [(ngModel)]="mesSeleccionado" (change)="cargarWalletMes(mesSeleccionado)">
+                              <option value="" disabled>-- Selecciona mes --</option>
+                              <option *ngFor="let m of meses" [value]="m">{{ m }}</option>
+                            </select>
+
+                            <!-- Mostrar wallets del mes -->
+                            <div *ngIf="walletMes.length > 0; else noMes" class="mt-4">
+                              <table class="w-full table-auto border-collapse">
+                                <thead>
+                                  <tr class="bg-gray-100 text-left">
+                                    <th class="border p-2">ID</th>
+                                    <th class="border p-2">Usuario</th>
+                                    <th class="border p-2">Clase</th>
+                                    <th class="border p-2">Fecha</th>
+                                    <th class="border p-2">Mes</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  <tr *ngFor="let w of walletMes">
+                                    <td class="border p-2">{{ w.wallet_id }}</td>
+                                    <td class="border p-2">{{ w.usuario_nombre }}</td>
+                                    <td class="border p-2">{{ w.tipoclase_nombre }}</td>
+                                    <td class="border p-2">{{ w.fecha | date:'dd/MM/yyyy' }}</td>
+                                    <td class="border p-2">{{ w.mes }}</td>
+                                  </tr>
+                                </tbody>
+                              </table>
+                            </div>
+
+                            <ng-template #noMes>
+                              <p class="text-gray-500 mt-4">No hay registros para este mes.</p>
+                            </ng-template>
+                          </div>
+
+
+
+
+
+                        <!-- Pagos por TIPO DE CLASE (mismos estilos que el bloque de Mes) -->
+                          <div *ngIf="mostrarPagosClase" class="mt-6 bg-green-600/60 rounded-xl shadow-inner p-4">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Tipo de clase</label>
+                            <select [(ngModel)]="tipoSeleccionadoId" (change)="onTipoClaseSeleccionado()"
+                                    class="w-full border rounded-lg p-2 bg-white focus:outline-none focus:ring-2 focus:ring-yellow-300">
+                              <option value="" disabled>-- Selecciona tipo de clase --</option>
+                              <option *ngFor="let tc of tiposClase" [value]="tc.id">{{ tc.nombre }}</option>
+                            </select>
+
+                            <!-- Tabla -->
+                            <div *ngIf="tiposClaseFiltrados.length > 0; else noTipoClase" class="mt-4">
+                              <table class="w-full table-auto border-collapse">
+                                <thead>
+                                  <tr class="bg-gray-100 text-left">
+                                    <th class="border p-2">ID</th>
+                                    <th class="border p-2">Usuario</th>
+                                    <th class="border p-2">Clase</th>
+                                    <th class="border p-2">Fecha</th>
+                                    <th class="border p-2">Mes</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  <tr *ngFor="let w of tiposClaseFiltrados" class="hover:bg-gray-50">
+                                    <td class="border p-2">{{ w.wallet_id }}</td>
+                                    <td class="border p-2">{{ w.usuario_nombre }}</td>
+                                    <td class="border p-2">{{ w.tipoclase_nombre }}</td>
+                                    <td class="border p-2">{{ w.fecha | date:'dd/MM/yyyy' }}</td>
+                                    <td class="border p-2">{{ w.mes }}</td>
+                                  </tr>
+                                </tbody>
+                              </table>
+                            </div>
+
+                            <ng-template #noTipoClase>
+                              <div class="p-3 text-gray-500">No hay pagos para este tipo de clase.</div>
+                            </ng-template>
+                          </div>
+
+
+
+
+                          
+                          <div *ngIf="mostrarMesTipo" >
+                            <div class="mt-6 bg-green-600/60 rounded-xl shadow-inner p-4">
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
+
+                                <select [(ngModel)]="mesSeleccionado"
+                                    (ngModelChange)="onFiltrarMesYTipo()"
+                                        class="w-full border rounded-lg p-2 bg-white focus:outline-none focus:ring-2 focus:ring-yellow-300">
+                                  <option [ngValue]="null" disabled>-- Selecciona mes --</option>
+                                  <option *ngFor="let m of meses" [value]="m">{{ m }}</option>
+                                </select>
+
+                                <select [(ngModel)]="tipoSeleccionadoId"
+                                        (ngModelChange)="onFiltrarMesYTipo()"
+                                        class="w-full border rounded-lg p-2 bg-white focus:outline-none focus:ring-2 focus:ring-yellow-300">
+                                  <option [ngValue]="null" disabled>-- Selecciona tipo de clase --</option>
+                                  <option *ngFor="let tc of tiposClase" [value]="tc.id">{{ tc.nombre }}</option>
+                                </select>
+
+                                </div>
+
+                                <!-- Tabla resultados -->
+                                <div *ngIf="walletMesTipo.length > 0; else noData" class="mt-4">
+                                  <table class="w-full table-auto border-collapse">
+                                    <thead>
+                                      <tr class="bg-gray-100 text-left">
+                                        <th class="border p-2">ID</th>
+                                        <th class="border p-2">Usuario</th>
+                                        <th class="border p-2">Clase</th>
+                                        <th class="border p-2">Fecha</th>
+                                        <th class="border p-2">Mes</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                      <tr *ngFor="let w of walletMesTipo" class="hover:bg-gray-50">
+                                        <td class="border p-2">{{ w.wallet_id }}</td>
+                                        <td class="border p-2">{{ w.usuario_nombre }}</td>
+                                        <td class="border p-2">{{ w.tipoclase_nombre }}</td>
+                                        <td class="border p-2">{{ w.fecha | date:'dd/MM/yyyy' }}</td>
+                                        <td class="border p-2">{{ w.mes }}</td>
+                                      </tr>
+                                    </tbody>
+                                  </table>
+                                </div>
+
+                                <ng-template #noData>
+                                  <div class="p-3 text-gray-600">Selecciona mes y tipo de clase para ver resultados.</div>
+                                </ng-template>
+                              </div>
+

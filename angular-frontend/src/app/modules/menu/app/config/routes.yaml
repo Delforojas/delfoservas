@@ -1,0 +1,11 @@
+controllers:
+  resource:
+    path: ../src/Controller/
+    namespace: App\Controller
+  type: attribute
+
+# Ruta sin controlador, gestionada por el firewall json_login
+login:
+  path: /api/login
+  controller: null
+  methods: [POST]

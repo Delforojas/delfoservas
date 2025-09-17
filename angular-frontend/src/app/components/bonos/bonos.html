@@ -1,0 +1,192 @@
+<div class="p-4">
+  <h2 class="text-2xl font-bold mb-4">Gestión de Bonos</h2>
+
+  <div *ngIf="error" class="text-red-600 mb-4">{{ error }}</div>
+  <div *ngIf="cargando" class="text-blue-500 mb-4">Cargando bonos...</div>
+
+  <!-- Formulario de creación -->
+  <div class="mb-6 p-4 bg-gray-100 rounded shadow">
+    <h3 class="font-semibold mb-3">Nuevo Bono</h3>
+    <div class="grid grid-cols-2 gap-4">
+      <input
+        type="date"
+        [(ngModel)]="nuevo.fecha"
+        name="fechaNuevo"
+        class="border p-2 rounded"
+        required
+      />
+
+      <input
+        [(ngModel)]="nuevo.estado"
+        name="estadoNuevo"
+        placeholder="Estado (activo/usado/expirado)"
+        class="border p-2 rounded"
+        required
+      />
+
+      <input
+        type="number"
+        [ngModel]="nuevo.tipoclase_id"
+        (ngModelChange)="nuevo.tipoclase_id = $event === '' ? 0 : +$event"
+        name="tipoclaseNuevo"
+        placeholder="TipoClase ID"
+        class="border p-2 rounded"
+        min="1"
+        step="1"
+        required
+      />
+
+      <input
+        type="number"
+        [ngModel]="nuevo.wallet_id"
+        (ngModelChange)="nuevo.wallet_id = $event === '' ? 0 : +$event"
+        name="walletNuevo"
+        placeholder="Wallet ID"
+        class="border p-2 rounded"
+        min="1"
+        step="1"
+        required
+      />
+
+      <input
+        type="number"
+        [ngModel]="nuevo.clases_totales"
+        (ngModelChange)="nuevo.clases_totales = $event === '' ? 0 : +$event"
+        name="totalesNuevo"
+        placeholder="Clases totales"
+        class="border p-2 rounded"
+        min="1"
+        step="1"
+        required
+      />
+
+      <input
+        type="number"
+        [ngModel]="nuevo.clases_restantes"
+        (ngModelChange)="nuevo.clases_restantes = $event === '' ? 0 : +$event"
+        name="restantesNuevo"
+        placeholder="Clases restantes"
+        class="border p-2 rounded"
+        min="0"
+        step="1"
+        required
+      />
+    </div>
+
+    <button (click)="crear()" class="mt-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+      Crear Bono
+    </button>
+
+    <!-- Debug opcional -->
+    <!-- <pre class="mt-2 text-xs">{{ nuevo | json }}</pre> -->
+  </div>
+
+  <!-- Tabla -->
+  <div *ngIf="bonos.length > 0" class="overflow-x-auto">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="bg-gray-200">
+          <th class="border p-2">ID</th>
+          <th class="border p-2">Fecha</th>
+          <th class="border p-2">Estado</th>
+          <th class="border p-2">TipoClase</th>
+          <th class="border p-2">Wallet</th>
+          <th class="border p-2">Totales</th>
+          <th class="border p-2">Restantes</th>
+          <th class="border p-2">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let b of bonos">
+          <td class="border p-2">{{ b.id }}</td>
+
+          <!-- Fila en modo edición -->
+          <ng-container *ngIf="editando?.id === b.id; else vista">
+            <td class="border p-2">
+              <input
+                type="date"
+                [(ngModel)]="editando!.fecha"
+                name="fechaEdit{{b.id}}"
+                class="border p-1 rounded w-full"
+              />
+            </td>
+            <td class="border p-2">
+              <input
+                [(ngModel)]="editando!.estado"
+                name="estadoEdit{{b.id}}"
+                class="border p-1 rounded w-full"
+              />
+            </td>
+            <td class="border p-2">
+              <input
+                type="number"
+                [ngModel]="editando!.tipoclase_id"
+                (ngModelChange)="editando!.tipoclase_id = $event === '' ? 0 : +$event"
+                name="tipoEdit{{b.id}}"
+                class="border p-1 rounded w-full"
+                min="1"
+                step="1"
+              />
+            </td>
+            <td class="border p-2">
+              <input
+                type="number"
+                [ngModel]="editando!.wallet_id"
+                (ngModelChange)="editando!.wallet_id = $event === '' ? 0 : +$event"
+                name="walletEdit{{b.id}}"
+                class="border p-1 rounded w-full"
+                min="1"
+                step="1"
+              />
+            </td>
+            <td class="border p-2">
+              <input
+                type="number"
+                [ngModel]="editando!.clases_totales"
+                (ngModelChange)="editando!.clases_totales = $event === '' ? 0 : +$event"
+                name="totalesEdit{{b.id}}"
+                class="border p-1 rounded w-full"
+                min="1"
+                step="1"
+              />
+            </td>
+            <td class="border p-2">
+              <input
+                type="number"
+                [ngModel]="editando!.clases_restantes"
+                (ngModelChange)="editando!.clases_restantes = $event === '' ? 0 : +$event"
+                name="restantesEdit{{b.id}}"
+                class="border p-1 rounded w-full"
+                min="0"
+                step="1"
+              />
+            </td>
+            <td class="border p-2 space-x-2">
+              <button (click)="guardarEdicion()" class="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700">Guardar</button>
+              <button (click)="cancelarEdicion()" class="bg-gray-500 text-white px-3 py-1 rounded hover:bg-gray-600">Cancelar</button>
+            </td>
+          </ng-container>
+
+          <!-- Vista normal -->
+          <ng-template #vista>
+            <td class="border p-2">{{ b.fecha }}</td>
+            <td class="border p-2">{{ b.estado }}</td>
+            <td class="border p-2">{{ b.tipoclase_id }}</td>
+            <td class="border p-2">{{ b.wallet_id }}</td>
+            <td class="border p-2">{{ b.clases_totales }}</td>
+            <td class="border p-2">{{ b.clases_restantes }}</td>
+            <td class="border p-2 space-x-2">
+              <button (click)="empezarEdicion(b)" class="bg-amber-500 text-white px-3 py-1 rounded hover:bg-amber-600">Editar</button>
+              <button (click)="eliminar(b.id)" class="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700">Eliminar</button>
+            </td>
+          </ng-template>
+
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div *ngIf="!cargando && bonos.length === 0" class="text-gray-500 mt-4">
+    No hay bonos.
+  </div>
+</div>

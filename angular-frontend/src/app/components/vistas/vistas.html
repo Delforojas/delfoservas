@@ -1,0 +1,304 @@
+<div class="p-4 space-y-6">
+  <h2 class="text-2xl font-bold">Vistas (debug rápido)</h2>
+
+  <div *ngIf="error" class="text-red-600">{{ error }}</div>
+  <div *ngIf="cargando" class="text-blue-600">Cargando...</div>
+
+  <!-- Bonos general -->
+  <div>
+        <button (click)="loadBonosGeneral()" class="bg-indigo-600 text-white px-3 py-1 rounded">Bonos general</button>
+
+        <div *ngIf="mostrarTablaBonosGeneral && bonosGeneral.length > 0">
+            <h3 class="font-semibold mb-2">Bonos (general)</h3>
+            <table class="min-w-full border-collapse border border-gray-300 text-sm">
+                <thead>
+                <tr class="bg-gray-200">
+                    <th class="border p-2">Usuario ID</th>
+                    <th class="border p-2">Cliente</th>
+                    <th class="border p-2">Tipo clase</th>
+                    <th class="border p-2">Total</th>
+                    <th class="border p-2">Restantes</th>
+                    <th class="border p-2">Estado</th>
+                    <th class="border p-2">Mes</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let b of bonosGeneral">
+                    <td class="border p-2">{{ b.usuario_id }}</td>
+                    <td class="border p-2">{{ b.cliente }}</td>
+                    <td class="border p-2">{{ b.tipo_clase }}</td>
+                    <td class="border p-2">{{ b.total_clases }}</td>
+                    <td class="border p-2">{{ b.clases_restantes }}</td>
+                    <td class="border p-2">{{ b.estado }}</td>
+                    <td class="border p-2">{{ b.mes }}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+       <!-- opcional: mensaje cuando no hay datos -->
+        <ng-template #noBonosGen>
+        <div class="text-gray-500">Sin datos</div>
+        </ng-template>
+     </div>
+
+                    <!-- Controles usuario -->
+
+                        <div class="flex items-center gap-3">
+                        <label class="w-28">Usuario</label>
+
+                        <select [(ngModel)]="usuarioId" class="border p-2 rounded w-60">
+                            <option [ngValue]="null" disabled>— Selecciona usuario —</option>
+                            <option *ngFor="let u of usuarios" [ngValue]="u.id">
+                            {{ u.nombre }} (ID: {{ u.id }})
+                            </option>
+                        </select>
+
+                        <span class="text-sm text-gray-600 ml-2">
+                            ID seleccionado: {{ usuarioId ?? '—' }}
+                        </span>
+
+                        <button (click)="loadBonosPorUsuario()" class="bg-blue-600 text-white px-3 py-1 rounded">Bonos usuario</button>
+                        <button (click)="loadClasesUsuario()" class="bg-blue-600 text-white px-3 py-1 rounded">Clases usuario</button>
+                        <button (click)="loadReservasUsuario()" class="bg-blue-600 text-white px-3 py-1 rounded">Reservas usuario</button>
+                        <button (click)="loadWalletUsuario()" class="bg-blue-600 text-white px-3 py-1 rounded">Wallet usuario</button>
+                        <button (click)="loadBonosVistaUsuario()" class="bg-blue-600 text-white px-3 py-1 rounded">Bonos vista usuario</button>
+                        </div>
+
+                        <!--Bonos por usuario -->
+                        <div *ngIf="mostrarTablaBonosUsuario">
+                        <ng-container *ngIf="bonosDeUsuario.length > 0; else noBonosUsuario">
+                            <h3 class="font-semibold mb-2">Bonos por usuario</h3>
+                            <table class="min-w-full border-collapse border border-gray-300">
+                            <thead>
+                                <tr class="bg-gray-200">
+                                <th class="border p-2">Usuario ID</th>
+                                <th class="border p-2">Cliente</th>
+                                <th class="border p-2">Total clases</th>
+                                <th class="border p-2">Clases restantes</th>
+                                <th class="border p-2">Estado</th>
+                                <th class="border p-2">Mes</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let bono of bonosDeUsuario">
+                                <td class="border p-2">{{ bono.usuario_id }}</td>
+                                <td class="border p-2">{{ bono.cliente }}</td>
+                                <td class="border p-2">{{ bono.total_clases }}</td>
+                                <td class="border p-2">{{ bono.clases_restantes }}</td>
+                                <td class="border p-2">{{ bono.estado }}</td>
+                                <td class="border p-2">{{ bono.mes }}</td>
+                                </tr>
+                            </tbody>
+                            </table>
+                        </ng-container>
+                        <ng-template #noBonosUsuario><div class="text-gray-500">Sin datos</div></ng-template>
+                        </div>
+
+                        
+                        <div  *ngIf="mostrarTablaClasesUsuario">
+                        <h3 class="font-semibold mb-2">Clases usuario</h3>
+                        <ng-container *ngIf="clasesUsuario.length > 0; else noClasesUsuario">
+                            <table class="min-w-full border-collapse border border-gray-300">
+                            <thead>
+                                <tr class="bg-gray-200">
+                                <th class="border p-2">Clase ID</th>
+                                <th class="border p-2">Nombre</th>
+                                <th class="border p-2">Fecha</th>
+                                <th class="border p-2">Hora</th>
+                                <th class="border p-2">Profesor</th>
+                                <th class="border p-2">Aforo</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let clase of clasesUsuario">
+                                <td class="border p-2">{{ clase.clase_id }}</td>
+                                <td class="border p-2">{{ clase.clase_nombre }}</td>
+                                <td class="border p-2">{{ clase.fecha }}</td>
+                                <td class="border p-2">{{ clase.hora }}</td>
+                                <td class="border p-2">{{ clase.profesor }}</td>
+                                <td class="border p-2">{{ clase.aforo_clase }}</td>
+                                </tr>
+                            </tbody>
+                            </table>
+                        </ng-container>
+                        </div>
+                        <ng-template #noClasesUsuario><div class="text-gray-500">Sin datos</div></ng-template>
+                        
+
+                        <!-- Reservas usuario -->
+                        <div *ngIf="mostrarTablaReservasUsuario">
+                        <h3 class="font-semibold mb-2">Reservas usuario</h3>
+                        <ng-container *ngIf="reservasUsuario.length > 0; else noReservasUsuario">
+                            <table class="min-w-full border-collapse border border-gray-300">
+                            <thead>
+                                <tr class="bg-gray-200">
+                                <th class="border p-2">ID Usuario</th>
+                                <th class="border p-2">Usuario</th>
+                                <th class="border p-2">Clase ID</th>
+                                <th class="border p-2">Clase</th>
+                                <th class="border p-2">Fecha</th>
+                                <th class="border p-2">Hora</th>
+                                <th class="border p-2">Reserva ID</th>
+                                <th class="border p-2">Bono ID</th>
+                                <th class="border p-2">Bono Estado</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let r of reservasUsuario">
+                                <td class="border p-2">{{ r.id_usuario }}</td>
+                                <td class="border p-2">{{ r.usuario_nombre }}</td>
+                                <td class="border p-2">{{ r.clase_id }}</td>
+                                <td class="border p-2">{{ r.clase_nombre }}</td>
+                                <td class="border p-2">{{ r.fecha }}</td>
+                                <td class="border p-2">{{ r.hora }}</td>
+                                <td class="border p-2">{{ r.reserva_id }}</td>
+                                <td class="border p-2">{{ r.bono_id }}</td>
+                                <td class="border p-2">{{ r.bono_estado }}</td>
+                                </tr>
+                            </tbody>
+                            </table>
+                        </ng-container>
+                        <ng-template #noReservasUsuario><div class="text-gray-500">Sin datos</div></ng-template>
+                        </div>
+
+                        <!-- Wallet usuario -->
+                        <div  *ngIf="mostrarTablaWalletUsuario">
+                        <h3 class="font-semibold mb-2">Wallet usuario</h3>
+                        <ng-container *ngIf="walletUsuario.length > 0; else noWalletUsuario">
+                            <table class="min-w-full border-collapse border border-gray-300">
+                            <thead>
+                                <tr class="bg-gray-200">
+                                <th class="border p-2">Wallet ID</th>
+                                <th class="border p-2">Usuario</th>
+                                <th class="border p-2">Email</th>
+                                <th class="border p-2">Tipo clase</th>
+                                <th class="border p-2">Precio</th>
+                                <th class="border p-2">Mes</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let w of walletUsuario">
+                                <td class="border p-2">{{ w.wallet_id }}</td>
+                                <td class="border p-2">{{ w.usuario_nombre }} (ID: {{ w.id_usuario }})</td>
+                                <td class="border p-2">{{ w.usuario_email }}</td>
+                                <td class="border p-2">{{ w.tipoclase_nombre }}</td>
+                                <td class="border p-2">{{ w.tipoclase_precio }}</td>
+                                <td class="border p-2">{{ w.mes }}</td>
+                                </tr>
+                            </tbody>
+                            </table>
+                        </ng-container>
+                        <ng-template #noWalletUsuario><div class="text-gray-500">Sin datos</div></ng-template>
+                        </div>
+
+                        <!-- Bonos vista usuario -->
+                        <div *ngIf="mostrarTablaBonosVistaUsuario">
+                        <h3 class="font-semibold mb-2">Bonos vista usuario</h3>
+                        <ng-container *ngIf="bonosUsuarioVista.length > 0; else noBonosVista">
+                            <table class="min-w-full border-collapse border border-gray-300">
+                            <thead>
+                                <tr class="bg-gray-200">
+                                <th class="border p-2">Bono ID</th>
+                                <th class="border p-2">Usuario</th>
+                                <th class="border p-2">Email</th>
+                                <th class="border p-2">Tipo clase</th>
+                                <th class="border p-2">Totales</th>
+                                <th class="border p-2">Restantes</th>
+                                <th class="border p-2">Estado</th>
+                                <th class="border p-2">Mes</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let b of bonosUsuarioVista">
+                                <td class="border p-2">{{ b.bono_id }}</td>
+                                <td class="border p-2">{{ b.usuario_nombre }} (ID: {{ b.id_usuario }})</td>
+                                <td class="border p-2">{{ b.usuario_email }}</td>
+                                <td class="border p-2">{{ b.tipo_clase }}</td>
+                                <td class="border p-2">{{ b.clases_totales }}</td>
+                                <td class="border p-2">{{ b.clases_restantes }}</td>
+                                <td class="border p-2">{{ b.estado }}</td>
+                                <td class="border p-2">{{ b.mes }}</td>
+                                </tr>
+                            </tbody>
+                            </table>
+                        </ng-container>
+                        <ng-template #noBonosVista><div class="text-gray-500">Sin datos</div></ng-template>
+                        </div>
+                    </div> 
+                    <div>
+                        <!-- Controles clase -->
+
+                        <div class="flex items-center gap-3">
+                        <label class="w-28">Clase</label>
+                        <select [(ngModel)]="claseId" class="border p-2 rounded w-60">
+                            <option [ngValue]="null" disabled>— Selecciona clase —</option>
+                            <option *ngFor="let c of clases" [ngValue]="c.id">
+                            {{ c.nombre }} (ID: {{ c.id }})
+                            </option>
+                        </select>
+                        <span class="text-sm text-gray-600 ml-2">ID seleccionado: {{ claseId ?? '—' }}</span>
+
+                        <button (click)="loadAlumnosClase()" class="bg-emerald-600 text-white px-3 py-1 rounded">Alumnos clase</button>
+                        <button (click)="loadTotalAlumnosClase()" class="bg-teal-700 text-white px-3 py-1 rounded">Total alumnos</button>
+                        </div>
+                    
+
+                            <!-- Alumnos clase -->
+                            <div *ngIf="alumnosClase.length > 0">
+                                <h3 class="font-semibold mb-2">Alumnos de la clase</h3>
+                                <table class="min-w-full border-collapse border border-gray-300 text-sm">
+                                <thead>
+                                    <tr class="bg-gray-200">
+                                    <th class="border p-2">Clase ID</th>
+                                    <th class="border p-2">Clase</th>
+                                    <th class="border p-2">Fecha</th>
+                                    <th class="border p-2">Hora</th>
+                                    <th class="border p-2">Tipo de clase</th>
+                                    <th class="border p-2">Alumno ID</th>
+                                    <th class="border p-2">Alumno</th>
+                                    <th class="border p-2">Email</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let a of alumnosClase">
+  <td class="border p-2">{{ a.clase_id }}</td>
+  <td class="border p-2">{{ a.clase_nombre }}</td>
+  <td class="border p-2">{{ a.fecha }}</td>
+  <td class="border p-2">{{ a.hora }}</td>
+  <td class="border p-2">{{ a.tipo_clase }}</td>
+  <td class="border p-2">{{ a.alumno_id }}</td>
+  <td class="border p-2">{{ a.alumno_nombre }}</td>
+  <td class="border p-2">{{ a.alumno_email }}</td>
+</tr>
+                                </tbody>
+                                </table>
+                            </div>
+
+                            <!-- Total alumnos -->
+                            <div  *ngIf="mostrarTablaTotalAlumnosClase && totalAlumnosClase.length > 0">
+                                <h3 class="font-semibold mb-2">Total alumnos (clase)</h3>
+                                <table class="min-w-full border-collapse border border-gray-300 text-sm">
+                                <thead>
+                                    <tr class="bg-gray-200">
+                                    <th class="border p-2">Clase ID</th>
+                                    <th class="border p-2">Clase</th>
+                                    <th class="border p-2">Fecha</th>
+                                    <th class="border p-2">Hora</th>
+                                    <th class="border p-2">Tipo de clase</th>
+                                    <th class="border p-2">Total alumnos</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let t of totalAlumnosClase">
+                                    <td class="border p-2">{{ t.clase_id }}</td>
+                                    <td class="border p-2">{{ t.clase }}</td>
+                                    <td class="border p-2">{{ t.fecha }}</td>
+                                    <td class="border p-2">{{ t.hora }}</td>
+                                    <td class="border p-2">{{ t.tipoclase }}</td>
+                                    <td class="border p-2">{{ t.total_alumnos }}</td>
+                                    </tr>
+                                </tbody>
+                                </table>
+                    
+</div>

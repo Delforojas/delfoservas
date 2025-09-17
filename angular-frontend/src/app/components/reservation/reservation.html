@@ -1,0 +1,114 @@
+<div class="min-h-screen bg-gray-50 flex justify-center items-center">
+  <!-- Contenedor centrado y con ancho máximo -->
+  <div class="mx-auto max-w-5xl px-4 py-10 space-y-8">
+
+    <!-- Formulario Crear Reserva -->
+    <div class="bg-red-300 rounded-xl shadow-lg p-6">
+      <h2 class="text-2xl font-bold mb-4 text-center">Crear Reserva</h2>
+
+      <div class="space-y-3">
+        <!-- 1) Usuarios -->
+        <select
+          class="w-full border px-3 py-2 rounded"
+          [(ngModel)]="nuevaReserva.usuario_id"
+          (ngModelChange)="onUsuarioChange($event)"
+          name="usuario"
+          required
+        >
+          <option [ngValue]="null" disabled>-- Selecciona usuario --</option>
+          <option *ngFor="let u of usuarios" [ngValue]="u.id">
+            {{ u.nombre || u.email }}
+          </option>
+        </select>
+
+        <!-- 2) Clases -->
+        <select
+          class="w-full border px-3 py-2 rounded"
+          [(ngModel)]="nuevaReserva.clase_id"
+          name="clase"
+          required
+        >
+          <option [ngValue]="null" disabled>-- Selecciona clase --</option>
+          <option *ngFor="let c of clases" [ngValue]="c.id">
+            {{ c.nombre }} · {{ c.fecha }} {{ c.hora }} · Sala {{ c.room }}
+          </option>
+        </select>
+
+        <!-- 3) Bonos activos del usuario -->
+        <select
+          class="w-full border px-3 py-2 rounded"
+          [(ngModel)]="nuevaReserva.bono_id"
+          (ngModelChange)="onBonoChange($event)"
+          name="bono"
+          [disabled]="!bonosActivosUsuario.length"
+          required
+        >
+          <option [ngValue]="null" disabled>-- Selecciona bono activo --</option>
+          <option *ngFor="let b of bonosActivosUsuario" [ngValue]="b.bono_id">
+            {{ b.nombre_tipoclase }} · {{ b.mes}}
+          </option>
+        </select>
+
+        <!-- Botón crear -->
+        <button
+          class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
+          (click)="crearReserva()"
+        >
+          Crear reserva
+        </button>
+      </div>
+    </div>
+
+    <!-- Info del bono seleccionado -->
+    <div *ngIf="bonoActivoSeleccionado" 
+     class="mt-4 p-3 rounded-lg bg-blue-50 border border-blue-200 text-blue-800 text-sm font-medium shadow-sm">
+  <p class="mb-1">
+    <span class="font-bold">📅 Mes:</span> {{ bonoActivoSeleccionado.mes }}
+  </p>
+  <p>
+    <span class="font-bold">🎟️ Clases Restantes:</span> 
+    {{ bonoActivoSeleccionado.clases_restantes }}/{{ bonoActivoSeleccionado.clases_totales }}
+  </p>
+  <p>
+  <span class="font-bold">
+    <span *ngIf="bonoActivoSeleccionado.estado === 'activo'">🟢</span>
+    <span *ngIf="bonoActivoSeleccionado.estado !== 'activo'">🔴</span>
+    Estado:
+  </span>
+  {{ bonoActivoSeleccionado.estado }}
+</p>
+</div>
+
+    <!-- Lista de reservas 
+    <div *ngIf="reservas.length > 0" class="overflow-x-auto">
+      <table class="border-collapse text-sm mx-auto">
+        <thead>
+          <tr class="bg-gray-100">
+            <th class="border px-4 py-2">ID</th>
+            <th class="border px-4 py-2">Usuario ID</th>
+            <th class="border px-4 py-2">Clase ID</th>
+            <th class="border px-4 py-2">Bono ID</th>
+            <th class="border px-4 py-2">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let r of reservas">
+            <td class="border px-4 py-2">{{ r.id }}</td>
+            <td class="border px-4 py-2">{{ r.usuario_id }}</td>
+            <td class="border px-4 py-2">{{ r.clase_id }}</td>
+            <td class="border px-4 py-2">{{ r.bono_id }}</td>
+            <td class="border px-4 py-2">
+              <button (click)="eliminarReserva(r.id)" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded">
+                Eliminar
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>-->
+
+    <!-- Mensajes -->
+    <div *ngIf="error" class="text-red-500 mt-4">{{ error }}</div>
+    <div *ngIf="cargando" class="text-blue-500 mt-4">Cargando...</div>
+  </div>
+</div>

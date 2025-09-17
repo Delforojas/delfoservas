@@ -1,0 +1,54 @@
+<div class="flex items-center justify-center min-h-screen bg-gray-600">
+  <div class="bg-white shadow-lg rounded-lg p-8 w-full max-w-md">
+    <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">Registro</h2>
+
+    <form [formGroup]="form" (ngSubmit)="submit()" class="space-y-4">
+      <!-- Nombre -->
+      <div>
+        <input 
+          formControlName="nombre" 
+          placeholder="Nombre"
+          type="text"
+          class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+        >
+      </div>
+
+      <!-- Email -->
+      <div>
+        <input 
+          formControlName="email" 
+          placeholder="Email" 
+          type="email"
+          class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+        >
+      </div>
+
+      <!-- Contraseña -->
+      <div>
+        <input 
+          formControlName="password" 
+          type="password" 
+          placeholder="Contraseña"
+          class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+        >
+      </div>
+
+      <!-- Botón de registro -->
+      <button 
+        type="submit" 
+        class="w-full bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-lg transition duration-200"
+      >
+        Registrarse
+      </button>
+
+      <!-- Botón para volver al login -->
+      <button 
+        type="button" 
+        routerLink="/login"
+        class="w-full bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded-lg transition duration-200"
+      >
+        Volver a Login
+      </button>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,45 @@
+<div class="p-4">
+  <h2 class="text-xl font-semibold mb-4">Salas</h2>
+
+  <!-- Crear nueva sala -->
+  <div class="mb-4">
+    <input [(ngModel)]="nuevaDescripcion" placeholder="Descripción" class="border p-2 mr-2" />
+    <input type="number" [(ngModel)]="nuevoAforo" placeholder="Aforo" class="border p-2 mr-2 w-24" />
+    <button (click)="crearRoom()" class="bg-green-600 text-white px-4 py-2 rounded">Crear</button>
+  </div>
+
+  <!-- Mensajes -->
+  <div *ngIf="error" class="text-red-500">{{ error }}</div>
+  <div *ngIf="cargando">Cargando salas...</div>
+
+  <!-- Tabla de salas -->
+  <table class="w-full border-collapse border">
+    <thead>
+      <tr>
+        <th class="border px-4 py-2">ID</th>
+        <th class="border px-4 py-2">Descripción</th>
+        <th class="border px-4 py-2">Aforo</th>
+        <th class="border px-4 py-2">Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let room of rooms">
+        <td class="border px-4 py-2">{{ room.id }}</td>
+        <td class="border px-4 py-2">{{ room.descripcion }}</td>
+        <td class="border px-4 py-2">{{ room.aforo_sala }}</td>
+        <td class="border px-4 py-2">
+          <button (click)="seleccionarRoom(room)" class="text-blue-600 mr-2">Ver</button>
+          <button (click)="eliminarRoom(room.id)" class="text-red-600">Eliminar</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Detalle -->
+  <div *ngIf="roomSeleccionada" class="mt-4 p-4 bg-gray-100 border rounded">
+    <h3 class="font-bold">Sala seleccionada</h3>
+    <p><strong>ID:</strong> {{ roomSeleccionada.id }}</p>
+    <p><strong>Descripción:</strong> {{ roomSeleccionada.descripcion }}</p>
+    <p><strong>Aforo:</strong> {{ roomSeleccionada.aforo_sala }}</p>
+  </div>
+</div>

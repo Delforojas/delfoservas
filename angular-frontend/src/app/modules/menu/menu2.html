@@ -1,0 +1,131 @@
+<!-- En Angular, estas fuentes mejor en index.html -->
+<head>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Fjalla+One&family=Shadows+Into+Light&family=Share+Tech&display=swap');
+    body { font-family: 'Share Tech', sans-serif; }
+    h1, h2, h3, a, tr, td { font-family: 'Fjalla One', sans-serif; }
+  </style>
+</head>
+
+<h1 class="text-2xl sm:text-3xl font-bold text-center my-4 sm:my-6">Mi Perfilr</h1>
+
+<div class="flex flex-col md:flex-row min-h-screen bg-black">
+  <aside class="w-full md:w-[15%] bg-gray-900 text-white p-4 md:p-6">
+    <label class="font-semibold block mb-2">
+            Alumno: {{ usuarios?.nombre }} ({{ usuarios?.rol }})
+          </label>
+          <button 
+    (click)="toggleAside()"
+    class="text-lg sm:text-xl font-bold mb-4 md:mb-6">Mi Perfil</button>
+    <ul *ngIf="mostrarAside" class="space-y-2 sm:space-y-10">
+      <li><a (click)="loadBonosPorUsuario()" class="hover:text-yellow-400 cursor-pointer">Mis Bonos</a></li>
+      <li><a (click)="loadReservasUsuario()" class="hover:text-yellow-400 cursor-pointer">Mis Reservas</a></li>
+      <li><a (click)="loadWalletUsuario()" class="hover:text-yellow-400 cursor-pointer">Mis Pagos</a></li>
+    </ul>
+   </aside>
+
+  <!-- Main -->
+  <main class="flex-1 sm:p-3 flex justify-center">
+    <div class="w-full">
+          <!-- Bonos -->
+          <section *ngIf="mostrarTablaBonosUsuario" class="p-1 sm:p-10 bg-yellow-200 ">
+            <ng-container *ngIf="bonosDeUsuario.length > 0; else noBonosTpl">
+              <h2 class="text-xl sm:text-2xl font-bold text-center mb-3 sm:mb-4">Mis Bonos</h2>
+              <div class="w-full overflow-x-auto">
+                <table class="min-w-full table-fixed text-xs sm:text-sm bg-white rounded-lg overflow-hidden">
+                  <thead>
+                    <tr class="min-w-full table-fixed text-xs sm:text-sm text-left">
+                      <th class="pl-4">Usuario ID</th>
+                      <th class="pl-4">Cliente</th>
+                      <th class="pl-4">Total clases</th>
+                      <th class="pl-4">Clases restantes</th>
+                      <th class="pl-4">Estado</th>
+                      <th class="pl-4">Mes</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let bono of bonosDeUsuario" class="text-black text-left hover:text-yellow-600 hover:bg-green-400 bg-yellow-200 w-full">
+                      <td class="pl-4 whitespace-nowrap">{{ bono.usuario_id }}</td>
+                      <td class="pl-4 whitespace-nowrap">{{ bono.cliente }}</td>
+                      <td class="pl-4 whitespace-nowrap">{{ bono.total_clases }}</td>
+                      <td class="pl-4 whitespace-nowrap">{{ bono.clases_restantes }}</td>
+                      <td class="pl-4 whitespace-nowrap">{{ bono.estado }}</td>
+                      <td class="pl-4 whitespace-nowrap">{{ bono.mes }}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </ng-container>
+            <ng-template #noBonosTpl>
+              <div class="text-gray-600 italic mt-2">Sin datos</div>
+            </ng-template>
+          </section>
+
+          <!-- Reservas usuario -->
+          <section *ngIf="mostrarTablaReservasUsuario" class="p-1 sm:p-10 bg-yellow-200 ">
+            <ng-container *ngIf="reservasUsuario.length > 0; else noReservasTpl">
+               <h2 class="text-xl sm:text-2xl font-bold text-center mb-3 sm:mb-4">Mis Reservas</h2>
+              <div class="w-full overflow-x-auto">
+                <table class="min-w-full table-fixed text-xs sm:text-sm bg-white rounded-lg overflow-hidden">
+                  <thead>
+                    <tr class="min-w-full table-fixed text-xs sm:text-sm text-left bg-yellow-200">
+                      <th class="pl-4"></th>
+                      <th class="pl-4">Clase</th>
+                      <th class="pl-4">Fecha</th>
+                      <th class="pl-4">Hora</th>
+                      <th class="pl-4">Acciones</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let r of reservasUsuario" class="text-black text-left hover:text-yellow-600 hover:bg-green-200 bg-yellow-200 w-full">         
+                      <td class="pl-4 py-2 whitespace-nowrap">{{ r.usuario_nombre }}</td>
+                      <td class="pl-4 whitespace-nowrap">{{ r.clase_nombre }}</td>
+                      <td class="pl-4 whitespace-nowrap">{{ r.fecha }}</td>
+                      <td class="pl-4 whitespace-nowrap">{{ r.hora }}</td>
+                      <td class="pl-4 whitespace-nowrap"></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </ng-container>
+            <ng-template #noReservasTpl>
+              <div class="text-gray-500">Sin datos</div>
+            </ng-template>
+          </section>
+
+          <!-- Wallet usuario -->
+          <section *ngIf="mostrarTablaWalletUsuario" class="p-1 sm:p-10 bg-yellow-200 ">
+            <ng-container *ngIf="walletUsuario.length > 0; else noWalletTpl">
+              <h2 class="text-xl sm:text-2xl font-bold text-center mb-3 sm:mb-4">Pagos</h2>
+              <div class="w-full overflow-x-auto">
+                <table class="min-w-full table-fixed text-xs sm:text-sm bg-white rounded-lg overflow-hidden">
+                  <thead>
+                    <tr class="min-w-full table-fixed text-xs sm:text-sm text-left bg-yellow-200">
+                      <th class="pl-4">Usuario</th>
+                      <th class="pl-4">Tipo clase</th>
+                      <th class="pl-4">Precio</th>
+                      <th class="pl-4">Mes</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let w of walletUsuario" class="text-black text-left hover:text-yellow-600 hover:bg-green-200 bg-yellow-200 w-full">
+                      <td class="pl-4 py-2 whitespace-nowrap">{{ w.usuario_nombre }}</td>
+                      <td class="pl-4 py-2 whitespace-nowrap">{{ w.tipoclase_nombre }}</td>
+                      <td class="pl-4 py-2 whitespace-nowrap">{{ w.tipoclase_precio }}</td>
+                      <td class="pl-4 py-2 whitespace-nowrap">{{ w.mes }}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </ng-container>
+            <ng-template #noWalletTpl>
+              <div class="text-gray-500">Sin datos</div>
+            </ng-template>
+          </section>
+
+      
+
+
+    </div>
+  </main>
+</div>

@@ -1,0 +1,51 @@
+<h2 class="text-2xl font-bold mb-4 text-gray-800">Lista de Usuarios</h2>
+
+<!-- Mensajes de carga y error -->
+<div *ngIf="cargando" class="p-4 text-blue-700 bg-blue-100 rounded-md mb-4">
+  Cargando usuarios...
+</div>
+
+<div *ngIf="error" class="p-4 text-red-700 bg-red-100 rounded-md mb-4">
+  {{ error }}
+</div>
+
+<!-- Tabla de usuarios -->
+<div class="overflow-x-auto shadow-md rounded-lg">
+  <table *ngIf="usuarios.length > 0 && !cargando" class="min-w-full bg-white border border-gray-200 rounded-lg">
+    <thead class="bg-gray-100">
+      <tr>
+        <th class="px-4 py-2 border-b text-left text-gray-700 font-semibold">ID</th>
+        <th class="px-4 py-2 border-b text-left text-gray-700 font-semibold">Nombre</th>
+        <th class="px-4 py-2 border-b text-left text-gray-700 font-semibold">Email</th>
+        <th class="px-4 py-2 border-b text-center text-gray-700 font-semibold">Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let usuario of usuarios" class="hover:bg-gray-50">
+        <td class="px-4 py-2 border-b">{{ usuario.id }}</td>
+        <td class="px-4 py-2 border-b">{{ usuario.nombre }}</td>
+        <td class="px-4 py-2 border-b">{{ usuario.email }}</td>
+        <td class="px-4 py-2 border-b text-center space-x-2">
+          <button 
+            (click)="verUsuario(usuario.id)" 
+            class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded shadow">
+            Ver
+          </button>
+          <button 
+            (click)="eliminarUsuario(usuario.id)" 
+            class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded shadow">
+            Eliminar
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- Detalle del usuario seleccionado -->
+<div *ngIf="usuarioSeleccionado" class="mt-6 p-4 bg-gray-50 border border-gray-200 rounded-lg shadow-sm">
+  <h3 class="text-xl font-semibold mb-2 text-gray-800">Detalles del Usuario</h3>
+  <p><strong>ID:</strong> {{ usuarioSeleccionado.id }}</p>
+  <p><strong>Nombre:</strong> {{ usuarioSeleccionado.nombre }}</p>
+  <p><strong>Email:</strong> {{ usuarioSeleccionado.email }}</p>
+</div>

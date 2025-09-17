@@ -1,0 +1,82 @@
+<aside >
+
+  <!-- Bloque Usuario -->
+  <div>
+    <button (click)="toggleMenu()"
+            class="w-full block text-left text-lg sm:text-xl font-bold mb-2 backdrop-blur shadow bg-gradient-to-r from-emerald-500 to-blue-60 py-2 hover:bg-gray-700">
+      👤 Mi Perfil
+    </button>
+
+    <ul *ngIf="mostrarMenu" class="mt-2 space-y-3">
+      <li>
+        <a routerLink="bonos"
+           routerLinkActive="text-yellow-400"
+           [routerLinkActiveOptions]="{ exact: true }"
+           class="block px-2 py-1 hover:text-yellow-300 hover:text-yellow-300">
+          💳 Mis Bonos
+        </a>
+      </li>
+      <li>
+        <a routerLink="reservas"
+           routerLinkActive="text-yellow-400"
+           class="block px-2 py-1 hover:text-yellow-300 hover:text-yellow-300">
+          📅 Mis Reservas
+        </a>
+      </li>
+      <li>
+        <a routerLink="pagosusuario"
+           routerLinkActive="text-yellow-400"
+           class="block px-2 py-1 hover:text-yellow-300 hover:text-yellow-300">
+          🧾 Mis Pagos
+        </a>
+      </li>
+       <li>
+        <a routerLink="reservasclase"
+           routerLinkActive="text-yellow-400"
+           class="block px-2 py-1 hover:text-yellow-300 hover:text-yellow-300">
+          Reservar Clases
+        </a>
+      </li>
+    </ul>
+  </div>
+
+  <!-- Bloque Profesor -->
+  <div *ngIf="auth.isAdmin() || auth.isTeacher()">
+    <button (click)="toggleMenuAdmin()"
+            class="w-full block text-left text-lg sm:text-xl font-bold mb-2 backdrop-blur shadow bg-gradient-to-r from-emerald-500 to-blue-60 py-2 hover:bg-gray-700">
+      🎓 Menú Profesor
+    </button>
+
+    <ul *ngIf="mostrarMenuAdmin" class="mt-2 space-y-3 ">
+      <li>
+        <a routerLink="crear"
+           routerLinkActive="text-yellow-400"
+           [routerLinkActiveOptions]="{ exact: true }"
+           class="block px-2 py-1 hover:text-yellow-300 hover:bg-green-200">
+          ➕ Crear clase
+        </a>
+      </li>
+      <li>
+        <a routerLink="pagos"
+           class="block px-2 py-3 hover:text-yellow-300 hover:bg-green-200">
+          💳 Pagos
+        </a>
+      </li>
+      <li *ngIf="auth.isAdmin()">
+        <a routerLink="admin"
+           routerLinkActive="text-yellow-400"
+           class="block px-2 py-3 hover:text-yellow-300 hover:bg-green-200">
+          📅 Clases General
+        </a>
+      </li>
+      <li>
+        <a routerLink="profe"
+           routerLinkActive="text-yellow-400"
+           class="block px-2 py-1 hover:text-yellow-300 hover:bg-green-200">
+          🧑‍🏫 Mis Clases
+        </a>
+      </li>
+    </ul>
+  </div>
+
+</aside>
