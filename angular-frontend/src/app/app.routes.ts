@@ -1,21 +1,8 @@
 import { Routes } from '@angular/router';
-import { TasksComponent } from './modules/tasks/tasks.component';
-import { UsersComponent } from './components/users/users';
-import { TipoclaseComponent } from './components/tipoclase/tipoclase';
-import { RoomComponent } from './components/room/room';
-import { WalletComponent } from './components/wallet/wallet';
-import { ReservationComponent } from './components/reservation/reservation'; 
-import { ClaseComponent } from './components/clase/clase';
-import { BonosComponent } from './components/bonos/bonos'; 
-import { VistasComponent } from './components/vistas/vistas'// 
+
 import { RegisterComponent } from './modules/register/register.component';
 import { LoginComponent } from './modules/login/login.component';
-import { MenuComponent } from './modules/menu/menu.component';
-import { MenuComponent2 } from './modules/menu/menu2.component';
-import { MenuComponent3 } from './modules/menu/menu3.component';
-import { Menu4Component } from './modules/menu/menu4component';
 import { AppShellComponent } from './app-shell.component';
-import { MainLayoutComponent } from './components/MainLayoutComponent/main-layout.component';
 import { AuthGuard } from './auth.guard';
 import { canMatchRoles } from './role.guard';
 import { CrearClaseComponent } from './modules/menu/crear-clase.component';

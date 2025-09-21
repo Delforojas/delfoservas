@@ -37,10 +37,9 @@ export class AuthService {
   }
 
   // -------- API ----------
-  register(data: any): Observable<any> {
-    return this.http.post(`${this.baseUrl}/register`, data);
-  }
-
+ register(data: any) {
+  return this.http.post(`${this.baseUrl}/users/register`, data);
+}
   login(data: any): Observable<any> {
     return this.http.post<{ token: string }>(`${this.baseUrl}/login`, data).pipe(
       tap(res => {

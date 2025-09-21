@@ -10,6 +10,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\HttpFoundation\Response;    
 
 #[Route('/api/users')]
 class UsersController extends AbstractController
@@ -57,19 +59,41 @@ public function show(Users $user): JsonResponse
     ]);
 }
 
-#[Route('/create', name: 'users_create', methods: ['POST'])]
-public function create(Request $request, EntityManagerInterface $em): JsonResponse
-{
-    $data = json_decode($request->getContent(), true);
-    $user = new Users();
-    $user->setNombre($data['nombre'] ?? '');
-    $user->setEmail($data['email'] ?? '');
-    $user->setPassword($data['password'] ?? ''); // OJO: deberías encriptar
-    $em->persist($user);
-    $em->flush();
+#[Route('/register', name: 'api_register', methods: ['POST'])]
+    public function register(
+        Request $req,
+        EntityManagerInterface $em,
+        UsersRepository $repo,
+        UserPasswordHasherInterface $hasher
+    ): JsonResponse {
+        $d = json_decode($req->getContent(), true) ?? [];
 
-    return $this->json(['message' => 'Usuario creado', 'id' => $user->getId()], 201);
-}
+        $email = trim($d['email'] ?? '');
+        $nombre = trim($d['nombre'] ?? '');
+        $plain = (string) ($d['password'] ?? '');
+
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            return $this->json(['error' => 'Email inválido'], Response::HTTP_BAD_REQUEST);
+        }
+        if (strlen($plain) < 8) {
+            return $this->json(['error' => 'La contraseña debe tener al menos 8 caracteres'], Response::HTTP_BAD_REQUEST);
+        }
+        if ($repo->findOneBy(['email' => $email])) {
+            return $this->json(['error' => 'El email ya existe'], Response::HTTP_CONFLICT);
+        }
+
+        $u = new Users();
+        $u->setEmail($email);
+        $u->setNombre($nombre);
+        $u->setRoles(['ROLE_USER']);
+        $u->setPassword($hasher->hashPassword($u, $plain));
+
+        $em->persist($u);
+        $em->flush();
+
+        return $this->json(['message' => 'Registrado', 'id' => $u->getId()], Response::HTTP_CREATED);
+    }
+
 
 #[Route('/{id}', name: 'users_update', methods: ['PUT'], requirements: ['id' => '\d+'])]
 public function update(Request $request, Users $user, EntityManagerInterface $em): JsonResponse

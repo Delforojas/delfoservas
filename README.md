@@ -1,15 +1,9 @@
-# 📌 Proyecto Full-Stack en Desarrollo (Symfony + Angular + Docker)
 
-Este repositorio recoge un proyecto **personal en paralelo a mis prácticas profesionales** en Codearts Solutions.  
-El objetivo es aplicar y consolidar los conocimientos adquiridos durante el ciclo **DAW** y mi experiencia en un entorno real de trabajo.
+# Proyecto Symfony + Angular + Docker
 
----
 
 👉 Este proyecto busca reflejar **mis habilidades técnicas y mi progreso como desarrollador**, mostrando cómo aplico lo aprendido tanto en el aula como en la empresa.
 
-
-
----
 
 ## 🚧 Estado del proyecto
 
@@ -31,7 +25,7 @@ El objetivo es aplicar y consolidar los conocimientos adquiridos durante el cicl
 - Probar y documentar la API con **Postman**.  
 - Mejorar la UI con **TailwindCSS** y arquitectura modular en Angular.
 
----
+
 
 ## 🛠️ Stack Tecnológico
 
@@ -62,7 +56,6 @@ El objetivo es aplicar y consolidar los conocimientos adquiridos durante el cicl
 - **TailwindCSS** para frontend básico  
 - **Testing de endpoints** y depuración de observables
 
----
 
 ## 🧑‍💻 Experiencia aplicada en el proyecto
 
@@ -86,4 +79,5 @@ Durante mis prácticas en **Codearts Solutions (Julio–Septiembre 2025)** he tr
 - [ ] Panel de administración para roles **ROLE_ADMIN** y **ROLE_TEACHER**  
 - [ ] Optimización de consultas con vistas materializadas  
 - [ ] Deploy en un entorno cloud (ej. Render, Railway o AWS)  
+
 
