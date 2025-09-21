@@ -32,7 +32,7 @@ security:
   access_control:
     # PÚBLICAS primero
     - { path: ^/api/login$, roles: PUBLIC_ACCESS }
-    - { path: ^/api/register$, roles: PUBLIC_ACCESS }
+    - { path: ^/api/users/register$, roles: PUBLIC_ACCESS }
     - { path: ^/api/users/create$, roles: PUBLIC_ACCESS }   # mientras creas el 1er usuario
     - { path: ^/api, roles: PUBLIC_ACCESS, methods: [OPTIONS] }  # preflight CORS
     # El resto del API protegido
