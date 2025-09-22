@@ -13,7 +13,6 @@ import { RouterModule } from '@angular/router';
   standalone: true,
   imports: [CommonModule, FormsModule, HttpClientModule , RouterModule],
   templateUrl: './clases-admin.html',
-  styleUrls: ['./clase.component.css']
 })
 export class ClasesAdminComponent implements OnInit
           {

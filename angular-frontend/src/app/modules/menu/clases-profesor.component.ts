@@ -16,7 +16,7 @@ import { RouterModule } from '@angular/router';
   standalone: true,
   imports: [CommonModule, FormsModule, HttpClientModule , RouterModule],
   templateUrl: './clases-profesor.html',
-  styleUrls: ['./clase.component.css']
+ 
 })
 export class ClasesProfesorComponent implements OnInit 
       {

@@ -13,6 +13,7 @@ import { UsuarioReservasComponent } from './modules/menu/reservas-usuario.compon
 import { UsuarioPagosComponent } from './modules/menu/pagos-usuario.component';
 import { ClasesReservaComponent } from './modules/menu/reservar-clase.component';
 import { PagosComponent } from './modules/menu/gestion-pagos';
+import { AppComponent } from './app.component';
 
 
 
@@ -23,7 +24,7 @@ export const routes: Routes = [
   {
     
   path: 'menu5',
-  component: AppShellComponent,
+  component: AppComponent,
   canActivate: [AuthGuard],
   children: [
     // 👇 redirección por defecto al entrar a /menu5

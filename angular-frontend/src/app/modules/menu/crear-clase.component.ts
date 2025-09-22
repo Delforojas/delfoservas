@@ -19,7 +19,7 @@ import { RouterModule } from '@angular/router';
   standalone: true,
   imports: [CommonModule, FormsModule, HttpClientModule , RouterModule],
   templateUrl: './crear-clase.html',
-  styleUrls: ['./clase.component.css']
+  
 })
 export class CrearClaseComponent implements OnInit {
   clasesVista: VistaClase[] = [];
