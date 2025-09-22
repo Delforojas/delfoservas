@@ -1,26 +1,26 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Observable } from 'rxjs';
-import { ClaseService, Alumno} from '../../shared/services/clases.service';
-import { ReservationService, ClaseDto, VistaClase ,} from '../../shared/services/reservation.service';
-import { AuthService } from '../../shared/services/auth.service';
+import { ClaseService, Alumno} from '../services/clases.service';
+import { ReservationService, ClaseDto, VistaClase ,} from '../services/reservation.service';
+import { AuthService } from '../services/auth.service';
+import { RouterModule } from '@angular/router'; 
 
 // Standalone children
 
-import { MenuComponent2 } from '../menu/menu2.component';
-import { ClaseComponent } from '../../components/clase/clase';
+
 
 @Component({
-  selector: 'app-menu4',
+  selector: 'app-aside-profesor',
   standalone: true,
-  imports: [CommonModule, MenuComponent2, ClaseComponent],
-  templateUrl: './menu4.html' ,
+  imports: [CommonModule,  RouterModule],
+  templateUrl: '../../shared/components/aside-profesor.html', 
 })
-export class Menu4Component implements OnInit {
+export class AsideProfesorComponent implements OnInit {
   usuarios: any = null;
   usuarioId: number | null = null;
   clases: ClaseDto[] = [];
-
+  
 
  clasesL: VistaClase[] = [];
  clasesM: VistaClase[] = [];
@@ -55,6 +55,10 @@ toggleTabla(dia: 'L' | 'M' | 'X' | 'J' | 'V') {
 
   reservandoId: number | null = null;
 
+   mostrarMenu = false;
+   mostrarMenuAdmin = false;
+
+  
 
  seleccionarDia(dia: string) {
     this.diaSeleccionado = dia;
@@ -199,6 +203,12 @@ toggleTablaAlumnos(id: number): void {
   this.cargarAlumnos(id);
 }
 
+toggleMenu() {
+    this.mostrarMenu = !this.mostrarMenu;
+  }
+  toggleMenuAdmin() {
+    this.mostrarMenuAdmin = !this.mostrarMenuAdmin;
+  }
 
   // Menu4Component.ts
 eliminarReserva(reservationId: number, claseId?: number): void {
@@ -230,4 +240,26 @@ eliminarReserva(reservationId: number, claseId?: number): void {
   trackByClase = (_: number, c: VistaClase) => c.id;
 
 
+  mostrarAside = true;
+  mostrarTabla = false;
+  mostrarTablaProfesores = false;
+
+  toggleAside() {
+    this.mostrarAside = !this.mostrarAside;
+  }
+
+  toggleCrear() {
+    console.log('Toggle Crear clase desde Aside');
+    // Aquí si quieres navegar o cambiar estado, lo pones
+  }
+
+  toggleTablaAdmin() {
+    this.mostrarTabla = !this.mostrarTabla;
+  }
+
+  toggleTablaProfesores() {
+    this.mostrarTablaProfesores = !this.mostrarTablaProfesores;
+  }
+
 }
+

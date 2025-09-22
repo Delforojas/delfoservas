@@ -1,6 +1,5 @@
 import { CanMatchFn, Route, UrlSegment } from '@angular/router';
-import { jwtDecode } from 'jwt-decode'; // 👈 v4 usa named export
-
+import { jwtDecode } from 'jwt-decode'; 
 type TokenPayload = { roles?: string[] };
 
 export const canMatchRoles = (required: string[]): CanMatchFn =>

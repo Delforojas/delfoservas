@@ -1,19 +1,12 @@
-
 # Proyecto Symfony + Angular + Docker
 
-
 👉 Este proyecto busca reflejar **mis habilidades técnicas y mi progreso como desarrollador**, mostrando cómo aplico lo aprendido tanto en el aula como en la empresa.
-
 
 ## 🚧 Estado del proyecto
 
 🔹 Actualmente en fase de desarrollo (**draft**).  
 🔹 Iteraciones semanales con nuevas features y refactorización del código.  
 🔹 Enfocado en demostrar tanto **backend sólido** como **frontend funcional**.
-
-
-
-
 
 ## 🎯 Objetivos del proyecto
 
@@ -24,8 +17,6 @@
 - Ejecutar el proyecto en entornos **Docker** con `docker-compose`.  
 - Probar y documentar la API con **Postman**.  
 - Mejorar la UI con **TailwindCSS** y arquitectura modular en Angular.
-
-
 
 ## 🛠️ Stack Tecnológico
 
@@ -56,7 +47,6 @@
 - **TailwindCSS** para frontend básico  
 - **Testing de endpoints** y depuración de observables
 
-
 ## 🧑‍💻 Experiencia aplicada en el proyecto
 
 Durante mis prácticas en **Codearts Solutions (Julio–Septiembre 2025)** he trabajado en un stack similar y apliqué los siguientes conceptos que aquí replico y extiendo:
@@ -79,5 +69,3 @@ Durante mis prácticas en **Codearts Solutions (Julio–Septiembre 2025)** he tr
 - [ ] Panel de administración para roles **ROLE_ADMIN** y **ROLE_TEACHER**  
 - [ ] Optimización de consultas con vistas materializadas  
 - [ ] Deploy en un entorno cloud (ej. Render, Railway o AWS)  
-
-

@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { AsideUsuarioComponent } from './modules/menu/aside-usuario.component';
-import { AsideProfesorComponent } from './modules/menu/menu5.component';
-import { HeaderComponent } from './modules/menu/header.component'; 
+import { AsideUsuarioComponent } from './shared/components/aside-usuario.component';
+import { AsideProfesorComponent } from './shared/components/aside-profesor-component';
+import { HeaderComponent } from './shared/components/header.component'; 
 import { AuthService } from './shared/services/auth.service';
-import { FooterComponent } from './modules/menu/footer.compomonent';
+import { FooterComponent } from './shared/components/footer.compomonent';
 
 
 @Component({
