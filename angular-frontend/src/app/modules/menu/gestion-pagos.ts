@@ -15,7 +15,7 @@ import { RouterModule } from '@angular/router';
   standalone: true,
   imports: [CommonModule, FormsModule, ReactiveFormsModule, HttpClientModule , RouterModule],
   templateUrl: './gestion-pagos.html',
-  styleUrls: ['./wallet.css']
+
 })
 export class PagosComponent implements OnInit {
   
