@@ -11,10 +11,10 @@ export interface ReservaUsuarioDto {
   clase_id: number;
   bono_id: number | null;
   clase_nombre: string;
-  fecha: string; // ISO
-  hora: string;  // "HH:mm:ss"
+  fecha: string; 
+  hora: string; 
   tipoclase_nombre: string;
-  bono_estado: 'activo' | 'consumido' | string; // puedes mejorar con enum
+  bono_estado: 'activo' | 'consumido' | string; 
 }
 
 export interface WalletMes {
@@ -39,7 +39,6 @@ export class VistasService {
   }
   
   
-  // ─────────── BONOS (API vistas) ───────────
   getBonos(): Observable<any[]> {
     return this.http.get<any[]>(`${this.vistasBase}/vistabonos`, { headers: this.authHeaders() });
   }
@@ -76,11 +75,6 @@ export class VistasService {
     return this.http.get<any[]>(`${this.vistasBase}/claseprofe/${claseId}/total-alumnos`, { headers: this.authHeaders() });
   }
 
-
-
-
-
-  // ─────────── Otros endpoints fuera de /api/vistas ───────────
   getUsuarios() {
     return this.http.get<Array<{ id: number; nombre: string; email: string }>>(
       `${this.base}/api/users`, { headers: this.authHeaders() }
