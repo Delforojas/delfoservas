@@ -9,7 +9,7 @@ import { tap } from 'rxjs/operators';
 })
 export class AuthService {
   private baseUrl = 'http://localhost:8000/api';
-  private roles: string[] = []; // ✅ guardamos aquí los roles del usuario
+  private roles: string[] = [];
 
   constructor(private http: HttpClient, private router: Router) {}
 
@@ -44,7 +44,6 @@ export class AuthService {
     return this.http.post<{ token: string }>(`${this.baseUrl}/login`, data).pipe(
       tap(res => {
         localStorage.setItem('token', res.token);
-        // Después de loguear, traemos el usuario y guardamos roles
         this.getUser().subscribe(user => this.setRoles(user?.roles || []));
       })
     );
@@ -55,13 +54,13 @@ export class AuthService {
     return this.http.get(`${this.baseUrl}/users/me`, {
       headers: { Authorization: `Bearer ${token}` }
     }).pipe(
-      tap((user: any) => this.setRoles(user?.roles || [])) // ✅ guardamos roles
+      tap((user: any) => this.setRoles(user?.roles || [])) 
     );
   }
 
   logout(): void {
     localStorage.removeItem('token');
-    this.roles = []; // limpiamos roles
+    this.roles = [];
     this.router.navigate(['/login']);
   }
 }

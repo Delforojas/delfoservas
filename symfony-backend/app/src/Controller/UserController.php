@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Entity\Enum\RoleEnum;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\DBAL\Connection; 
@@ -85,7 +86,7 @@ public function show(User $user): JsonResponse
         $u = new User();
         $u->setEmail($email);
         $u->setNombre($nombre);
-        $u->setRoles(['ROLE_USER']);
+        $u->setRole(RoleEnum::USER);
         $u->setPassword($hasher->hashPassword($u, $plain));
 
         $em->persist($u);
