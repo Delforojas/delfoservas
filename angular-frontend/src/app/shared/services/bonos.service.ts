@@ -31,7 +31,7 @@ export interface BonoActivoUsuario {
   providedIn: 'root'
 })
 export class BonosService {
-  private apiUrl = 'http://localhost:8000/api/bonos'; // Cambia según tu backend
+  private apiUrl = 'http://localhost:8000/api/bonos'; 
 
   constructor(private http: HttpClient) {}
     
@@ -69,7 +69,7 @@ export class BonosService {
 
 getBonosActivos(usuarioId: number): Observable<BonoActivoUsuario[]> {
   return this.http.get<BonoActivoUsuario[]>(
-    `${this.apiUrl}/usuario/${usuarioId}/bono-activo`, // 👈 usa el que ya tienes en Symfony
+    `${this.apiUrl}/usuario/${usuarioId}/bono-activo`, 
     { headers: this.authHeaders() }
   );
 }
