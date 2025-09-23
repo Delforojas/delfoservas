@@ -15,9 +15,9 @@ class Reservation
     private ?int $id = null;
 
     // FK a users
-    #[ORM\ManyToOne(targetEntity: Users::class)]
+    #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(name: 'usuario_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
-    private ?Users $usuario = null;
+    private ?User $usuario = null;
 
     // FK a clase
     #[ORM\ManyToOne(targetEntity: Clase::class)]
@@ -35,12 +35,12 @@ class Reservation
         return $this->id;
     }
 
-    public function getUsuario(): ?Users
+    public function getUsuario(): ?User
     {
         return $this->usuario;
     }
 
-    public function setUsuario(?Users $usuario): self
+    public function setUsuario(?User $usuario): self
     {
         $this->usuario = $usuario;
         return $this;

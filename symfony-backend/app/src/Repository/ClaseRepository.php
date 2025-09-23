@@ -4,7 +4,7 @@
 namespace App\Repository;
 use App\Entity\Clase;
 use App\Entity\TipoClase;
-use App\Entity\Users;
+use App\Entity\User;
 use App\Entity\Room;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -43,7 +43,7 @@ class ClaseRepository extends ServiceEntityRepository
                 $em = $this->getEntityManager();
 
                 $tipoClase = $em->getRepository(TipoClase::class)->find($data['tipoclase'] ?? null);
-                $teacher   = $em->getRepository(Users::class)->find($data['teacher'] ?? null);
+                $teacher   = $em->getRepository(User::class)->find($data['teacher'] ?? null);
                 $room      = $em->getRepository(Room::class)->find($data['room'] ?? null);
 
                 if (!$tipoClase || !$teacher || !$room) {
@@ -85,7 +85,7 @@ class ClaseRepository extends ServiceEntityRepository
 
                 if (array_key_exists('teacher', $data)) {
                     $teacherId = $data['teacher'] ?? null;
-                    $teacher = $teacherId ? $em->getRepository(Users::class)->find($teacherId) : null;
+                    $teacher = $teacherId ? $em->getRepository(User::class)->find($teacherId) : null;
                     if ($teacherId && !$teacher) {
                         return false;
                     }

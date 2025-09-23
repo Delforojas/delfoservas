@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Reservation;
-use App\Entity\Users;
+use App\Entity\User;
 use App\Entity\Clase;
 use App\Entity\Bonos;
 use App\Repository\ReservationRepository;
@@ -52,7 +52,7 @@ class ReservationController extends AbstractController
     {
         $data = json_decode($request->getContent(), true);
 
-        $usuario = $em->getRepository(Users::class)->find($data['usuario_id']);
+        $usuario = $em->getRepository(User::class)->find($data['usuario_id']);
         $clase = $em->getRepository(Clase::class)->find($data['clase_id']);
         $bono = $em->getRepository(Bonos::class)->find($data['bono_id']);
 
@@ -77,7 +77,7 @@ class ReservationController extends AbstractController
         $data = json_decode($request->getContent(), true);
 
         if (isset($data['usuario_id'])) {
-            $usuario = $em->getRepository(Users::class)->find($data['usuario_id']);
+            $usuario = $em->getRepository(User::class)->find($data['usuario_id']);
             if ($usuario) $reservation->setUsuario($usuario);
         }
 

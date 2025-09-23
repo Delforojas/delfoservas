@@ -6,9 +6,6 @@ import { ReservationService, ClaseDto, VistaClase ,} from '../services/reservati
 import { AuthService } from '../services/auth.service';
 import { RouterModule } from '@angular/router'; 
 
-// Standalone children
-
-
 
 @Component({
   selector: 'app-aside-profesor',

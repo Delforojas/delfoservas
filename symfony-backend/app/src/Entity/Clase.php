@@ -20,9 +20,9 @@ class Clase
     #[ORM\JoinColumn(name: 'tipoclase', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
     private ?TipoClase $tipoclase = null;
 
-    #[ORM\ManyToOne(targetEntity: Users::class)]
+    #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(name: 'teacher_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
-    private ?Users $teacher = null;
+    private ?User $teacher = null;
 
     #[ORM\Column(type: 'date')]
     private ?\DateTimeInterface $fecha = null;
@@ -47,8 +47,8 @@ class Clase
     public function getTipoclase(): ?TipoClase { return $this->tipoclase; }
     public function setTipoclase(?TipoClase $tipoclase): self { $this->tipoclase = $tipoclase; return $this; }
 
-    public function getTeacher(): ?Users { return $this->teacher; }
-    public function setTeacher(?Users $teacher): self { $this->teacher = $teacher; return $this; }
+    public function getTeacher(): ?User { return $this->teacher; }
+    public function setTeacher(?User $teacher): self { $this->teacher = $teacher; return $this; }
 
     public function getFecha(): ?\DateTimeInterface { return $this->fecha; }
     public function setFecha(\DateTimeInterface $fecha): self { $this->fecha = $fecha; return $this; }

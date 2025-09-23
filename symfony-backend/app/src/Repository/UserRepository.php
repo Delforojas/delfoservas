@@ -2,18 +2,18 @@
 
 namespace App\Repository;
 
-use App\Entity\Users;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<Users>
+ * @extends ServiceEntityRepository<User>
  */
-class UsersRepository extends ServiceEntityRepository
+class UserRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Users::class);
+        parent::__construct($registry, User::class);
     }
 
     public function listarProfesores(): array
@@ -30,7 +30,7 @@ class UsersRepository extends ServiceEntityRepository
 
     // Aquí puedes añadir consultas personalizadas si las necesitas, por ejemplo:
     /*
-    public function findByEmail(string $email): ?Users
+    public function findByEmail(string $email): ?User
     {
         return $this->createQueryBuilder('u')
             ->andWhere('u.email = :email')

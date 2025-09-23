@@ -2,7 +2,7 @@ import { Routes } from '@angular/router';
 
 import { RegisterComponent } from './modules/register/register.component';
 import { LoginComponent } from './modules/login/login.component';
-import { AppShellComponent } from './app-shell.component';
+import { AppComponent } from './app.component';
 import { AuthGuard } from './auth.guard';
 import { canMatchRoles } from './role.guard';
 import { CrearClaseComponent } from './modules/menu/crear-clase.component';
@@ -13,7 +13,6 @@ import { UsuarioReservasComponent } from './modules/menu/reservas-usuario.compon
 import { UsuarioPagosComponent } from './modules/menu/pagos-usuario.component';
 import { ClasesReservaComponent } from './modules/menu/reservar-clase.component';
 import { PagosComponent } from './modules/menu/gestion-pagos';
-import { AppComponent } from './app.component';
 
 
 
@@ -23,7 +22,7 @@ export const routes: Routes = [
 
   {
     
-  path: 'menu5',
+  path: 'dashboard',
   component: AppComponent,
   canActivate: [AuthGuard],
   children: [

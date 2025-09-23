@@ -10,7 +10,7 @@ import { VistasService } from '../../shared/services/vistas.service';
   selector: 'bonos-usuario',
   standalone: true,
   templateUrl: './bonos-usuario.html',
-  imports: [CommonModule, RouterModule, FormsModule, ReactiveFormsModule], // 👈 añade ReactiveFormsModule
+  imports: [CommonModule, RouterModule, FormsModule, ReactiveFormsModule], 
 })
 export class UsuarioBonosComponent implements OnInit {
         usuarios: any = null

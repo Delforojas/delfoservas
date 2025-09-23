@@ -19,7 +19,7 @@ class Wallet
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(name: 'usuario_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
-    private ?Users $usuario = null;
+    private ?User $usuario = null;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(name: 'tipoclase', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
@@ -43,12 +43,12 @@ class Wallet
         return $this;
     }
 
-    public function getUsuario(): ?Users
+    public function getUsuario(): ?User
     {
         return $this->usuario;
     }
 
-    public function setUsuario(?Users $usuario): self
+    public function setUsuario(?User $usuario): self
     {
         $this->usuario = $usuario;
         return $this;
