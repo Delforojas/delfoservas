@@ -15,7 +15,6 @@ import { FooterComponent } from './shared/components/footer.compomonent';
     CommonModule,
     RouterModule,
     HeaderComponent,
-    AsideUsuarioComponent,
     AsideProfesorComponent,
     FooterComponent
   ],
