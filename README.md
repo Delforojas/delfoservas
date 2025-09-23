@@ -1,4 +1,4 @@
-### 🛠️ Actualizaciones Proyecto Symfony + Angular + Docker
+##### 🛠️ Actualizaciones Proyecto Symfony + Angular + Docker
 
 ## 📌 Rutas Angular
 - Se dejaron solo las rutas activas:
@@ -59,5 +59,6 @@ En esta sesión se reorganizó el **frontend Angular** para hacerlo más modular
 - Se separaron páginas y componentes reutilizables.
 - Se reforzó la lógica de menús según roles.
 - Se corrigió la entidad `User` y se añadió un `Command` para la creación automática de un usuario admin.
+
 
 
