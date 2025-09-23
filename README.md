@@ -1,4 +1,4 @@
-# 🚀 Proyecto Symfony + Angular + Docker
+# 🛠️ Actualizaciones Proyecto Symfony + Angular + Docker
 
 ## 📌 Rutas Angular
 - Se dejaron solo las rutas activas:
