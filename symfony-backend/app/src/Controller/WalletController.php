@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Wallet;
 use App\Repository\WalletRepository;
-use App\Entity\Users;
+use App\Entity\User;
 use App\Entity\TipoClase;
 use App\Controller\TipoclaseController;
 use Doctrine\ORM\EntityManagerInterface;
@@ -53,7 +53,7 @@ class WalletController extends AbstractController
         $wallet = new Wallet();
         $wallet->setFecha(new \DateTime($data['fecha']));
 
-        $usuario = $em->getRepository(Users::class)->find($data['usuario_id']);
+        $usuario = $em->getRepository(User::class)->find($data['usuario_id']);
         $tipoClase = $em->getRepository(TipoClase::class)->find($data['tipoclase_id']);
 
         if (!$usuario || !$tipoClase) {

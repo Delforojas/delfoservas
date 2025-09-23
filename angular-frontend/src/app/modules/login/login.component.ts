@@ -30,7 +30,7 @@ export class LoginComponent {
    this.auth.login(this.form.value).subscribe({
      next: res => {
        localStorage.setItem('token', res.token);
-       this.router.navigate(['/menu5']);
+       this.router.navigate(['/dashboard']);
      },
      error: err => alert(err.error.message || 'Error al iniciar sesión')
    });

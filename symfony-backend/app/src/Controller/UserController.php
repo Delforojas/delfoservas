@@ -2,8 +2,8 @@
 
 namespace App\Controller;
 
-use App\Entity\Users;
-use App\Repository\UsersRepository;
+use App\Entity\User;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\DBAL\Connection; 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -14,10 +14,10 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\HttpFoundation\Response;    
 
 #[Route('/api/users')]
-class UsersController extends AbstractController
+class UserController extends AbstractController
 {
     #[Route('', name: 'users_index', methods: ['GET'])]
-public function index(UsersRepository $repo): JsonResponse
+public function index(UserRepository $repo): JsonResponse
 {
     $users = $repo->findAll();
     $data = [];
@@ -30,7 +30,7 @@ public function index(UsersRepository $repo): JsonResponse
         ];
     }
 
-    // 👇 IMPORTANTE: devolver SIEMPRE la respuesta
+   
     return $this->json($data);
 }
   #[Route('/me', name: 'users_me', methods: ['GET'])]
@@ -50,7 +50,7 @@ public function index(UsersRepository $repo): JsonResponse
     }
 
    #[Route('/{id}', name: 'users_show', methods: ['GET'], requirements: ['id' => '\d+'])]
-public function show(Users $user): JsonResponse
+public function show(User $user): JsonResponse
 {
     return $this->json([
         'id'     => $user->getId(),
@@ -63,7 +63,7 @@ public function show(Users $user): JsonResponse
     public function register(
         Request $req,
         EntityManagerInterface $em,
-        UsersRepository $repo,
+        UserRepository $repo,
         UserPasswordHasherInterface $hasher
     ): JsonResponse {
         $d = json_decode($req->getContent(), true) ?? [];
@@ -82,7 +82,7 @@ public function show(Users $user): JsonResponse
             return $this->json(['error' => 'El email ya existe'], Response::HTTP_CONFLICT);
         }
 
-        $u = new Users();
+        $u = new User();
         $u->setEmail($email);
         $u->setNombre($nombre);
         $u->setRoles(['ROLE_USER']);
@@ -96,7 +96,7 @@ public function show(Users $user): JsonResponse
 
 
 #[Route('/{id}', name: 'users_update', methods: ['PUT'], requirements: ['id' => '\d+'])]
-public function update(Request $request, Users $user, EntityManagerInterface $em): JsonResponse
+public function update(Request $request, User $user, EntityManagerInterface $em): JsonResponse
 {
     $data = json_decode($request->getContent(), true);
     $user->setNombre($data['nombre'] ?? $user->getNombre());
@@ -108,7 +108,7 @@ public function update(Request $request, Users $user, EntityManagerInterface $em
 }
 
 #[Route('/delete/{id}', name: 'users_delete', methods: ['DELETE'], requirements: ['id' => '\d+'])]
-public function delete(Users $user, EntityManagerInterface $em): JsonResponse
+public function delete(User $user, EntityManagerInterface $em): JsonResponse
 {
     $em->remove($user);
     $em->flush();
@@ -116,7 +116,7 @@ public function delete(Users $user, EntityManagerInterface $em): JsonResponse
 }
 
     #[Route('/profesores', name: 'profesores_index', methods: ['GET'])]
-    public function listarProfesores(UsersRepository $repo): JsonResponse
+    public function listarProfesores(UserRepository $repo): JsonResponse
     {
         return $this->json($repo->listarProfesores());
     }

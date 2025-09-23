@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Entity\Users;
+use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -29,12 +29,12 @@ final class AuthController extends AbstractController
         }
 
         // Evitar duplicados de email
-        $existing = $em->getRepository(Users::class)->findOneBy(['email' => $data['email']]);
+        $existing = $em->getRepository(User::class)->findOneBy(['email' => $data['email']]);
         if ($existing) {
             return $this->json(['error' => 'El email ya está en uso'], 409);
         }
 
-        $user = new Users();
+        $user = new User();
         $user->setNombre(isset($data['nombre']) ? trim((string)$data['nombre']) : '');
         $user->setEmail($data['email']);
         $user->setPassword($passwordHasher->hashPassword($user, $data['password']));

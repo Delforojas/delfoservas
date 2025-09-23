@@ -1,13 +1,13 @@
 security:
   password_hashers:
-    App\Entity\Users:
+    App\Entity\User:
       algorithm: auto   # autodetecta bcrypt ($2y$...), argon2i, sodium, etc.
       migrate_from: ['bcrypt', 'auto']  # opcional, por si tienes mezcladas
 
   providers:
     app_user_provider:
       entity:
-        class: App\Entity\Users
+        class: App\Entity\User
         property: email
 
   firewalls:
