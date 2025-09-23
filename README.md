@@ -1,71 +1,61 @@
-# Proyecto Symfony + Angular + Docker
+#  Actualización Proyecto Symfony + Angular + Docker
 
-👉 Este proyecto busca reflejar **mis habilidades técnicas y mi progreso como desarrollador**, mostrando cómo aplico lo aprendido tanto en el aula como en la empresa.
+## 📌 Rutas Angular
+- Se dejaron solo las rutas activas:
+  - **Públicas**: `/login`, `/register`
+  - **Protegidas dentro de `/dashboard`**:
+    - Usuario: `reservasclase`, `bonos`, `reservas`, `pagosusuario`
+    - Solo `ROLE_ADMIN` y `ROLE_TEACHER`: `crear`, `admin`, `profe`, `pagos`
+- Rutas antiguas (`menu`, `menu2`, `menu3`, `menu4`) eliminadas o marcadas como prescindibles.
 
-## 🚧 Estado del proyecto
+---
 
-🔹 Actualmente en fase de desarrollo (**draft**).  
-🔹 Iteraciones semanales con nuevas features y refactorización del código.  
-🔹 Enfocado en demostrar tanto **backend sólido** como **frontend funcional**.
+## 🗂️ Organización de carpetas
+- **/pages/** → vistas completas que se usan como rutas (Login, Register, Reservas, Clases, etc.)
+- **/shared/components/** → componentes reutilizables (AsideUsuario, AsideProfesor, Header, Footer)
+- **/shared/services/** → servicios centralizados (AuthService, ReservationService, ClasesService)
+- **/shared/guards/** → guards de autenticación y roles
+- Limpieza de `modules/menu/` eliminando ficheros obsoletos (`menu.component.ts`, `menu2`, `menu3`, `menu4`, etc.)
 
-## 🎯 Objetivos del proyecto
+---
 
-- Diseñar y desplegar una aplicación **full-stack** con **Symfony (PHP)** en el backend y **Angular (TypeScript)** en el frontend.  
-- Implementar **autenticación JWT** y **control de roles** (admin, profesor, usuario).  
-- Construir un sistema de reservas y pagos con lógica de negocio centralizada.  
-- Utilizar **PostgreSQL** con triggers, procedimientos almacenados y vistas para automatizar procesos.  
-- Ejecutar el proyecto en entornos **Docker** con `docker-compose`.  
-- Probar y documentar la API con **Postman**.  
-- Mejorar la UI con **TailwindCSS** y arquitectura modular en Angular.
+## 📜 Ajustes en rutas (`app.routes.ts`)
+- Consolidación de rutas en **`/dashboard`** con `AppComponent` como layout principal.
+- **Rutas usuario**: `/bonos`, `/reservas`, `/pagosusuario`, `/reservasclase`
+- **Rutas protegidas (`ROLE_ADMIN` / `ROLE_TEACHER`)**: `/crear`, `/admin`, `/profe`, `/pagos`
 
-## 🛠️ Stack Tecnológico
+---
 
-### Lenguajes y frameworks
-- **PHP (Symfony)**  
-- **Java (Spring Boot)**  
-- **TypeScript (Angular)**  
-- **SQL / PLpgSQL**  
-- **JavaScript**
+## 🧩 Componentes actualizados
+- **AsideProfesorComponent**
+  - Movido a `shared/components/`
+  - Con su propio `.html` limpio
+  - Incluye menú dinámico que muestra opciones según roles (`auth.isAdmin()`, `auth.isTeacher()`)
+- **AppComponent**
+  - Importa header, aside y footer como standalone components
+  - Define el layout principal con `<router-outlet>`
 
-### APIs y herramientas
-- **RESTful APIs**  
-- **Postman**  
-- **JWT Authentication**  
-- **Role-Based Access Control**
+---
 
-### Bases de datos
-- **PostgreSQL** → triggers, procedimientos almacenados, vistas  
-- **MySQL**
+## ⚙️ Backend Symfony
+- Actualización de la entidad **User** (antes `Users`):
+  - Simplificación de la entidad a `User.php`
+  - Asociación con **Enum `RoleEnum`** para los roles (`ROLE_USER`, `ROLE_TEACHER`, `ROLE_ADMIN`).
+- Creación de un **Command `app:create-admin`** para inicializar un admin por defecto al lanzar la app.
+- Ajuste de repositorios y controladores (`UserRepository`, `UserController`).
 
-### Cloud y contenedores
-- **Docker & Docker Compose**  
-- Despliegues básicos en entornos cloud
+---
 
-### Otros
-- **Git/GitHub**  
-- **Scrum (metodología ágil)**  
-- **TailwindCSS** para frontend básico  
-- **Testing de endpoints** y depuración de observables
+## 🚧 Pendiente
+- Crear usuarios con roles correctos (`ROLE_ADMIN`, `ROLE_USER`, etc.) para verificar visibilidad de menús y rutas protegidas.
+- Depurar imports relativos y migrarlos a paths con `tsconfig.json` (`@components/*`, `@pages/*`, etc.)
+- Revisar qué ficheros de `modules/menu/` son realmente borradores y eliminarlos del repo.
 
-## 🧑‍💻 Experiencia aplicada en el proyecto
+---
 
-Durante mis prácticas en **Codearts Solutions (Julio–Septiembre 2025)** he trabajado en un stack similar y apliqué los siguientes conceptos que aquí replico y extiendo:
-
-- Desarrollo y prueba de **APIs REST con Symfony**, con **JWT** y roles.  
-- **Optimización de bases de datos PostgreSQL**, creando triggers y vistas.  
-- **Servicios en Symfony** para centralizar la lógica de negocio.  
-- **Despliegue con Docker** (Angular + Symfony + Postgres).  
-- Documentación de endpoints con **Postman**.  
-- Arquitectura modular en Angular + **TailwindCSS**.  
-- Manejo de flujos de usuario: **login, registro, reservas, pagos**.  
-- Sistema de notificaciones con un **toast service reutilizable** en Angular.  
-- **Buenas prácticas**: refactorización de código, observables, separación de responsabilidades.
-
-## 📌 Roadmap
-
-- [ ] Endpoint de registro con emisión automática de JWT  
-- [ ] Gestión de clases, profesores y reservas  
-- [ ] Validación avanzada de pagos y bonos  
-- [ ] Panel de administración para roles **ROLE_ADMIN** y **ROLE_TEACHER**  
-- [ ] Optimización de consultas con vistas materializadas  
-- [ ] Deploy en un entorno cloud (ej. Render, Railway o AWS)  
+## ✅ Conclusión
+En esta sesión se reorganizó el **frontend Angular** para hacerlo más modular y mantenible, además de alinear el backend Symfony:
+- Se limpiaron rutas y archivos obsoletos.
+- Se separaron páginas y componentes reutilizables.
+- Se reforzó la lógica de menús según roles.
+- Se corrigió la entidad `User` y se añadió un `Command` para la creación automática de un usuario admin.
