@@ -2,12 +2,21 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
-import { ClaseService, Clase , VistaClase , ClaseProfe , Alumno} from '../../shared/services/clases.service';
-import { TipoClaseService, TipoClase } from '../../shared/services/tipoclase.service';
-import { RoomService, Room } from '../../shared/services/room.service';
-import { UsersService, Profesor } from '../../shared/services/users.service';
+import { ClaseService} from '../../shared/services/clases.service';
+import { TipoClaseService} from '../../shared/services/tipoclase.service';
+import { RoomService } from '../../shared/services/room.service';
+import { UsersService} from '../../shared/services/users.service';
 import { AuthService } from '../../shared/services/auth.service';
 import { ReservationService } from '../../shared/services/reservation.service';
+
+import { Clase } from '../../shared/interfaces/clase.interface';
+import { VistaClase } from '../../shared/interfaces/vistaClase.interface';
+import { ClaseProfe } from '../../shared/interfaces/claseProfe.interface';
+import { TipoClase } from '../../shared/interfaces/tipoClase.interface';
+import { Alumno } from '../../shared/interfaces/Alumno.interface';
+import { Room } from '../../shared/interfaces/room.interface';
+import { Profesor } from '../../shared/interfaces/profesor.interface';
+
 
 
 

@@ -2,12 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule , ReactiveFormsModule,} from '@angular/forms';
 import { FormControl } from '@angular/forms';
-import { WalletService, Wallet } from '../../shared/services/wallet.service';
+import { WalletService } from '../../shared/services/wallet.service';
 import { VistasService } from '../../shared/services/vistas.service';
 import { TipoClaseService, } from '../../shared/services/tipoclase.service';
 
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
+
+import { Wallet } from '../../shared/interfaces/wallet.interface';
 
 
 @Component({

@@ -2,12 +2,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient , HttpHeaders} from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { Room } from '../interfaces/room.interface';
 
-export interface Room {
-  id: number;
-  descripcion: string;
-  aforo_sala: number;
-}
 
 @Injectable({
   providedIn: 'root'

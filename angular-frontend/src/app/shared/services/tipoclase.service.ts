@@ -2,12 +2,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-
-export interface TipoClase {
-  id: number;
-  nombre: string;
-  clases_totales: number;
-}
+import { TipoClase } from '../interfaces/tipoClase.interface';
 
 @Injectable({
   providedIn: 'root'

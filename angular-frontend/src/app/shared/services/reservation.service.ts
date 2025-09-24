@@ -2,63 +2,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-
-export interface Reservation {
-  id: number;
-  usuario_id: number;
-  clase_id: number;
-  bono_id: number;
-}
-
-// 👇 ajusta la interfaz al DTO real que devuelves en tu /api/clases
-export interface ClaseDto {
-  id: number;
-  nombre: string;
-  aforo_clase: number;
-  plazas: number;
-  fecha: string;
-  hora: string;
-  dia: string;
-  completa: boolean;
-  profesor?: string | null;
-  sala?: string | null;
-  // opcionalmente:
-  teacher?: string | null;
-  room?: string | null;
-}
-export interface VistaClase {
-  id: number;
-  nombre: string;
-  aforo_clase: number;
-  fecha: string;   // YYYY-MM-DD
-  hora: string;    // HH:mm
-  dia: string;     // <- usa texto ('Lunes','Martes'...) si tu vista lo devuelve así
-  profesor?: string | null;
-  sala?: string | null;
-  tipoclase_id: number;
-  tipoclase_nombre: string;
-  reservas: number;
-  plazas: number;
-  completa: boolean;
-
-  // opcional, por si a veces te llega el id crudo
-  teacher?: number;
-  room?: number;
-
-  reservation_id?: number | null;
-}
-
-export interface BonoActivoUsuario {
-  usuario_id: number;
-  usuario_nombre: string;
-  email: string;
-  bono_id: number;
-  tipoclase: number;
-  clases_totales: number;
-  clases_restantes: number;
-  estado: 'activo' | 'inactivo' | string; // ajusta si solo usas 'activo'
-  fecha_wallet: string; // YYYY-MM-DD
-}
+import { Reservation } from '../interfaces/reservation.interface';
+import { ClaseDto } from '../interfaces/ClaseDto.interface';
+import { VistaClase } from '../interfaces/vistaClase.interface';
+import { BonoActivoUsuario } from '../interfaces/bonoActivoUsuario.interface';
 
 @Injectable({ providedIn: 'root' })
 export class ReservationService {

@@ -2,30 +2,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient , HttpHeaders} from '@angular/common/http';
 import { Observable } from 'rxjs';
-
-export interface Bono {
-  id: number;
-  clases_restantes: number;
-  clases_totales: number;
-  fecha: string; // formato YYYY-MM-DD
-  estado: string;
-  tipoclase_id: number;
-  wallet_id: number;
-}
-
-export interface BonoActivoUsuario {
-  usuario_id: number;
-  usuario_nombre: string;
-  email: string;
-  bono_id: number;
-  tipoclase: number;
-  nombre_tipoclase: string;
-  clases_totales: number;
-  clases_restantes: number;
-  estado: string;
-  fecha_wallet: string;
-   mes: string;    
-}
+import { Bono } from '../interfaces/bono.interface';
+import { BonoActivoUsuario } from '../interfaces/bonoActivoUsuario.interface';
 
 @Injectable({
   providedIn: 'root'

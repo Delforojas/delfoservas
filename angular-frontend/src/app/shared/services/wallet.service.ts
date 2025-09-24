@@ -2,13 +2,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient ,HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-
-export interface Wallet {
-  id: number;
-  fecha: string; // formato YYYY-MM-DD
-  usuario_id: number;
-  tipoclase_id: number;
-}
+import { Wallet } from '../interfaces/wallet.interface';
 
 @Injectable({
   providedIn: 'root'

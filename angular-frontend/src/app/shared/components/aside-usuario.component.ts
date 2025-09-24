@@ -1,12 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Observable } from 'rxjs';
-import { ClaseService, Alumno} from '../../shared/services/clases.service';
-import { ReservationService, ClaseDto, VistaClase ,} from '../../shared/services/reservation.service';
+import { ClaseService} from '../../shared/services/clases.service';
+import { ReservationService} from '../../shared/services/reservation.service';
 import { AuthService } from '../../shared/services/auth.service';
 import { RouterModule } from '@angular/router'; 
+import { ClaseDto } from '../interfaces/ClaseDto.interface';
+import { VistaClase } from '../interfaces/vistaClase.interface';
+import { Alumno } from '../interfaces/Alumno.interface'
 
-// Standalone children
 
 
 

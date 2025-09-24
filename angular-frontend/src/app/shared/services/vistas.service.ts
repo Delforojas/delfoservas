@@ -2,28 +2,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-
-
-export interface ReservaUsuarioDto {
-  id_usuario: number;
-  usuario_nombre: string;
-  reserva_id: number;
-  clase_id: number;
-  bono_id: number | null;
-  clase_nombre: string;
-  fecha: string; 
-  hora: string; 
-  tipoclase_nombre: string;
-  bono_estado: 'activo' | 'consumido' | string; 
-}
-
-export interface WalletMes {
-  id: number;
-  usuario_id: number;
-  tipoclase: number;
-  fecha: string; // YYYY-MM-DD
-  mes: string;
-}
+import { ReservaUsuarioDto } from '../interfaces/reservaUsuarioDto.interface';
+import { WalletMes } from '../interfaces/walletMes.interface';
 
 
 @Injectable({ providedIn: 'root' })

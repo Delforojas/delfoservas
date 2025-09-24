@@ -2,59 +2,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient , HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-
-export interface Clase {
-  id: number;
-  nombre: string;
-  tipoclase: number; 
-  teacher: number;   
-  fecha: string;     
-  hora: string;     
-  aforo_clase: number;
-  room: number;      
-}
-
-export interface VistaClase {
-  id: number;
-  nombre: string;
-  aforo_clase: number;
-  fecha: string;   // YYYY-MM-DD
-  hora: string;    // HH:mm
-  dia: string;     // <- usa texto ('Lunes','Martes'...) si tu vista lo devuelve así
-  profesor?: string | null;
-  sala?: string | null;
-  tipoclase_id: number;
-  tipoclase_nombre: string;
-  reservas: number;
-  plazas: number;
-  completa: boolean;
-
-  // opcional, por si a veces te llega el id crudo
-  teacher?: number;
-  room?: number;
-
-    usuario_id: number | null;
-  reservation_id: number | null;
-}
-
-export interface ClaseProfe {
-  id: number;
-  nombre: string;
-  fecha: string;           
-  hora: string;            
-  sala: string;
-  nombre_tipoclase: string;
-  aforo_clase: number;
-  plazas: number;
-  completa: boolean;
-}
- export interface Alumno {
-  alumno_reservation_id: number | null;  
-  alumno_id: number;
-  alumno_nombre: string;
-  alumno_email: string;
-}
-
+import { Clase } from '../interfaces/clase.interface';
+import { VistaClase } from '../interfaces/vistaClase.interface';
+import {ClaseProfe} from '../interfaces/claseProfe.interface';
+import { Alumno } from '../interfaces/Alumno.interface';
 @Injectable({
   providedIn: 'root'
 })
