@@ -43,12 +43,44 @@ Se adaptaron los **services** y **componentes** para importar correctamente las 
 - `vistas.service.ts` → exporta **ReservaUsuarioDto**  
 - Componentes como **clases-admin, clases-profesor, crear-clase**, etc. se actualizaron para usar estas interfaces centralizadas.
 
----
-
-## ✅ Resumen
-
-- ✅ Sistema de **toasts** implementado para feedback en tiempo real.  
-- ✅ Interfaces **centralizadas y sin duplicados**, mejorando la mantenibilidad del código.  
-- ✅ Refactorización de imports en **servicios y componentes** para usar interfaces unificadas.  
 
 🔥 El proyecto queda más **ordenado**, fácil de escalar y con **feedback visual** para los usuarios.  
+
+
+## 🗂️ Refactorización de Servicios con Rutas Centralizadas
+
+### 📌 Objetivo
+Organizar las rutas de la API en archivos dedicados (`*.routes.ts`) para cada módulo, de forma que:
+- Se eviten strings duplicados en los servicios.
+- Cambiar una ruta del backend sea tan sencillo como modificar una sola línea.
+- Se mantenga un código más limpio y escalable.
+
+---
+
+### 🛠️ Cambios realizados
+
+1. **Centralización de rutas**
+   - Se creó una carpeta `shared/routes/` que contiene archivos como:
+     - `auth-routes.ts`
+     - `bonos-routes.ts`
+     - `clase-routes.ts`
+     - `reservation-routes.ts`
+     - `room-routes.ts`
+     - `tipoclase-routes.ts`
+     - `users-routes.ts`
+     - `vistas-routes.ts`
+     - `wallet-routes.ts`
+
+2. **Refactorización de servicios**
+   - Cada servicio (`*.service.ts`) ahora importa las rutas desde su archivo correspondiente.
+
+
+##✅ Resumen
+	-•	✅ Sistema de toasts implementado para feedback en tiempo real.
+	-•	✅ Interfaces centralizadas y sin duplicados, mejorando la mantenibilidad del código.
+	-•	✅ Refactorización de imports en servicios y componentes para usar interfaces unificadas.
+	-•	✅ Servicios consumen rutas centralizadas, sin URLs hardcodeadas.
+
+
+
+

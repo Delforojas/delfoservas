@@ -5,7 +5,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { ClaseService} from '../../shared/services/clases.service';
 import { TipoClaseService} from '../../shared/services/tipoclase.service';
 import { RoomService } from '../../shared/services/room.service';
-import { UsersService} from '../../shared/services/users.service';
+import { UsersService} from '../../shared/services/user.service';
 import { AuthService } from '../../shared/services/auth.service';
 import { ReservationService } from '../../shared/services/reservation.service';
 

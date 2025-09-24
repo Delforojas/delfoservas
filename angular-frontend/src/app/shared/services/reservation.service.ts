@@ -2,15 +2,16 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+
 import { Reservation } from '../interfaces/reservation.interface';
 import { ClaseDto } from '../interfaces/ClaseDto.interface';
 import { VistaClase } from '../interfaces/vistaClase.interface';
-import { BonoActivoUsuario } from '../interfaces/bonoActivoUsuario.interface';
+// import { BonoActivoUsuario } from '../interfaces/bonoActivoUsuario.interface'; // <- si lo usas, descomenta
+
+import { RESERVATION_ROUTES } from '../routes/reservation-routes';
 
 @Injectable({ providedIn: 'root' })
 export class ReservationService {
-  private apiUrl = 'http://localhost:8000/api';
-
 
   constructor(private http: HttpClient) {}
 
@@ -22,72 +23,65 @@ export class ReservationService {
     });
   }
 
-  // ✅ listar clases
+  // ---------- Catálogo de clases ----------
   getClases(): Observable<ClaseDto[]> {
-    return this.http.get<ClaseDto[]>(`${this.apiUrl}/clases`, {
+    return this.http.get<ClaseDto[]>(RESERVATION_ROUTES.clases(), {
       headers: this.authHeaders(),
     });
   }
 
-  // ✅ reservar clase (POST /api/reservar/{id})
- reservarClase(claseId: number) {
-  return this.http.post(`${this.apiUrl}/reservations/reservar/${claseId}`, {}, {
-    headers: this.authHeaders(),
-  });
-}
+  // ---------- Reservar ----------
+  reservarClase(claseId: number): Observable<any> {
+    return this.http.post(RESERVATION_ROUTES.reservarClase(claseId), {}, {
+      headers: this.authHeaders(),
+    });
+  }
 
-  // ✅ listar todas las reservas
+  // ---------- CRUD de reservas ----------
   getReservations(): Observable<Reservation[]> {
-    return this.http.get<Reservation[]>(`${this.apiUrl}/reservations`, {
+    return this.http.get<Reservation[]>(RESERVATION_ROUTES.list(), {
       headers: this.authHeaders(),
     });
   }
 
-  // ✅ obtener una reserva
   getReservation(id: number): Observable<Reservation> {
-    return this.http.get<Reservation>(`${this.apiUrl}/reservations/${id}`, {
+    return this.http.get<Reservation>(RESERVATION_ROUTES.byId(id), {
       headers: this.authHeaders(),
     });
   }
 
-  // ✅ crear reserva (POST /api/reservations/create)
   crearReservation(data: { usuario_id: number; clase_id: number; bono_id: number }): Observable<any> {
-    return this.http.post(`${this.apiUrl}/reservations/create`, data, {
+    return this.http.post(RESERVATION_ROUTES.create(), data, {
       headers: this.authHeaders(),
     });
   }
 
-  // ✅ actualizar reserva (PUT /api/reservations/update/{id})
   actualizarReservation(id: number, data: Partial<Reservation>): Observable<any> {
-    return this.http.put(`${this.apiUrl}/reservations/update/${id}`, data, {
+    return this.http.put(RESERVATION_ROUTES.update(id), data, {
       headers: this.authHeaders(),
     });
   }
 
-  // ✅ eliminar reserva (DELETE /api/reservations/delete/{id})
   eliminarReservation(id: number): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/reservations/delete/${id}`, {
+    return this.http.delete(RESERVATION_ROUTES.delete(id), {
       headers: this.authHeaders(),
     });
   }
+
+  // ---------- Vistas por día ----------
   getClasesLunes(): Observable<VistaClase[]> {
-    return this.http.get<VistaClase[]>(`${this.apiUrl}/reservations/clases/lunes`, { headers: this.authHeaders() });
+    return this.http.get<VistaClase[]>(RESERVATION_ROUTES.clasesLunes(), { headers: this.authHeaders() });
   }
   getClasesMartes(): Observable<VistaClase[]> {
-    return this.http.get<VistaClase[]>(`${this.apiUrl}/reservations/clases/martes`, { headers: this.authHeaders() });
+    return this.http.get<VistaClase[]>(RESERVATION_ROUTES.clasesMartes(), { headers: this.authHeaders() });
   }
   getClasesMiercoles(): Observable<VistaClase[]> {
-    return this.http.get<VistaClase[]>(`${this.apiUrl}/reservations/clases/miercoles`, { headers: this.authHeaders() });
+    return this.http.get<VistaClase[]>(RESERVATION_ROUTES.clasesMiercoles(), { headers: this.authHeaders() });
   }
   getClasesJueves(): Observable<VistaClase[]> {
-    return this.http.get<VistaClase[]>(`${this.apiUrl}/reservations/clases/jueves`, { headers: this.authHeaders() });
+    return this.http.get<VistaClase[]>(RESERVATION_ROUTES.clasesJueves(), { headers: this.authHeaders() });
   }
   getClasesViernes(): Observable<VistaClase[]> {
-    return this.http.get<VistaClase[]>(`${this.apiUrl}/reservations/clases/viernes`, { headers: this.authHeaders() });
+    return this.http.get<VistaClase[]>(RESERVATION_ROUTES.clasesViernes(), { headers: this.authHeaders() });
   }
-
-
-
 }
-
-

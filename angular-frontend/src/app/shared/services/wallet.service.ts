@@ -1,41 +1,39 @@
 // src/app/services/wallet.service.ts
 import { Injectable } from '@angular/core';
-import { HttpClient ,HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Wallet } from '../interfaces/wallet.interface';
+import { WALLET_ROUTES } from '../routes/wallet-routes';
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class WalletService {
-  private apiUrl = 'http://localhost:8000/api/wallet'; // Cambia según la URL de tu backend
-
   constructor(private http: HttpClient) {}
-  
-    private authHeaders(): HttpHeaders {
-        const token = localStorage.getItem('token') || '';
-        return new HttpHeaders({ Authorization: `Bearer ${token}` });
-      }
-    
-  
 
-  // Obtener todas las wallets
+  private authHeaders(): HttpHeaders {
+    const token = localStorage.getItem('token') || '';
+    return new HttpHeaders({ Authorization: `Bearer ${token}` });
+  }
+
+  // ✅ Obtener todas las wallets
   getWallets(): Observable<Wallet[]> {
-    return this.http.get<Wallet[]>(this.apiUrl ,{ headers: this.authHeaders() });
+    return this.http.get<Wallet[]>(WALLET_ROUTES.all(), { headers: this.authHeaders() });
   }
 
-  // Obtener una wallet por ID
+  // ✅ Obtener una wallet por ID
   getWallet(id: number): Observable<Wallet> {
-    return this.http.get<Wallet>(`${this.apiUrl}/${id}`,{ headers: this.authHeaders() });
+    return this.http.get<Wallet>(WALLET_ROUTES.byId(id), { headers: this.authHeaders() });
   }
 
-  // Crear wallet
+  // ✅ Crear wallet
   crearWallet(data: { fecha: string; usuario_id: number; tipoclase_id: number }): Observable<any> {
-    return this.http.post(`${this.apiUrl}/create`, data,{ headers: this.authHeaders() });
+    return this.http.post(WALLET_ROUTES.create(), data, { headers: this.authHeaders() });
   }
 
-  // Eliminar wallet
+  // ✅ Eliminar wallet
   eliminarWallet(id: number): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/delete/${id}`,{ headers: this.authHeaders() });
+    return this.http.delete(WALLET_ROUTES.delete(id), { headers: this.authHeaders() });
   }
 }
