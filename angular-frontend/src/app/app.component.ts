@@ -6,6 +6,7 @@ import { AsideProfesorComponent } from './shared/components/aside-profesor.compo
 import { HeaderComponent } from './shared/components/header.component'; 
 import { AuthService } from './shared/services/auth.service';
 import { FooterComponent } from './shared/components/footer.compomonent';
+import { ToastComponent } from "./shared/components/toast/toast.component";
 
 
 @Component({
@@ -16,8 +17,9 @@ import { FooterComponent } from './shared/components/footer.compomonent';
     RouterModule,
     HeaderComponent,
     AsideProfesorComponent,
-    FooterComponent
-  ],
+    FooterComponent,
+    ToastComponent
+],
   templateUrl: './app.component.html',
 })
 export class AppComponent {
