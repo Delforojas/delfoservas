@@ -1,86 +1,61 @@
-# 🛠️ Actualizaciones Proyecto Symfony + Angular + Docker
+# Proyecto Symfony + Angular + Docker
 
----
+👉 Este proyecto busca reflejar **mis habilidades técnicas y mi progreso como desarrollador**, mostrando cómo aplico lo aprendido tanto en el aula como en la empresa.
 
-## 🔔 Implementación de Toasts (notificaciones) en Angular
+## 🚧 Estado del proyecto
+- 🔹 Actualmente en fase de desarrollo (**draft**).  
+- 🔹 Iteraciones semanales con nuevas features y refactorización del código.  
+- 🔹 Enfocado en demostrar tanto **backend sólido** como **frontend funcional**.
 
-### 📌 Objetivo
-Añadir un sistema de notificaciones **global**, ligero y reutilizable en Angular, para mostrar mensajes de éxito, error o información.
+## 🎯 Objetivos del proyecto
+- Diseñar y desplegar una aplicación **full-stack** con **Symfony (PHP)** en el backend y **Angular (TypeScript)** en el frontend.  
+- Implementar **autenticación JWT** y **control de roles** (admin, profesor, usuario).  
+- Construir un sistema de reservas y pagos con lógica de negocio centralizada.  
+- Utilizar **PostgreSQL** con triggers, procedimientos almacenados y vistas para automatizar procesos.  
+- Ejecutar el proyecto en entornos **Docker** con `docker-compose`.  
+- Probar y documentar la API con **Postman**.  
+- Mejorar la UI con **TailwindCSS** y arquitectura modular en Angular.
 
----
+## 🛠️ Stack Tecnológico
+### Lenguajes y frameworks
+- **PHP (Symfony)**  
+- **Java (Spring Boot)**  
+- **TypeScript (Angular)**  
+- **SQL / PLpgSQL**  
+- **JavaScript**
 
-### 🛠️ Pasos de implementación
+### Bases de datos
+- **PostgreSQL** → triggers, procedimientos almacenados, vistas  
+- **MySQL**
 
-1. **Creación del servicio `ToastService`**  
-   Gestiona la lista de notificaciones activas y su tiempo de vida.  
+### Cloud y contenedores
+- **Docker & Docker Compose**  
+- Despliegues básicos en entornos cloud
 
-2. **Creación del componente `ToastComponent`**  
-   Renderiza las notificaciones en pantalla y se comunica con el servicio.
-   
-3. **Inyección en el componente principal (`app.component.html`)**  
-   Se añade el selector `<app-toast>` para que las notificaciones sean visibles en toda la aplicación.  
+### Otros
+- **Git/GitHub**  
+- **Scrum (metodología ágil)**  
+- **TailwindCSS** para frontend básico  
+- **Testing de endpoints** y depuración de observables
 
----
+## 🧑‍💻 Experiencia aplicada en el proyecto
+Durante mis prácticas en **Codearts Solutions (Julio–Septiembre 2025)** he trabajado en un stack similar y apliqué los siguientes conceptos que aquí replico y extiendo:
 
-## 📑 Refactorización de Interfaces en Angular
+- Desarrollo y prueba de **APIs REST con Symfony**, con **JWT** y roles.  
+- **Optimización de bases de datos PostgreSQL**, creando triggers y vistas.  
+- **Servicios en Symfony** para centralizar la lógica de negocio.  
+- **Despliegue con Docker** (Angular + Symfony + Postgres).  
+- Documentación de endpoints con **Postman**.  
+- Arquitectura modular en Angular + **TailwindCSS**.  
+- Manejo de flujos de usuario: **login, registro, reservas, pagos**.  
+- Sistema de notificaciones con un **toast service reutilizable** en Angular.  
+- **Buenas prácticas**: refactorización de código, observables, separación de responsabilidades.
 
-### 📌 Objetivo
-Unificar y limpiar interfaces duplicadas para mejorar la **consistencia tipada** en el frontend.
-
----
-
-### 🔄 Unificación de Interfaces
-Antes había varias versiones repetidas con atributos distintos.  
-Ahora se consolidó en **una única interfaz bien definida**.
-
----
-
-### 🔧 Implementación en componentes y servicios
-Se adaptaron los **services** y **componentes** para importar correctamente las interfaces unificadas, evitando duplicaciones:
-
-- `clases.service.ts` → exporta **Clase, VistaClase, ClaseProfe, Alumno**  
-- `reservation.service.ts` → exporta **ClaseDto, VistaClase**  
-- `vistas.service.ts` → exporta **ReservaUsuarioDto**  
-- Componentes como **clases-admin, clases-profesor, crear-clase**, etc. se actualizaron para usar estas interfaces centralizadas.
-
-
-🔥 El proyecto queda más **ordenado**, fácil de escalar y con **feedback visual** para los usuarios.  
-
-
-## 🗂️ Refactorización de Servicios con Rutas Centralizadas
-
-### 📌 Objetivo
-Organizar las rutas de la API en archivos dedicados (`*.routes.ts`) para cada módulo, de forma que:
-- Se eviten strings duplicados en los servicios.
-- Cambiar una ruta del backend sea tan sencillo como modificar una sola línea.
-- Se mantenga un código más limpio y escalable.
-
----
-
-### 🛠️ Cambios realizados
-
-1. **Centralización de rutas**
-   - Se creó una carpeta `shared/routes/` que contiene archivos como:
-     - `auth-routes.ts`
-     - `bonos-routes.ts`
-     - `clase-routes.ts`
-     - `reservation-routes.ts`
-     - `room-routes.ts`
-     - `tipoclase-routes.ts`
-     - `users-routes.ts`
-     - `vistas-routes.ts`
-     - `wallet-routes.ts`
-
-2. **Refactorización de servicios**
-   - Cada servicio (`*.service.ts`) ahora importa las rutas desde su archivo correspondiente.
-
-
-##✅ Resumen
-	-•	✅ Sistema de toasts implementado para feedback en tiempo real.
-	-•	✅ Interfaces centralizadas y sin duplicados, mejorando la mantenibilidad del código.
-	-•	✅ Refactorización de imports en servicios y componentes para usar interfaces unificadas.
-	-•	✅ Servicios consumen rutas centralizadas, sin URLs hardcodeadas.
-
-
-
+## 📌 Roadmap
+- [ ] Endpoint de registro con emisión automática de JWT  
+- [ ] Gestión de clases, profesores y reservas  
+- [ ] Validación avanzada de pagos y bonos  
+- [ ] Panel de administración para roles **ROLE_ADMIN** y **ROLE_TEACHER**  
+- [ ] Optimización de consultas con vistas materializadas  
+- [ ] Deploy en un entorno cloud (ej. Render, Railway o AWS) 
 
