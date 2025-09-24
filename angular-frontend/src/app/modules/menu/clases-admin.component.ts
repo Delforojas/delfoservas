@@ -2,11 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
-import { ClaseService, Clase , VistaClase , ClaseProfe , Alumno} from '../../shared/services/clases.service';
+import { ClaseService} from '../../shared/services/clases.service';
 import { AuthService } from '../../shared/services/auth.service';
 import { ReservationService } from '../../shared/services/reservation.service';
 import { RouterModule } from '@angular/router';
-
+import { Clase } from '../../shared/interfaces/clase.interface';
+import { VistaClase } from '../../shared/interfaces/vistaClase.interface';
+import { ClaseProfe } from '../../shared/interfaces/claseProfe.interface';
+import { Alumno } from '../../shared/interfaces/Alumno.interface';
 
 @Component({
   selector: 'app-clases-admin',

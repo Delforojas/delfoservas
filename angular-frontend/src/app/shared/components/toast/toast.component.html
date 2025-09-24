@@ -1,0 +1,16 @@
+<ul class="fixed top-5 right-5 z-50 flex flex-col gap-2">
+
+  <li
+    *ngFor="let toast of toastService.toasts; let i = index"
+    class="px-4 py-2 rounded shadow-lg text-white flex justify-between items-center cursor-pointer transition-all duration-300 toast-anim"
+    [ngClass]="{
+      'bg-green-500': toast.type === 'success',
+      'bg-red-500': toast.type === 'error',
+      'bg-blue-500': toast.type === 'info'
+    }"
+    (click)="toastService.removeToast()"
+  >
+    <span>{{ toast.message }}</span>
+    <button class="ml-4 font-bold">✖</button>
+  </li>
+</ul>

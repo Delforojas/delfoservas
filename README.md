@@ -58,3 +58,4 @@ Durante mis prácticas en **Codearts Solutions (Julio–Septiembre 2025)** he tr
 - [ ] Panel de administración para roles **ROLE_ADMIN** y **ROLE_TEACHER**  
 - [ ] Optimización de consultas con vistas materializadas  
 - [ ] Deploy en un entorno cloud (ej. Render, Railway o AWS) 
+

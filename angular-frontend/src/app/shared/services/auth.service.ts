@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { BehaviorSubject, catchError, Observable, of, switchMap, tap, throwError } from 'rxjs';
+import { AUTH_ROUTES } from '../routes/auth-routes';
 
 @Injectable({
   providedIn: 'root'
@@ -37,27 +37,25 @@ export class AuthService {
   }
 
   // -------- API ----------
- register(data: any) {
-  return this.http.post(`${this.baseUrl}/users/register`, data);
+register(data: any) {
+  return this.http.post(AUTH_ROUTES.register(), data);
 }
-  login(data: any): Observable<any> {
-    return this.http.post<{ token: string }>(`${this.baseUrl}/login`, data).pipe(
-      tap(res => {
-        localStorage.setItem('token', res.token);
-        this.getUser().subscribe(user => this.setRoles(user?.roles || []));
-      })
-    );
-  }
-
-  getUser(): Observable<any> {
-    const token = localStorage.getItem('token');
-    return this.http.get(`${this.baseUrl}/users/me`, {
-      headers: { Authorization: `Bearer ${token}` }
-    }).pipe(
-      tap((user: any) => this.setRoles(user?.roles || [])) 
-    );
-  }
-
+login(data: any): Observable<any> {
+  return this.http.post<{ token: string }>(AUTH_ROUTES.login(), data).pipe(
+    tap(res => {
+      localStorage.setItem('token', res.token);
+      this.getUser().subscribe(user => this.setRoles(user?.roles || []));
+    })
+  );
+}
+getUser(): Observable<any> {
+  const token = localStorage.getItem('token');
+  return this.http.get(AUTH_ROUTES.me(), {
+    headers: { Authorization: `Bearer ${token}` }
+  }).pipe(
+    tap((user: any) => this.setRoles(user?.roles || []))
+  );
+}
   logout(): void {
     localStorage.removeItem('token');
     this.roles = [];

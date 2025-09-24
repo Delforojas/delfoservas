@@ -2,9 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../shared/services/auth.service';
 import { RouterModule } from '@angular/router'; 
-import { VistasService ,  ReservaUsuarioDto } from '../../shared/services/vistas.service';
+import { VistasService } from '../../shared/services/vistas.service';
 import { ReservationService } from '../../shared/services/reservation.service';
 
+import { ReservaUsuarioDto } from '../../shared/interfaces/reservaUsuarioDto.interface';
 
 
         @Component({
