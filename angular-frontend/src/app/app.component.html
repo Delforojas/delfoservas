@@ -1,22 +1,14 @@
 <app-header></app-header>
 
-<div class="flex flex-col md:flex-row min-h-screen bg-black">
-    <!-- ASIDE STICKY -->
-    <aside class="w-full md:w-[15%] backdrop-blur shadow bg-gradient-to-r from-emerald-500 to-blue-60 text-white ">
-      <app-aside-profesor></app-aside-profesor> 
-    </aside>
+<div class="flex">
+  <aside class="w-64">
+    <app-aside-profesor></app-aside-profesor>
+  </aside>
 
-    <!-- MAIN -->
-    <main class=" h-full flex-1  sm:p-3 flex justify-center">
-      <!-- barra superior opcional -->
-      <div class="w-full h-full">
-      
-          <router-outlet></router-outlet>
-      
-      </div>
-    </main>
+  <main class="flex-1">
+    <router-outlet></router-outlet>
+  </main>
+</div>
 
-    <app-footer></app-footer>
-  </div>
-
+<app-footer></app-footer>
   <app-toast></app-toast>

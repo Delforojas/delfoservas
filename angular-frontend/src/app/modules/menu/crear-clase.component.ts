@@ -13,7 +13,7 @@ import { Clase } from '../../shared/interfaces/clase.interface';
 import { VistaClase } from '../../shared/interfaces/vistaClase.interface';
 import { ClaseProfe } from '../../shared/interfaces/claseProfe.interface';
 import { TipoClase } from '../../shared/interfaces/tipoClase.interface';
-import { Alumno } from '../../shared/interfaces/Alumno.interface';
+import { Alumno } from '../../shared/interfaces/alumno.interface';
 import { Room } from '../../shared/interfaces/room.interface';
 import { Profesor } from '../../shared/interfaces/profesor.interface';
 
@@ -21,6 +21,9 @@ import { Profesor } from '../../shared/interfaces/profesor.interface';
 
 
 import { RouterModule } from '@angular/router';
+import { ToastService } from '../../shared/services/toast.service';
+import { handleHttpError } from '../../shared/utils/http-error';
+
 
 
 @Component({
@@ -65,10 +68,11 @@ export class CrearClaseComponent implements OnInit {
     private tipoClaseService: TipoClaseService ,
     private roomService: RoomService,
     private usersService: UsersService,
-    public auth: AuthService
+    public auth: AuthService,
+    private toast :ToastService
     
 
-    // 👈 inyectas el servicio
+
   ) {}
 
   ngOnInit(): void {
@@ -84,13 +88,13 @@ export class CrearClaseComponent implements OnInit {
   cargarClases(): void {
     this.claseService.getClases().subscribe({ // <-- endpoint normal (tabla)
       next: (data: Clase[]) => this.clases = data,
-      error: () => this.error = 'Error al cargar clases'
+      error: (e) => handleHttpError(e, this.toast, undefined, 'clasesError'),
     });
   }
   cargarClasesVista(): void {
     this.claseService.getClasesVista().subscribe({ // <-- endpoint vista_clases
       next: (data: VistaClase[]) => this.clasesVista = data,
-      error: () => this.error = 'Error al cargar vista de clases'
+      error: (e) => handleHttpError(e, this.toast, undefined, 'vistaClasesError'),
     });
   }
 
@@ -98,21 +102,22 @@ export class CrearClaseComponent implements OnInit {
  cargarTiposClase(): void {
     this.tipoClaseService.getTipos().subscribe({
       next: (res: TipoClase[]) => this.tiposClase = res,
-      error: (e: any) => console.error('Error cargando tipos de clase', e)
+      error: (e) => handleHttpError(e, this.toast, undefined, 'tiposClaseError'),
+
     });
   }
 
  cargarRooms(): void {
   this.roomService.getRooms().subscribe({
     next: (res: Room[]) => this.rooms = res,
-    error: (e) => console.error('Error cargando salas', e)
+    error: (e) => handleHttpError(e, this.toast, undefined, 'roomsError'),
   });
 }
 
 cargarProfesores(): void {
   this.usersService.getProfesores().subscribe({
     next: (res: Profesor[]) => this.profesores = res,
-    error: (e) => console.error('Error cargando profesores', e)
+    error: (e) => handleHttpError(e, this.toast, undefined, 'profesoresError'),
   });
 }
 
@@ -121,13 +126,11 @@ cargarClasesProfesores(): void {
     this.error = null;
     this.claseService.getMisClases().subscribe({
       next: (rows) => { this.clasesprofe = rows; this.cargando = false; },
-      error: (e) => { this.error = 'No se pudieron cargar tus clases'; this.cargando = false; }
+      error: (e) => handleHttpError(e, this.toast, undefined, 'misClasesError'),
     });
   }
 
 cargarAlumnos(id: number): void {
-  console.log('Entrando a cargarAlumnos con id:', id);
-
   this.cargandoAlumnos = true;
   this.errorAlumnos = null;
   this.alumnos = [];
@@ -135,16 +138,11 @@ cargarAlumnos(id: number): void {
 
   this.claseService.getAlumnosDeClase(id).subscribe({
     next: (rows) => {
-      console.log('Alumnos recibidos:', rows);
       this.alumnos = rows;
       this.mostrarTablaAlumnos = true;
       this.cargandoAlumnos = false;
     },
-    error: (err) => {
-      console.error('Error cargando alumnos:', err);
-      this.errorAlumnos = 'No se pudieron cargar los alumnos';
-      this.cargandoAlumnos = false;
-    }
+     error: (e) => handleHttpError(e, this.toast, undefined, 'alumnosError'),
   });
 }
 
@@ -176,11 +174,8 @@ crearClase(): void {
   if (!Number.isFinite(payload.room) || payload.room <= 0) errores.push('room');
 
   if (errores.length) {
-
-
-    alert('Completa correctamente: ' + errores.join(', '));
-    console.warn('Valores recibidos en nuevaClase:', this.nuevaClase);
-    console.warn('Payload normalizado:', payload);
+    handleHttpError({ status: 400 } as any, this.toast, undefined, 'crearClaseFormInvalid');
+    console.warn('Campos inválidos:', errores.join(', '), { payload });
     return;
   }
 
@@ -190,10 +185,8 @@ crearClase(): void {
       this.nuevaClase = { nombre: '', tipoclase: 0, teacher: 0, fecha: '', hora: '', aforo_clase: 0, room: 0 };
       this.cargarClases();
     },
-    error: (err) => {
-      this.error = 'Error al crear la clase';
-      console.error(err);
-    }
+   
+    error: (e) => handleHttpError(e, this.toast, undefined, 'crearClaseError'),
   });
 }
 

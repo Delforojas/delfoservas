@@ -9,6 +9,7 @@ import { FooterComponent } from './shared/components/footer.compomonent';
 import { ToastComponent } from "./shared/components/toast/toast.component";
 
 
+
 @Component({
   selector: 'app-root',
   standalone: true,

@@ -3,6 +3,12 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { AuthService } from '../../shared/services/auth.service';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { ToastService } from '../../shared/services/toast.service';
+import { handleHttpError } from '../../shared/utils/http-error';
+import { showToast } from '../../shared/utils/test-messages';
+import { NavigationService } from '../../shared/services/navigation.service';
+import { HttpErrorResponse } from '@angular/common/http';
+
 
 @Component({
   selector: 'app-register',
@@ -16,12 +22,14 @@ export class RegisterComponent {
   constructor(
     private fb: FormBuilder,
     private auth: AuthService,
-    private router: Router
+    private router: Router,
+    private toast : ToastService,
+    private navigation: NavigationService
   ) {
     this.form = this.fb.group({
-      nombre: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', Validators.required]
+      nombre: [''],
+      email: [''],
+      password: ['']
     });
   }
 
@@ -30,10 +38,12 @@ export class RegisterComponent {
 
     this.auth.register(this.form.value).subscribe({
       next: () => {
-        alert('Registro exitoso');
-        this.router.navigate(['/login']);
+        showToast(this.toast, 'registerSuccess');
+        this.navigation.goTo ('login')
       },
-      error: (err) => alert(err.error.message || 'Error en el registro')
-    });
+      error: (err: HttpErrorResponse) => {
+        handleHttpError(err, this.toast, this.form);
+        },
+      });
   }
 }

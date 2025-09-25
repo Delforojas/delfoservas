@@ -4,8 +4,10 @@ import { AuthService } from '../../shared/services/auth.service';
 import { RouterModule } from '@angular/router'; 
 import { VistasService } from '../../shared/services/vistas.service';
 import { ReservationService } from '../../shared/services/reservation.service';
-
 import { ReservaUsuarioDto } from '../../shared/interfaces/reservaUsuarioDto.interface';
+import { ToastService } from '../../shared/services/toast.service';
+import { handleHttpError } from '../../shared/utils/http-error';
+import { showToast } from '../../shared/utils/test-messages';
 
 
         @Component({
@@ -33,6 +35,7 @@ import { ReservaUsuarioDto } from '../../shared/interfaces/reservaUsuarioDto.int
                 private vistas: VistasService,
                 private auth: AuthService,
                 private reservationService: ReservationService,
+                private toast :ToastService
             ) {}
 
             ngOnInit(): void {
@@ -45,14 +48,14 @@ import { ReservaUsuarioDto } from '../../shared/interfaces/reservaUsuarioDto.int
                     
                 }
                 },
-                error: (e) => console.error('Error cargando usuario', e),
+                error: (e) => handleHttpError(e, this.toast, undefined, 'cargarUsuarioError'),
             });
             }
   
 
             loadReservasUsuario() {
             if (!this.usuarioId || this.usuarioId <= 0) { 
-                alert('Pon un usuarioId válido'); 
+            handleHttpError({ status: 400 } as any, this.toast, undefined, 'reservasUsuarioError');
                 return; 
             }
             this.cargando = true;
@@ -62,12 +65,10 @@ import { ReservaUsuarioDto } from '../../shared/interfaces/reservaUsuarioDto.int
                 this.mostrarTablaReservasUsuario = true;
                 this.cargando=false;
                 },
-                error: e => {
+                error: (e) => {
                 this.mostrarTablaReservasUsuario = false;
                 this.reservasUsuario = [];
-                this.error = 'Error cargando reservas del usuario';
-                console.error(e);
-                this.cargando= false;
+                handleHttpError(e, this.toast, undefined, 'reservasUsuarioError');
                 }
             });
             }
@@ -91,11 +92,9 @@ import { ReservaUsuarioDto } from '../../shared/interfaces/reservaUsuarioDto.int
       next: () => {
         this.reservasUsuario = this.reservasUsuario.filter(r => r.reserva_id !== reservaId);
         this.eliminandoId = null;
+        showToast(this.toast, 'eliminarReservaSuccess');
       },
-      error: (err) => {
-        console.error('Error eliminando reserva', err);
-        this.eliminandoId = null;
-      }
+      error: (e) => handleHttpError(e, this.toast, undefined, 'eliminarReservaError'),
     });
   }
 

@@ -4,7 +4,8 @@ import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule, FormControl } from '@angular/forms';
 import { AuthService } from '../../shared/services/auth.service';
 import { VistasService } from '../../shared/services/vistas.service';
-
+import { ToastService } from '../../shared/services/toast.service';
+import { handleHttpError } from '../../shared/utils/http-error';
 
 @Component({
   selector: 'bonos-usuario',
@@ -27,7 +28,8 @@ export class UsuarioBonosComponent implements OnInit {
 
         constructor(
             private vistas: VistasService,
-            private auth: AuthService
+            private auth: AuthService,
+            private toast: ToastService,            
         ) {}
 
             ngOnInit(): void {
@@ -35,12 +37,13 @@ export class UsuarioBonosComponent implements OnInit {
                 next: (u) => {
                 this.usuarios = u;
                 this.usuarioId = Number(u?.id) || null;
-                // 🔥 carga automática al entrar por ruta
                 if (this.usuarioId) {
                     this.loadBonosPorUsuario();
                 }
                 },
-                error: (e) => console.error('Error cargando usuario', e),
+                error: (e) => {
+                handleHttpError(e, this.toast); 
+                    },
             });
             }
   
@@ -48,7 +51,7 @@ export class UsuarioBonosComponent implements OnInit {
 
             const id = Number(this.usuarioId);
             if (!id || id <= 0) {
-                alert('Pon un usuarioId válido');
+                handleHttpError({ status: 400 } as any, this.toast, undefined, 'bonosError');
                 return;
             }
             
@@ -63,9 +66,8 @@ export class UsuarioBonosComponent implements OnInit {
                 this.cargando = false;
                 },
                 error: (e) => {
-                console.error('[Menu2] bonos ERROR', e);
-                this.error = 'Error cargando bonos del usuario';
-                this.cargando = false;
+                    handleHttpError(e, this.toast, undefined, 'bonosError'); 
+                    this.cargando = false;
                 }
             });
             }

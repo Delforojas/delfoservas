@@ -1,88 +1,57 @@
 # 🛠️ Actualizaciones Proyecto Symfony + Angular + Docker
 
 ---
+# 📌 Gestión de Errores y Notificaciones (Angular + Symfony)
 
-## 🔔 Implementación de Toasts (notificaciones) en Angular
+## ✅ Avances implementados
+- **Centralización de errores**  
+  Se creó el helper `handleHttpError` en `shared/utils/http-error.ts` para gestionar los errores HTTP desde un solo punto, evitando duplicación de código en los componentes.
+  
+- **Sistema unificado de toasts**  
+  En `shared/utils/test-messages.ts` se definió un **mapa de claves (`ToastKey`)** con todos los mensajes de éxito y error de la aplicación (login, clases, reservas, bonos, etc.).  
+  Cada error o éxito se maneja llamando a:
 
-### 📌 Objetivo
-Añadir un sistema de notificaciones **global**, ligero y reutilizable en Angular, para mostrar mensajes de éxito, error o información.
+  ```ts
+  showToast(this.toast, 'clasesError');
 
----
+  o en el caso de errores HTTP:
+  handleHttpError(err, this.toast, undefined, 'alumnosError');
 
-### 🛠️ Pasos de implementación
+### 🔧 Mensajes personalizados por contexto
 
-1. **Creación del servicio `ToastService`**  
-   Gestiona la lista de notificaciones activas y su tiempo de vida.  
+Usamos claves (`ToastKey`) para mostrar mensajes coherentes en cada parte de la app. Así evitamos repetir textos y mantenemos el mismo tono en toda la UI.
 
-2. **Creación del componente `ToastComponent`**  
-   Renderiza las notificaciones en pantalla y se comunica con el servicio.
-   
-3. **Inyección en el componente principal (`app.component.html`)**  
-   Se añade el selector `<app-toast>` para que las notificaciones sean visibles en toda la aplicación.  
+- **Autenticación**
+  - `loginSuccess`, `loginError`, `registerSuccess`, `registerConflict`, `passwordResetSuccess`, `passwordResetError`, etc.
+- **Dominio**
+  - Clases, reservas, alumnos, bonos, profesores, salas, wallet…
+  - Ejemplos: `clasesError`, `alumnosError`, `reservarError`, `reservarSuccess`, `bonosError`, `walletError`, etc.
+- **Éxitos**
+  - Mensajes claros cuando una acción se completa: `reservarSuccess`, `eliminarReservaSuccess`, etc.
 
----
+> Todos los componentes usan `handleHttpError` y `showToast` en lugar de `alert` o strings duplicados.
 
-## 📑 Refactorización de Interfaces en Angular
+```ts
+// Ejemplos
+showToast(this.toast, 'clasesError');
+handleHttpError(err, this.toast, undefined, 'alumnosError');
+### 🧩 Componentes adaptados
 
-### 📌 Objetivo
-Unificar y limpiar interfaces duplicadas para mejorar la **consistencia tipada** en el frontend.
+Estos componentes ya migraron al sistema centralizado de errores/toasts:
 
----
-
-### 🔄 Unificación de Interfaces
-Antes había varias versiones repetidas con atributos distintos.  
-Ahora se consolidó en **una única interfaz bien definida**.
-
----
-
-### 🔧 Implementación en componentes y servicios
-Se adaptaron los **services** y **componentes** para importar correctamente las interfaces unificadas, evitando duplicaciones:
-
-- `clases.service.ts` → exporta **Clase, VistaClase, ClaseProfe, Alumno**  
-- `reservation.service.ts` → exporta **ClaseDto, VistaClase**  
-- `vistas.service.ts` → exporta **ReservaUsuarioDto**  
-- Componentes como **clases-admin, clases-profesor, crear-clase**, etc. se actualizaron para usar estas interfaces centralizadas.
-
-
-🔥 El proyecto queda más **ordenado**, fácil de escalar y con **feedback visual** para los usuarios.  
-
-
-## 🗂️ Refactorización de Servicios con Rutas Centralizadas
-
-### 📌 Objetivo
-Organizar las rutas de la API en archivos dedicados (`*.routes.ts`) para cada módulo, de forma que:
-- Se eviten strings duplicados en los servicios.
-- Cambiar una ruta del backend sea tan sencillo como modificar una sola línea.
-- Se mantenga un código más limpio y escalable.
+- `ClasesAdminComponent`
+- `ClasesProfesorComponent`
+- `CrearClaseComponent`
+- `ClasesReservaComponent`
+- `UsuarioBonosComponent`
+- `UsuarioReservasComponent`
+- `UsuarioPagosComponent`
 
 ---
 
-### 🛠️ Cambios realizados
+## 🛠️ Beneficios
 
-1. **Centralización de rutas**
-   - Se creó una carpeta `shared/routes/` que contiene archivos como:
-     - `auth-routes.ts`
-     - `bonos-routes.ts`
-     - `clase-routes.ts`
-     - `reservation-routes.ts`
-     - `room-routes.ts`
-     - `tipoclase-routes.ts`
-     - `users-routes.ts`
-     - `vistas-routes.ts`
-     - `wallet-routes.ts`
-
-2. **Refactorización de servicios**
-   - Cada servicio (`*.service.ts`) ahora importa las rutas desde su archivo correspondiente.
-
-
-##✅ Resumen
-	-•	✅ Sistema de toasts implementado para feedback en tiempo real.
-	-•	✅ Interfaces centralizadas y sin duplicados, mejorando la mantenibilidad del código.
-	-•	✅ Refactorización de imports en servicios y componentes para usar interfaces unificadas.
-	-•	✅ Servicios consumen rutas centralizadas, sin URLs hardcodeadas.
-
-
-
-
-
-
+- Código **más limpio y mantenible**.  
+- **Menos repetición** de mensajes en los componentes.  
+- Mejor **experiencia de usuario** con notificaciones consistentes.  
+- **Escalabilidad**: añadir un nuevo mensaje = agregar un `ToastKey` en `test-messages.ts` y listo.  

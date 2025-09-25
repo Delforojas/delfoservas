@@ -7,7 +7,7 @@ import { AuthService } from '../../shared/services/auth.service';
 import { RouterModule } from '@angular/router'; 
 import { ClaseDto } from '../interfaces/ClaseDto.interface';
 import { VistaClase } from '../interfaces/vistaClase.interface';
-import { Alumno } from '../interfaces/Alumno.interface'
+import { Alumno } from '../interfaces/alumno.interface'
 
 
 

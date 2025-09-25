@@ -47,9 +47,9 @@
                 <tr *ngIf="claseSeleccionadaId === cl.id && mostrarTablaAlumnos">
                   <td [attr.colspan]="8">
                     <div *ngIf="cargandoAlumnos" class="text-blue-600">Cargando alumnos…</div>
-                    <div *ngIf="errorAlumnos" class="text-red-600">{{ errorAlumnos }}</div>
+                   
 
-                    <ng-container *ngIf="!cargandoAlumnos && !errorAlumnos">
+                    <ng-container *ngIf="!cargandoAlumnos">
                       <table *ngIf="alumnos.length; else sinAlumnos" class="w-full text-xs bg-yellow-200">
                         <tbody>
                           <tr *ngFor="let a of alumnos" class="odd:bg-white even:bg-gray-50">

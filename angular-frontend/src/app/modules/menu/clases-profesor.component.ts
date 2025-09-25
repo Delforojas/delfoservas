@@ -8,10 +8,12 @@ import { ReservationService } from '../../shared/services/reservation.service';
 import { Clase } from '../../shared/interfaces/clase.interface';
 import { VistaClase } from '../../shared/interfaces/vistaClase.interface';
 import { ClaseProfe } from '../../shared/interfaces/claseProfe.interface';
-import { Alumno } from '../../shared/interfaces/Alumno.interface'
+import { Alumno } from '../../shared/interfaces/alumno.interface'
 
 
 import { RouterModule } from '@angular/router';
+import { handleHttpError } from '../../shared/utils/http-error';
+import { ToastService } from '../../shared/services/toast.service';
 
 
 @Component({
@@ -50,7 +52,8 @@ export class ClasesProfesorComponent implements OnInit
           constructor(
             private claseService: ClaseService,
             private reservationService: ReservationService,
-            public auth: AuthService
+            public auth: AuthService,
+            private toast: ToastService
             ) {}
 
           ngOnInit(): void {
@@ -62,13 +65,14 @@ export class ClasesProfesorComponent implements OnInit
           cargarClases(): void {
             this.claseService.getClases().subscribe({ 
               next: (data: Clase[]) => this.clases = data,
-              error: () => this.error = 'Error al cargar clases'
+              error: (e) => handleHttpError(e, this.toast, undefined, 'clasesError'),
+
             });
           }
           cargarClasesVista(): void {
             this.claseService.getClasesVista().subscribe({ 
               next: (data: VistaClase[]) => this.clasesVista = data,
-              error: () => this.error = 'Error al cargar vista de clases'
+              error: (e) => handleHttpError(e, this.toast, undefined, 'vistaClasesError'),
             });
           }
 
@@ -77,13 +81,11 @@ export class ClasesProfesorComponent implements OnInit
             this.error = null;
             this.claseService.getMisClases().subscribe({
               next: (rows) => { this.clasesprofe = rows; this.cargando = false; },
-              error: (e) => { this.error = 'No se pudieron cargar tus clases'; this.cargando = false; }
+              error: (e) => handleHttpError(e, this.toast, undefined, 'misClasesError'),
             });
           }
 
         cargarAlumnos(id: number): void {
-          console.log('Entrando a cargarAlumnos con id:', id);
-
           this.cargandoAlumnos = true;
           this.errorAlumnos = null;
           this.alumnos = [];
@@ -91,17 +93,12 @@ export class ClasesProfesorComponent implements OnInit
 
           this.claseService.getAlumnosDeClase(id).subscribe({
             next: (rows) => {
-              console.log('Alumnos recibidos:', rows);
               this.alumnos = rows;
               this.mostrarTablaAlumnos = true;
               this.cargandoAlumnos = false;
             },
-            error: (err) => {
-              console.error('Error cargando alumnos:', err);
-              this.errorAlumnos = 'No se pudieron cargar los alumnos';
-              this.cargandoAlumnos = false;
-            }
-          });
+            error: (e) => handleHttpError(e, this.toast, undefined, 'alumnosError'),
+            });
         }
 
         toggleTablaAlumnos(id: number): void {
@@ -117,10 +114,7 @@ export class ClasesProfesorComponent implements OnInit
           if (confirm('¿Eliminar esta clase?')) {
             this.claseService.eliminarClase(id).subscribe({
               next: () => this.cargarClases(),
-              error: (err) => {
-                this.error = 'Error al eliminar la clase';
-                console.error(err);
-              }
+              error: (e) => handleHttpError(e, this.toast, undefined, 'eliminarClaseError'),
             });
           }
         }
@@ -128,7 +122,7 @@ export class ClasesProfesorComponent implements OnInit
 
         eliminarAlumnoDeClase(a: Alumno): void {
           if (!a.alumno_reservation_id) {
-            alert('No se encontró la reserva de este alumno.');
+            handleHttpError({ status: 400 } as any, this.toast, undefined, 'eliminarReservaError');
             return;
           }
           if (!confirm(`¿Eliminar la reserva de ${a.alumno_nombre}?`)) return;
@@ -137,20 +131,14 @@ export class ClasesProfesorComponent implements OnInit
 
           this.reservationService.eliminarReservation(a.alumno_reservation_id).subscribe({
             next: () => {
-              // Quita de la UI inmediatamente
               this.alumnos = this.alumnos.filter(x => x.alumno_reservation_id !== a.alumno_reservation_id);
-
-              // Refresca la subtabla por si el backend recalcula algo
               if (this.claseSeleccionadaId != null) {
                 this.cargarAlumnos(this.claseSeleccionadaId);
               }
               this.cargarClasesProfesores();
             },
-            error: (err) => {
-              console.error('Error eliminando reserva', err);
-              alert(err?.error?.error ?? 'No se pudo eliminar la reserva');
-            },
-            complete: () => this.eliminandoId = null
+            error: (e) => handleHttpError(e, this.toast, undefined, 'eliminarReservaError'),
+            complete: () => this.eliminandoId = null ,
           });
         }
       }
