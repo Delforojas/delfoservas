@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Entity\Enum\ClassType;
 use App\Repository\TipoClaseRepository;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -13,7 +14,7 @@ class TipoClase
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
     private ?int $id = null;
-
+    
     #[ORM\Column(type: 'string', length: 100)]
     private ?string $nombre = null;
 
@@ -26,17 +27,9 @@ class TipoClase
         return $this->id;
     }
 
-    public function getNombre(): ?string
-    {
-        return $this->nombre;
-    }
-
-    public function setNombre(string $nombre): self
-    {
-        $this->nombre = $nombre;
-        return $this;
-    }
-
+    public function getNombre(): ?string { return $this->nombre; }
+    public function setNombre(string $nombre): self { $this->nombre = $nombre; return $this; }
+    
     public function getClasesTotales(): ?float
     {
         return $this->clases_totales;

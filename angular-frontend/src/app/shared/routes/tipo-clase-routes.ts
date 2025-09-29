@@ -1,11 +1,9 @@
-import { environment } from "../../environments/environments";
-
-export const API_URL = environment.endpointUrl;
+import { API} from "../../environments/environments";
 
 export const TIPO_CLASE_ROUTES = {
-  list:     () => `${API_URL}/tipoclase`,
-  byId:     (id: number) => `${API_URL}/tipoclase/${id}`,
-  create:   () => `${API_URL}/tipoclase/create`,
-  update:   (id: number) => `${API_URL}/tipoclase/update/${id}`,
-  delete:   (id: number) => `${API_URL}/tipoclase/delete/${id}`,
+  list:     () => `${API}/tipoclase`,
+  byId:     (id: number) => `${API}/tipoclase/${id}`,
+  create:   () => `${API}/tipoclase`,
+  update:   (id: number) => `${API}/tipoclase/${id}`,
+  delete:   (id: number) => `${API}/tipoclase/${id}`,
 };

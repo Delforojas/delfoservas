@@ -4,3 +4,5 @@ export const environment = {
  endpointUrl: 'http://localhost:8000/api',
  base: 'http://localhost:8000'
  };
+
+ export const API = environment.endpointUrl;

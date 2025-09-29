@@ -2,10 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
-import { ClaseService} from '../../shared/services/clases.service';
-import { TipoClaseService} from '../../shared/services/tipoclase.service';
+import { ClaseService } from '../../shared/services/clases.service';
+import { TipoClaseService } from '../../shared/services/tipoclase.service';
 import { RoomService } from '../../shared/services/room.service';
-import { UsersService} from '../../shared/services/user.service';
+import { UsersService } from '../../shared/services/user.service';
 import { AuthService } from '../../shared/services/auth.service';
 
 import { Clase } from '../../shared/interfaces/clase.interface';
@@ -41,16 +41,16 @@ import { ToastService } from '../../shared/services/toast.service';
   standalone: true,
   imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './crear-clase.html',
-  
+
 })
 export class CrearClaseComponent implements OnInit {
   clasesVista: VistaClase[] = [];
   clases: Clase[] = [];
-   tiposClase: TipoClase[] = [];
-  rooms: Room[] = [];          
+  tiposClase: TipoClase[] = [];
+  rooms: Room[] = [];
   profesores: Profesor[] = [];
   clasesprofe: ClaseProfe[] = [];
-  alumnos: Alumno[] = []; 
+  alumnos: Alumno[] = [];
 
   nuevaClase: Omit<Clase, 'id'> = {
     nombre: '',
@@ -73,17 +73,17 @@ export class CrearClaseComponent implements OnInit {
   mostrarTablaProfesores = false;
   mostrarTablaAlumnos = false;
 
-   constructor(
+  constructor(
     private claseService: ClaseService,
-    private tipoClaseService: TipoClaseService ,
+    private tipoClaseService: TipoClaseService,
     private roomService: RoomService,
     private usersService: UsersService,
     public auth: AuthService,
-    private toast :ToastService
-    
+    private toast: ToastService
 
 
-  ) {}
+
+  ) { }
 
   ngOnInit(): void {
     loadClases(this);
@@ -94,10 +94,10 @@ export class CrearClaseComponent implements OnInit {
     loadClasesProfesores(this);
   }
 
- 
-crearClase(): void {
-  crearClase(this);
-}
+
+  crearClase(): void {
+    crearClase(this);
+  }
 
 }
 

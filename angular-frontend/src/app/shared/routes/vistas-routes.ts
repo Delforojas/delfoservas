@@ -1,7 +1,6 @@
 // src/app/shared/routes/vistas-routes.ts
-import { environment } from "../../environments/environments";
+import { API } from "../../environments/environments";
 
-const API = environment.endpointUrl;          
 const VISTAS = `${API}/vistas`;
 
 export const VISTAS_ROUTES = {

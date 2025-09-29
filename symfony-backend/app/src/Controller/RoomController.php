@@ -40,7 +40,7 @@ class RoomController extends AbstractController
         ]);
     }
 
-    #[Route('/create', name: 'room_create', methods: ['POST'])]
+    #[Route('', name: 'room_create', methods: ['POST'])]
     public function create(Request $request, EntityManagerInterface $em): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
@@ -68,7 +68,7 @@ class RoomController extends AbstractController
         return $this->json(['message' => 'Sala actualizada correctamente']);
     }
 
-    #[Route('/delete/{id}', name: 'room_delete', methods: ['DELETE'])]
+    #[Route('/{id}', name: 'room_delete', methods: ['DELETE'])]
     public function delete(Room $room, EntityManagerInterface $em): JsonResponse
     {
         $em->remove($room);

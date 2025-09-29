@@ -94,7 +94,7 @@ toggleTabla(dia: 'L' | 'M' | 'X' | 'J' | 'V') {
   }
 
   cargarClases(): void {
-    this.reservasService.getClases().subscribe((data: ClaseDto[]) => {
+    this.claseService.getClases().subscribe((data: ClaseDto[]) => {
       this.clases = data;
     });
   }

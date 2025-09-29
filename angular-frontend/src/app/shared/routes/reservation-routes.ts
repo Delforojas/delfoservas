@@ -1,25 +1,26 @@
-import { environment } from "../../environments/environments";
+import { API } from "../../environments/environments";
 
-export const API_URL = environment.endpointUrl;
+const RESERVATIONS = `${API}/reservations`;
+
 
 export const RESERVATION_ROUTES = {
-  // clases (catálogo)
-  clases:           () => `${API_URL}/clases`,
 
   // reservas CRUD
-  list:             () => `${API_URL}/reservations`,
-  byId:             (id: number) => `${API_URL}/reservations/${id}`,
-  create:           () => `${API_URL}/reservations/create`,
-  update:           (id: number) => `${API_URL}/reservations/update/${id}`,
-  delete:           (id: number) => `${API_URL}/reservations/delete/${id}`,
+  list:             () => RESERVATIONS,
+  byId:             (id: number) => `${RESERVATIONS}/${id}`,
+  create:           () => RESERVATIONS,
+  update:           (id: number) => `${RESERVATIONS}/${id}`,
+  delete:           (id: number) => `${RESERVATIONS}/${id}`,
 
   // acciones
-  reservarClase:    (claseId: number) => `${API_URL}/reservations/reservar/${claseId}`,
+  reservarClase:    (claseId: number) => `${RESERVATIONS}/reservar/${claseId}`,
 
   // vistas por día
-  clasesLunes:      () => `${API_URL}/reservations/clases/lunes`,
-  clasesMartes:     () => `${API_URL}/reservations/clases/martes`,
-  clasesMiercoles:  () => `${API_URL}/reservations/clases/miercoles`,
-  clasesJueves:     () => `${API_URL}/reservations/clases/jueves`,
-  clasesViernes:    () => `${API_URL}/reservations/clases/viernes`,
+  clasesLunes:      () => `${RESERVATIONS}/clases/lunes`,
+  clasesMartes:     () => `${RESERVATIONS}/clases/martes`,
+  clasesMiercoles:  () => `${RESERVATIONS}/clases/miercoles`,
+  clasesJueves:     () => `${RESERVATIONS}/clases/jueves`,
+  clasesViernes:    () => `${RESERVATIONS}/clases/viernes`,
+
+   reservasPorDia: (userId: number, dia: string) => `${RESERVATIONS}/usuarios/${userId}/reservas/${dia}`,
 };

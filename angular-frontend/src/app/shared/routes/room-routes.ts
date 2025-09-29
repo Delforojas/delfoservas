@@ -1,13 +1,11 @@
-import { environment } from "../../environments/environments";
+import { API } from "../../environments/environments";
 
-environment
-
-export const API_URL = environment.endpointUrl;
+const ROOM = `${API}/room`;
 
 export const ROOM_ROUTES = {
-  list:      () => `${API_URL}/room`,
-  byId:      (id: number) => `${API_URL}/room/${id}`,
-  create:    () => `${API_URL}/room/create`,
-  update:    (id: number) => `${API_URL}/room/update/${id}`,
-  delete:    (id: number) => `${API_URL}/room/delete/${id}`,
+  list:      () => ROOM,
+  byId:      (id: number) => `${ROOM}/${id}`,
+  create:    () => `${ROOM}`,
+  update:    (id: number) => `${ROOM}/${id}`,
+  delete:    (id: number) => `${ROOM}/${id}`,
 };

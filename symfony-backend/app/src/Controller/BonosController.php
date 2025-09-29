@@ -50,7 +50,7 @@ class BonosController extends AbstractController
         ]);
     }
 
-    #[Route('/create', name: 'bonos_create', methods: ['POST'])]
+    #[Route('', name: 'bonos_create', methods: ['POST'])]
     public function create(Request $request, EntityManagerInterface $em): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
@@ -76,7 +76,7 @@ class BonosController extends AbstractController
         return $this->json(['message' => 'Bono creado correctamente', 'id' => $bono->getId()], 201);
     }
 
-    #[Route('/update/{id}', name: 'bonos_update', methods: ['PUT'])]
+    #[Route('/{id}', name: 'bonos_update', methods: ['PUT'])]
     public function update(Request $request, Bonos $bono, EntityManagerInterface $em): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
@@ -112,7 +112,7 @@ class BonosController extends AbstractController
         return $this->json(['message' => 'Bono actualizado correctamente']);
     }
 
-    #[Route('/delete/{id}', name: 'bonos_delete', methods: ['DELETE'])]
+    #[Route('/{id}', name: 'bonos_delete', methods: ['DELETE'])]
     public function delete(Bonos $bono, EntityManagerInterface $em): JsonResponse
     {
         $em->remove($bono);

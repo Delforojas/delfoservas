@@ -60,7 +60,7 @@ public function show(User $user): JsonResponse
     ]);
 }
 
-#[Route('/register', name: 'api_register', methods: ['POST'])]
+#[Route('', name: 'api_register', methods: ['POST'])]
     public function register(
         Request $req,
         EntityManagerInterface $em,
@@ -108,7 +108,7 @@ public function update(Request $request, User $user, EntityManagerInterface $em)
     return $this->json(['message' => 'Usuario actualizado']);
 }
 
-#[Route('/delete/{id}', name: 'users_delete', methods: ['DELETE'], requirements: ['id' => '\d+'])]
+#[Route('/{id}', name: 'users_delete', methods: ['DELETE'], requirements: ['id' => '\d+'])]
 public function delete(User $user, EntityManagerInterface $em): JsonResponse
 {
     $em->remove($user);
@@ -116,9 +116,9 @@ public function delete(User $user, EntityManagerInterface $em): JsonResponse
     return $this->json(['message' => 'Usuario eliminado']);
 }
 
-    #[Route('/profesores', name: 'profesores_index', methods: ['GET'])]
-    public function listarProfesores(UserRepository $repo): JsonResponse
-    {
-        return $this->json($repo->listarProfesores());
-    }
+#[Route('/profesores ', name: 'profesores_index', methods: ['GET'])]
+public function listarProfesores(UserRepository $repo): JsonResponse
+{
+    return $this->json($repo->listarProfesores());
+}
 }

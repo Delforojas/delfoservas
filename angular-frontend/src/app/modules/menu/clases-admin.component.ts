@@ -13,14 +13,14 @@ import { VistaClase } from '../../shared/interfaces/vistaClase.interface';
 import { ClaseProfe } from '../../shared/interfaces/claseProfe.interface';
 import { Alumno } from '../../shared/interfaces/alumno.interface';
 
-import { loadClases, loadClasesVista, loadClasesProfesores, loadAlumnos, deleteClase, deleteAlumnoDeClase } 
+import { loadClases, loadClasesVista, loadClasesProfesores, loadAlumnos, deleteClase, deleteAlumnoDeClase }
   from '../../shared/utils/load';
 
 
 @Component({
   selector: 'app-clases-admin',
   standalone: true,
-  imports: [CommonModule,  RouterModule],
+  imports: [CommonModule, RouterModule],
   templateUrl: './clases-admin.html',
 })
 export class ClasesAdminComponent implements OnInit {
@@ -44,9 +44,9 @@ export class ClasesAdminComponent implements OnInit {
   constructor(
     private claseService: ClaseService,
     private reservationService: ReservationService,
-    public  auth: AuthService,
+    public auth: AuthService,
     private toast: ToastService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     loadClases(this);
