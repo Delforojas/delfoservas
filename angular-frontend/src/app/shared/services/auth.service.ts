@@ -3,17 +3,17 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable,tap } from 'rxjs';
 import { AUTH_ROUTES } from '../routes/auth-routes';
+import { authHeaders } from '../utils/auth-headers'; 
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private baseUrl = 'http://localhost:8000/api';
   private roles: string[] = [];
 
   constructor(private http: HttpClient, private router: Router) {}
 
-  // -------- Helpers de roles ----------
+  /*// -------- Helpers de roles ----------
   setRoles(roles: string[] | string) {
     const arr = Array.isArray(roles) ? roles : [roles];
     this.roles = arr.map(r => r.toUpperCase());
@@ -34,31 +34,22 @@ export class AuthService {
 
   isTeacher(): boolean {
     return this.hasAnyRole(['ROLE_TEACHER']);
-  }
+  }*/
 
   // -------- API ----------
 register(data: any) {
-  return this.http.post(AUTH_ROUTES.register(), data);
+  return this.http.post(AUTH_ROUTES.register(), data ,{ headers: authHeaders() });
 }
-login(data: any): Observable<any> {
+login(data: any): Observable<{ token: string }> {
   return this.http.post<{ token: string }>(AUTH_ROUTES.login(), data).pipe(
     tap(res => {
       localStorage.setItem('token', res.token);
-      this.getUser().subscribe(user => this.setRoles(user?.roles || []));
     })
   );
 }
 getUser(): Observable<any> {
-  const token = localStorage.getItem('token');
-  return this.http.get(AUTH_ROUTES.me(), {
-    headers: { Authorization: `Bearer ${token}` }
-  }).pipe(
-    tap((user: any) => this.setRoles(user?.roles || []))
-  );
+  return this.http.get(AUTH_ROUTES.me(), { headers: authHeaders() });
 }
-  logout(): void {
-    localStorage.removeItem('token');
-    this.roles = [];
-    this.router.navigate(['/login']);
-  }
+
+
 }
