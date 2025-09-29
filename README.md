@@ -1,66 +1,61 @@
-# 🛠️ Actualizaciones Proyecto Symfony + Angular + Docker
+# Proyecto Symfony + Angular + Docker
 
-## 🔑 Centralización de Headers de Autenticación
+👉 Este proyecto busca reflejar **mis habilidades técnicas y mi progreso como desarrollador**, mostrando cómo aplico lo aprendido tanto en el aula como en la empresa.
 
-### 🎯 Objetivo
-Se eliminó la repetición del `Authorization: Bearer <token>` en cada servicio Angular.  
-Ahora existe una clase única encargada de generar los headers con el token.
+## 🚧 Estado del proyecto
+- 🔹 Actualmente en fase de desarrollo (**draft**).  
+- 🔹 Iteraciones semanales con nuevas features y refactorización del código.  
+- 🔹 Enfocado en demostrar tanto **backend sólido** como **frontend funcional**.
 
-### ✅ Beneficios
-- Centralización → la lógica de autenticación vive en un solo archivo.  
-- Reutilización → todos los servicios consumen la misma clase.  
-- Mantenimiento → si cambia la forma de obtener el token, solo se toca un punto del código.  
+## 🎯 Objetivos del proyecto
+- Diseñar y desplegar una aplicación **full-stack** con **Symfony (PHP)** en el backend y **Angular (TypeScript)** en el frontend.  
+- Implementar **autenticación JWT** y **control de roles** (admin, profesor, usuario).  
+- Construir un sistema de reservas y pagos con lógica de negocio centralizada.  
+- Utilizar **PostgreSQL** con triggers, procedimientos almacenados y vistas para automatizar procesos.  
+- Ejecutar el proyecto en entornos **Docker** con `docker-compose`.  
+- Probar y documentar la API con **Postman**.  
+- Mejorar la UI con **TailwindCSS** y arquitectura modular en Angular.
 
----
+## 🛠️ Stack Tecnológico
+### Lenguajes y frameworks
+- **PHP (Symfony)**  
+- **Java (Spring Boot)**  
+- **TypeScript (Angular)**  
+- **SQL / PLpgSQL**  
+- **JavaScript**
 
-## 🌍 Refactorización de Rutas con Environment
+### Bases de datos
+- **PostgreSQL** → triggers, procedimientos almacenados, vistas  
+- **MySQL**
 
-### 🎯 Objetivo
-Centralizar la **base URL** de la API en el archivo `environment.ts` para simplificar la gestión de entornos (local, producción, staging).
+### Cloud y contenedores
+- **Docker & Docker Compose**  
+- Despliegues básicos en entornos cloud
 
-### ✅ Beneficios
-- Cambio centralizado → un ajuste en `environment` actualiza toda la aplicación.  
-- Orden → cada recurso (clases, reservas, usuarios, bonos) tiene su propio archivo de rutas.  
-- Escalabilidad → se facilita añadir o modificar endpoints.  
+### Otros
+- **Git/GitHub**  
+- **Scrum (metodología ágil)**  
+- **TailwindCSS** para frontend básico  
+- **Testing de endpoints** y depuración de observables
 
----
+## 🧑‍💻 Experiencia aplicada en el proyecto
+Durante mis prácticas en **Codearts Solutions (Julio–Septiembre 2025)** he trabajado en un stack similar y apliqué los siguientes conceptos que aquí replico y extiendo:
 
-## 📌 Rutas de la API (Angular)
+- Desarrollo y prueba de **APIs REST con Symfony**, con **JWT** y roles.  
+- **Optimización de bases de datos PostgreSQL**, creando triggers y vistas.  
+- **Servicios en Symfony** para centralizar la lógica de negocio.  
+- **Despliegue con Docker** (Angular + Symfony + Postgres).  
+- Documentación de endpoints con **Postman**.  
+- Arquitectura modular en Angular + **TailwindCSS**.  
+- Manejo de flujos de usuario: **login, registro, reservas, pagos**.  
+- Sistema de notificaciones con un **toast service reutilizable** en Angular.  
+- **Buenas prácticas**: refactorización de código, observables, separación de responsabilidades.
 
-Cada recurso de la API ahora tiene su propio archivo de rutas en Angular.  
-Por ejemplo: `clases-routes.ts`, `reservation-routes.ts`, `users-routes.ts`, etc.  
-Esto permite que el código sea más ordenado y que los servicios consuman las rutas de forma consistente.  
+## 📌 Roadmap
+- [ ] Endpoint de registro con emisión automática de JWT  
+- [ ] Gestión de clases, profesores y reservas  
+- [ ] Validación avanzada de pagos y bonos  
+- [ ] Panel de administración para roles **ROLE_ADMIN** y **ROLE_TEACHER**  
+- [ ] Optimización de consultas con vistas materializadas  
+- [ ] Deploy en un entorno cloud (ej. Render, Railway o AWS) 
 
----
-
-## 📡 Servicios Angular
-
-Los servicios en Angular fueron refactorizados para:  
-- Usar las rutas centralizadas.  
-- Aplicar los headers de autenticación de forma unificada.  
-- Mantener un código más limpio en los componentes.  
-
-De esta forma, los servicios se encargan de toda la comunicación con la API y los componentes solo se ocupan de la lógica de presentación.  
-
----
-
-## 🎮 Controladores Symfony (Backend)
-
-En el backend se organizaron los **controladores** para exponer endpoints claros y consistentes.  
-Ejemplos de controladores:  
-- `ClaseController` → gestiona las clases (crear, listar, actualizar, eliminar).  
-- `ReservationController` → gestiona reservas, validaciones de aforo, bonos y vistas por día.  
-- `UsersController` → gestiona usuarios y profesores.  
-
-Además, se añadieron restricciones de seguridad con roles (`ROLE_ADMIN`, `ROLE_TEACHER`) usando las herramientas de Symfony.  
-
----
-
-## 🚀 Resumen
-
-Con esta rama se consiguió:  
-- 🔑 Headers de autenticación centralizados.  
-- 🌍 Base URL desacoplada y configurable por entorno.  
-- 📌 Rutas organizadas por recurso.  
-- 📡 Servicios Angular claros y reutilizables.  
-- 🎮 Controladores Symfony robustos y seguros.  
