@@ -1,78 +1,66 @@
 # 🛠️ Actualizaciones Proyecto Symfony + Angular + Docker
 
----
-
-## 📦 Refactorización con `load.ts`
+## 🔑 Centralización de Headers de Autenticación
 
 ### 🎯 Objetivo
-Centralizar funciones repetitivas de carga de datos en un archivo común (`shared/loaders/load.ts`) para:
-
-- 🚫 Evitar duplicación de código en los componentes.  
-- ✨ Mantener los componentes más limpios y enfocados en la vista.  
-- 🔁 Facilitar la reutilización de lógica en diferentes módulos.  
-- 🔧 Simplificar la mantenibilidad del proyecto.  
-
----
-
-### 🛠️ Estructura
-Las funciones de carga se encuentran en:
-
-src/app/shared/loaders/load.ts
-
-
----
-
-### 📌 Ejemplo de función en `load.ts`
-
-// shared/loaders/load.ts
-import { handleHttpError } from './http-error';
-
-export function cargarClases(ctx: any) {
-  ctx.clasesService.getClases().subscribe({
-    next: (d: any) => (ctx.clases = d ?? []),
-    error: (e: any) => handleHttpError(e, ctx.toast),
-  });
-}
---- 
-
-### 📌 Ejemplo de uso en un componente
-
-import { Component, OnInit } from '@angular/core';
-import { cargarClases, cargarAlumnos, cargarBonosPorUsuario } from '@/shared/loaders/load';
-
-@Component({
-  selector: 'app-dashboard',
-  templateUrl: './dashboard.component.html',
-})
-export class DashboardComponent implements OnInit {
-  clases: any[] = [];
-  alumnos: any[] = [];
-  bonosDeUsuario: any[] = [];
-  usuarioId = 12;
-
-  ngOnInit(): void {
-    cargarClases(this);
-    cargarAlumnos(this);
-    cargarBonosPorUsuario(this, this.usuarioId);
-  }
-}
-
+Se eliminó la repetición del `Authorization: Bearer <token>` en cada servicio Angular.  
+Ahora existe una clase única encargada de generar los headers con el token.
 
 ### ✅ Beneficios
-- 🧹 Código más limpio en los componentes.
-- ♻️ Funciones reutilizables en varios puntos del proyecto.
-- 🔄 Mantenimiento más sencillo: si cambia la lógica de carga, solo se edita en un sitio.
+- Centralización → la lógica de autenticación vive en un solo archivo.  
+- Reutilización → todos los servicios consumen la misma clase.  
+- Mantenimiento → si cambia la forma de obtener el token, solo se toca un punto del código.  
 
+---
 
-### 🚀 Próximos pasos
-- Migrar más funciones repetidas
-- Centralizar también lógica de carga de reservas, pagos, etc. en load.ts.
-- Refactorizar servicios
-- Separar la lógica de negocio en services y dejar load.ts solo como orquestador.
-- Actualizar rutas a RESTful
-- Reemplazar rutas con /create, /update, /delete por las estándar:
+## 🌍 Refactorización de Rutas con Environment
 
-- Mejorar tipado
-- Sustituir any por interfaces (Clase, Alumno, Bono) para aumentar la robustez del código.
-- Documentación
-- Crear una colección de Postman con los endpoints actualizados.
+### 🎯 Objetivo
+Centralizar la **base URL** de la API en el archivo `environment.ts` para simplificar la gestión de entornos (local, producción, staging).
+
+### ✅ Beneficios
+- Cambio centralizado → un ajuste en `environment` actualiza toda la aplicación.  
+- Orden → cada recurso (clases, reservas, usuarios, bonos) tiene su propio archivo de rutas.  
+- Escalabilidad → se facilita añadir o modificar endpoints.  
+
+---
+
+## 📌 Rutas de la API (Angular)
+
+Cada recurso de la API ahora tiene su propio archivo de rutas en Angular.  
+Por ejemplo: `clases-routes.ts`, `reservation-routes.ts`, `users-routes.ts`, etc.  
+Esto permite que el código sea más ordenado y que los servicios consuman las rutas de forma consistente.  
+
+---
+
+## 📡 Servicios Angular
+
+Los servicios en Angular fueron refactorizados para:  
+- Usar las rutas centralizadas.  
+- Aplicar los headers de autenticación de forma unificada.  
+- Mantener un código más limpio en los componentes.  
+
+De esta forma, los servicios se encargan de toda la comunicación con la API y los componentes solo se ocupan de la lógica de presentación.  
+
+---
+
+## 🎮 Controladores Symfony (Backend)
+
+En el backend se organizaron los **controladores** para exponer endpoints claros y consistentes.  
+Ejemplos de controladores:  
+- `ClaseController` → gestiona las clases (crear, listar, actualizar, eliminar).  
+- `ReservationController` → gestiona reservas, validaciones de aforo, bonos y vistas por día.  
+- `UsersController` → gestiona usuarios y profesores.  
+
+Además, se añadieron restricciones de seguridad con roles (`ROLE_ADMIN`, `ROLE_TEACHER`) usando las herramientas de Symfony.  
+
+---
+
+## 🚀 Resumen
+
+Con esta rama se consiguió:  
+- 🔑 Headers de autenticación centralizados.  
+- 🌍 Base URL desacoplada y configurable por entorno.  
+- 📌 Rutas organizadas por recurso.  
+- 📡 Servicios Angular claros y reutilizables.  
+- 🎮 Controladores Symfony robustos y seguros.  

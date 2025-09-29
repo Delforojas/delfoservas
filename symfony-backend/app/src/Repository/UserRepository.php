@@ -19,13 +19,17 @@ class UserRepository extends ServiceEntityRepository
     public function listarProfesores(): array
     {
         $conn = $this->getEntityManager()->getConnection();
-        $sql = "
-            SELECT id, nombre, email
-            FROM users
-            WHERE roles IN ('profesor', 'admin')
-            ORDER BY nombre
-        ";
-        return $conn->fetchAllAssociative($sql);
+
+        $sql = '
+            SELECT id, "nombre", email
+            FROM "user"
+            WHERE role = :rol
+            ORDER BY "nombre"
+        ';
+
+        return $conn->fetchAllAssociative($sql, [
+            'rol' => 'ROLE_TEACHER',
+        ]);
     }
 
     // Aquí puedes añadir consultas personalizadas si las necesitas, por ejemplo:

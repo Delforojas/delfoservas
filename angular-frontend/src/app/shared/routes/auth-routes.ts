@@ -7,7 +7,7 @@ export const AUTH_ROUTES = {
   login:    () => `${AUTH_API_URL}/login`,
   register: () => `${AUTH_API_URL}/users/register`,
   me:       () => `${AUTH_API_URL}/users/me`,
-  logout:   () => `${AUTH_API_URL}/logout`,          // si backend tiene endpoint
-  forgot:   () => `${AUTH_API_URL}/password/forgot`, // si lo implementas en Symfony
-  reset:    () => `${AUTH_API_URL}/password/reset`,  // idem
+  logout:   () => `${AUTH_API_URL}/logout`,          
+  forgot:   () => `${AUTH_API_URL}/password/forgot`, 
+  reset:    () => `${AUTH_API_URL}/password/reset`,  
 };

@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { BehaviorSubject, catchError, Observable, of, switchMap, tap, throwError } from 'rxjs';
+import { Observable,tap } from 'rxjs';
 import { AUTH_ROUTES } from '../routes/auth-routes';
 
 @Injectable({

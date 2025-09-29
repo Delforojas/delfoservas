@@ -13,6 +13,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\DBAL\Connection;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 
 #[Route('/api/reservations')]
@@ -47,7 +48,7 @@ class ReservationController extends AbstractController
         ]);
     }
 
-    #[Route('/create', name: 'reservation_create', methods: ['POST'])]
+    #[Route('', name: 'reservation_create', methods: ['POST'])]
     public function create(Request $request, EntityManagerInterface $em): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
@@ -71,8 +72,8 @@ class ReservationController extends AbstractController
         return $this->json(['message' => 'Reserva creada correctamente', 'id' => $reservation->getId()], 201);
     }
 
-    #[Route('/update/{id}', name: 'reservation_update', methods: ['PUT'])]
-    public function update(Request $request, Reservation $reservation, EntityManagerInterface $em): JsonResponse
+    #[Route('/{id}', name: 'reservation_update', methods: ['PUT'])]
+public function update(Request $request, Reservation $reservation, EntityManagerInterface $em)
     {
         $data = json_decode($request->getContent(), true);
 
@@ -96,7 +97,7 @@ class ReservationController extends AbstractController
         return $this->json(['message' => 'Reserva actualizada correctamente']);
     }
 
-    #[Route('/delete/{id}', name: 'reservation_delete', methods: ['DELETE'], requirements: ['id' => '\d+'])]
+    #[Route('/{id}', name: 'reservation_delete', methods: ['DELETE'], requirements: ['id' => '\d+'])]
     public function delete(Reservation $reservation, EntityManagerInterface $em): JsonResponse
     {
         $em->remove($reservation);
@@ -264,7 +265,7 @@ class ReservationController extends AbstractController
         }
     }
 
-    #[Route('/api/usuarios/{userId}/reservas/{dia}', methods: ['GET'])]
+    #[Route('/usuarios/{userId}/reservas/{dia}', methods: ['GET'])]
     public function reservasPorDia(int $userId, string $dia, Connection $conn): JsonResponse
     {
         $map = [

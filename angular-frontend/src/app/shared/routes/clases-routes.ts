@@ -1,14 +1,14 @@
-import { environment } from "../../environments/environments";
+import { API } from "../../environments/environments";
 
-export const CLASES_API_URL = `${environment.endpointUrl}/clases`;
+const CLASES = `${API}/clases`;
 
 export const CLASES_ROUTES = {
-  list:         () => `${CLASES_API_URL}`,
-  vista:        () => `${CLASES_API_URL}/vista`,
-  byId:         (id: number) => `${CLASES_API_URL}/${id}`,
-  create:       () => `${CLASES_API_URL}/create`,
-  update:       (id: number) => `${CLASES_API_URL}/update/${id}`,
-  delete:       (id: number) => `${CLASES_API_URL}/delete/${id}`,
-  mias:         () => `${CLASES_API_URL}/mias`,
-  alumnosClase: (id: number) => `${CLASES_API_URL}/alumnos/${id}`,
+  list:         () => CLASES,
+  vista:        () => `${CLASES}/vista`,
+  byId:         (id: number) => `${CLASES}/${id}`,
+  create:       () => CLASES,
+  update:       (id: number) => `${CLASES}/${id}`,
+  delete:       (id: number) => `${CLASES}/${id}`,
+  mias:         () => `${CLASES}/mias`,
+  alumnosClase: (id: number) => `${CLASES}/alumnos/${id}`,
 };

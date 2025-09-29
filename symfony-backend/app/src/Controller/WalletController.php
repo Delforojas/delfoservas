@@ -45,7 +45,7 @@ class WalletController extends AbstractController
         ]);
     }
 
-    #[Route('/create', name: 'wallet_create', methods: ['POST'])]
+    #[Route('', name: 'wallet_create', methods: ['POST'])]
     public function create(Request $request, EntityManagerInterface $em): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
@@ -69,7 +69,7 @@ class WalletController extends AbstractController
         return $this->json(['message' => 'Wallet creado correctamente', 'id' => $wallet->getId()], 201);
     }
 
-    #[Route('/delete/{id}', name: 'wallet_delete', methods: ['DELETE'])]
+    #[Route('/{id}', name: 'wallet_delete', methods: ['DELETE'])]
     public function delete(Wallet $wallet, EntityManagerInterface $em): JsonResponse
     {
         $em->remove($wallet);

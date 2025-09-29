@@ -10,6 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\Security;
 
 
 use Doctrine\DBAL\Connection;
@@ -39,8 +40,8 @@ class ClaseController extends AbstractController
     }
     
 
-
-    #[Route('/create', name: 'clase_create', methods: ['POST'])]
+    #[Security("is_granted('ROLE_TEACHER') or is_granted('ROLE_ADMIN')")]
+    #[Route('', name: 'clase_create', methods: ['POST'])]
     public function create(Request $request, ClaseRepository $repo): JsonResponse
     {
         $data = json_decode($request->getContent(), true) ?? [];
@@ -57,8 +58,8 @@ class ClaseController extends AbstractController
     }
 
     
-
-    #[Route('/update/{id}', name: 'clase_update', methods: ['PUT'])]
+    #[Security("is_granted('ROLE_TEACHER') or is_granted('ROLE_ADMIN')")]
+    #[Route('/{id}', name: 'clase_update', methods: ['PUT'])]
     public function update(int $id, Request $request, ClaseRepository $repo): JsonResponse
     {
         $clase = $repo->find($id);
@@ -77,8 +78,8 @@ class ClaseController extends AbstractController
     }
 
 
-
-    #[Route('/delete/{id}', name: 'clase_delete', methods: ['DELETE'])]
+    #[Security("is_granted('ROLE_TEACHER') or is_granted('ROLE_ADMIN')")]
+    #[Route('/{id}', name: 'clase_delete', methods: ['DELETE'])]
     public function delete(Clase $clase, EntityManagerInterface $em): JsonResponse
     {
         $em->remove($clase);
