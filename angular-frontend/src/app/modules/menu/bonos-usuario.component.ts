@@ -1,16 +1,21 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { FormsModule, ReactiveFormsModule, FormControl } from '@angular/forms';
+
 import { AuthService } from '../../shared/services/auth.service';
 import { VistasService } from '../../shared/services/vistas.service';
+import { ToastService } from '../../shared/services/toast.service';
+
+import { loadBonosPorUsuario } from '../../shared/utils/load';
+
+import { handleHttpError } from '../../shared/utils/http-error';
 
 
 @Component({
   selector: 'bonos-usuario',
   standalone: true,
   templateUrl: './bonos-usuario.html',
-  imports: [CommonModule, RouterModule, FormsModule, ReactiveFormsModule], 
+  imports: [CommonModule, RouterModule], 
 })
 export class UsuarioBonosComponent implements OnInit {
         usuarios: any = null
@@ -27,7 +32,8 @@ export class UsuarioBonosComponent implements OnInit {
 
         constructor(
             private vistas: VistasService,
-            private auth: AuthService
+            private auth: AuthService,
+            private toast: ToastService,            
         ) {}
 
             ngOnInit(): void {
@@ -35,40 +41,16 @@ export class UsuarioBonosComponent implements OnInit {
                 next: (u) => {
                 this.usuarios = u;
                 this.usuarioId = Number(u?.id) || null;
-                // 🔥 carga automática al entrar por ruta
                 if (this.usuarioId) {
-                    this.loadBonosPorUsuario();
+                    loadBonosPorUsuario(this);
                 }
                 },
-                error: (e) => console.error('Error cargando usuario', e),
+                error: (e) => {
+                handleHttpError(e, this.toast); 
+                    },
             });
             }
   
-            loadBonosPorUsuario(): void {
-
-            const id = Number(this.usuarioId);
-            if (!id || id <= 0) {
-                alert('Pon un usuarioId válido');
-                return;
-            }
-            
-            this.cargando = true; 
-            this.error = null;
-
-            this.vistas.getBonosPorUsuario(id).subscribe({
-                next: (d) => {
-
-                this.bonosDeUsuario = d ?? [];
-                this.mostrarTablaBonosUsuario = true;
-                this.cargando = false;
-                },
-                error: (e) => {
-                console.error('[Menu2] bonos ERROR', e);
-                this.error = 'Error cargando bonos del usuario';
-                this.cargando = false;
-                }
-            });
-            }
             toggleBonos() {
             this.mostrarTablaBonosUsuario = !this.mostrarTablaBonosUsuario;
 

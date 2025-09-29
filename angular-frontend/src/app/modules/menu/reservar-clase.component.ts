@@ -5,9 +5,24 @@ import { ClaseService } from '../../shared/services/clases.service';
 import { ReservationService } from '../../shared/services/reservation.service';
 import { AuthService } from '../../shared/services/auth.service';
 
-import { Alumno } from '../../shared/interfaces/Alumno.interface';
+import { Alumno } from '../../shared/interfaces/alumno.interface';
 import { ClaseDto } from '../../shared/interfaces/ClaseDto.interface';
 import { VistaClase } from '../../shared/interfaces/vistaClase.interface';
+import { ToastService } from '../../shared/services/toast.service';
+import { handleHttpError } from '../../shared/utils/http-error';
+
+
+import {
+  loadClasesReserva,
+  loadClasesLunes,
+  loadClasesMartes,
+  loadClasesMiercoles,
+  loadClasesJueves,
+  loadClasesViernes,
+  loadAlumnosDeClase,
+  reservarClase,
+} from '../../shared/utils/load';
+
 
 // Standalone children
 
@@ -57,7 +72,7 @@ toggleTabla(dia: Dia) {
 }
 
 
-  usuario$!: Observable<any>; // 👈 observable del usuario logueado
+  usuario$!: Observable<any>; 
   mostrarTablaL = false;
   mostrarTablaM = false;
   mostrarTablaX = false;
@@ -85,120 +100,35 @@ toggleTabla(dia: Dia) {
   constructor(
     private reservasService: ReservationService,
     private claseService: ClaseService,
-    public auth: AuthService
+    public auth: AuthService,
+    private toast :ToastService
   ) {}
 
   ngOnInit(): void {
-    this.cargarClases();
-    this.cargarClasesLunes();
-    this.cargarClasesMartes();
-    this.cargarClasesMiercoles();
-    this.cargarClasesJueves();
-    this.cargarClasesViernes();
+  loadClasesReserva(this);
+  loadClasesLunes(this);
+  loadClasesMartes(this);
+  loadClasesMiercoles(this);
+  loadClasesJueves(this);
+  loadClasesViernes(this);
 
-    this.auth.getUser().subscribe({
-      next: (u) => {
-        this.usuarios = u;
-        this.usuarioId = Number(u?.id) || null; // ajusta si tu API usa otro nombre
-      },
-      error: (e) => console.error('Error cargando usuario', e),
-    });
-   
-
-  }
-
-  cargarClases(): void {
-    this.reservasService.getClases().subscribe((data: ClaseDto[]) => {
-      this.clases = data;
-    });
-  }
-
-  cargarClasesLunes(): void {
-    this.reservasService.getClasesLunes().subscribe((data: VistaClase[]) => {
-      this.clasesL = [...data];
-    });
-  }
-  cargarClasesMartes(): void {
-    this.reservasService.getClasesMartes().subscribe((data: VistaClase[]) => {
-      this.clasesM = [...data];
-    });
-  }
-  cargarClasesMiercoles(): void {
-  this.reservasService.getClasesMiercoles().subscribe({
-    next: (data: VistaClase[]) => {
-      console.log('MIERCOLES OK', data);
-      this.clasesX= [...data];
+  this.auth.getUser().subscribe({
+    next: (u) => {
+      this.usuarios = u;
+      this.usuarioId = Number(u?.id) || null;
     },
-    error: (err) => {
-      console.error('MIERCOLES ERROR', err);
-    }
+    error: (e) => handleHttpError(e, this.toast, undefined, 'unexpectedError'),
   });
 }
-  cargarClasesJueves(): void {
-    this.reservasService.getClasesJueves().subscribe((data: VistaClase[]) => {
-    this.clasesJ = [...data];    });
-  }
-  cargarClasesViernes(): void {
-    this.reservasService.getClasesViernes().subscribe((data: VistaClase[]) => {
-     this.clasesV = [...data];
-    });
-  }
 
-  cargarAlumnos(id: number): void {
-  console.log('Entrando a cargarAlumnos con id:', id);
-
-  this.cargandoAlumnos = true;
-  this.errorAlumnos = null;
-  this.alumnos = [];
-  this.claseSeleccionadaId = id;
-
-  this.claseService.getAlumnosDeClase(id).subscribe({
-    next: (rows) => {
-      console.log('Alumnos recibidos:', rows);
-      this.alumnos = rows;
-      this.mostrarTablaAlumnos = true;
-      this.cargandoAlumnos = false;
-    },
-    error: (err) => {
-      console.error('Error cargando alumnos:', err);
-      this.errorAlumnos = 'No se pudieron cargar los alumnos';
-      this.cargandoAlumnos = false;
-    }
-  });
+cargarAlumnos(id: number): void {
+  loadAlumnosDeClase(this, id);
 }
+
 reservar(id: number): void {
-  const claseId = Number(id);
-  if (!Number.isFinite(claseId) || claseId <= 0) {
-    alert('ID de clase inválido');
-    return;
-  }
-
-  this.reservandoId = claseId;
-
-  this.reservasService.reservarClase(claseId).subscribe({
-    next: () => {
-      // Recarga solo las tablas visibles
-      alert('Clase reservada con éxito ✅');
-      if (this.mostrarTablaL) this.cargarClasesLunes();
-      if (this.mostrarTablaM) this.cargarClasesMartes();
-      if (this.mostrarTablaX) this.cargarClasesMiercoles();
-      if (this.mostrarTablaJ) this.cargarClasesJueves();
-      if (this.mostrarTablaV) this.cargarClasesViernes();
-
-      // Si la subtabla de alumnos está abierta para esa clase, recárgala
-      if (this.mostrarTablaAlumnos && this.claseSeleccionadaId === claseId) {
-        this.cargarAlumnos(claseId);
-      }
-    },
-    error: (err) => {
-      const msg = err?.error?.error ?? 'Error al reservar';
-      alert(msg);
-    },
-    complete: () => {
-      this.reservandoId = null;
-    }
-  });
+  reservarClase(this, id);
 }
+
 
 toggleTablaL() {
     this.mostrarTablaL = !this.mostrarTablaL;

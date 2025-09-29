@@ -1,61 +1,78 @@
-# Proyecto Symfony + Angular + Docker
+# 🛠️ Actualizaciones Proyecto Symfony + Angular + Docker
 
-👉 Este proyecto busca reflejar **mis habilidades técnicas y mi progreso como desarrollador**, mostrando cómo aplico lo aprendido tanto en el aula como en la empresa.
+---
 
-## 🚧 Estado del proyecto
-- 🔹 Actualmente en fase de desarrollo (**draft**).  
-- 🔹 Iteraciones semanales con nuevas features y refactorización del código.  
-- 🔹 Enfocado en demostrar tanto **backend sólido** como **frontend funcional**.
+## 📦 Refactorización con `load.ts`
 
-## 🎯 Objetivos del proyecto
-- Diseñar y desplegar una aplicación **full-stack** con **Symfony (PHP)** en el backend y **Angular (TypeScript)** en el frontend.  
-- Implementar **autenticación JWT** y **control de roles** (admin, profesor, usuario).  
-- Construir un sistema de reservas y pagos con lógica de negocio centralizada.  
-- Utilizar **PostgreSQL** con triggers, procedimientos almacenados y vistas para automatizar procesos.  
-- Ejecutar el proyecto en entornos **Docker** con `docker-compose`.  
-- Probar y documentar la API con **Postman**.  
-- Mejorar la UI con **TailwindCSS** y arquitectura modular en Angular.
+### 🎯 Objetivo
+Centralizar funciones repetitivas de carga de datos en un archivo común (`shared/loaders/load.ts`) para:
 
-## 🛠️ Stack Tecnológico
-### Lenguajes y frameworks
-- **PHP (Symfony)**  
-- **Java (Spring Boot)**  
-- **TypeScript (Angular)**  
-- **SQL / PLpgSQL**  
-- **JavaScript**
+- 🚫 Evitar duplicación de código en los componentes.  
+- ✨ Mantener los componentes más limpios y enfocados en la vista.  
+- 🔁 Facilitar la reutilización de lógica en diferentes módulos.  
+- 🔧 Simplificar la mantenibilidad del proyecto.  
 
-### Bases de datos
-- **PostgreSQL** → triggers, procedimientos almacenados, vistas  
-- **MySQL**
+---
 
-### Cloud y contenedores
-- **Docker & Docker Compose**  
-- Despliegues básicos en entornos cloud
+### 🛠️ Estructura
+Las funciones de carga se encuentran en:
 
-### Otros
-- **Git/GitHub**  
-- **Scrum (metodología ágil)**  
-- **TailwindCSS** para frontend básico  
-- **Testing de endpoints** y depuración de observables
+src/app/shared/loaders/load.ts
 
-## 🧑‍💻 Experiencia aplicada en el proyecto
-Durante mis prácticas en **Codearts Solutions (Julio–Septiembre 2025)** he trabajado en un stack similar y apliqué los siguientes conceptos que aquí replico y extiendo:
 
-- Desarrollo y prueba de **APIs REST con Symfony**, con **JWT** y roles.  
-- **Optimización de bases de datos PostgreSQL**, creando triggers y vistas.  
-- **Servicios en Symfony** para centralizar la lógica de negocio.  
-- **Despliegue con Docker** (Angular + Symfony + Postgres).  
-- Documentación de endpoints con **Postman**.  
-- Arquitectura modular en Angular + **TailwindCSS**.  
-- Manejo de flujos de usuario: **login, registro, reservas, pagos**.  
-- Sistema de notificaciones con un **toast service reutilizable** en Angular.  
-- **Buenas prácticas**: refactorización de código, observables, separación de responsabilidades.
+---
 
-## 📌 Roadmap
-- [ ] Endpoint de registro con emisión automática de JWT  
-- [ ] Gestión de clases, profesores y reservas  
-- [ ] Validación avanzada de pagos y bonos  
-- [ ] Panel de administración para roles **ROLE_ADMIN** y **ROLE_TEACHER**  
-- [ ] Optimización de consultas con vistas materializadas  
-- [ ] Deploy en un entorno cloud (ej. Render, Railway o AWS) 
+### 📌 Ejemplo de función en `load.ts`
 
+// shared/loaders/load.ts
+import { handleHttpError } from './http-error';
+
+export function cargarClases(ctx: any) {
+  ctx.clasesService.getClases().subscribe({
+    next: (d: any) => (ctx.clases = d ?? []),
+    error: (e: any) => handleHttpError(e, ctx.toast),
+  });
+}
+--- 
+
+### 📌 Ejemplo de uso en un componente
+
+import { Component, OnInit } from '@angular/core';
+import { cargarClases, cargarAlumnos, cargarBonosPorUsuario } from '@/shared/loaders/load';
+
+@Component({
+  selector: 'app-dashboard',
+  templateUrl: './dashboard.component.html',
+})
+export class DashboardComponent implements OnInit {
+  clases: any[] = [];
+  alumnos: any[] = [];
+  bonosDeUsuario: any[] = [];
+  usuarioId = 12;
+
+  ngOnInit(): void {
+    cargarClases(this);
+    cargarAlumnos(this);
+    cargarBonosPorUsuario(this, this.usuarioId);
+  }
+}
+
+
+### ✅ Beneficios
+- 🧹 Código más limpio en los componentes.
+- ♻️ Funciones reutilizables en varios puntos del proyecto.
+- 🔄 Mantenimiento más sencillo: si cambia la lógica de carga, solo se edita en un sitio.
+
+
+### 🚀 Próximos pasos
+- Migrar más funciones repetidas
+- Centralizar también lógica de carga de reservas, pagos, etc. en load.ts.
+- Refactorizar servicios
+- Separar la lógica de negocio en services y dejar load.ts solo como orquestador.
+- Actualizar rutas a RESTful
+- Reemplazar rutas con /create, /update, /delete por las estándar:
+
+- Mejorar tipado
+- Sustituir any por interfaces (Clase, Alumno, Bono) para aumentar la robustez del código.
+- Documentación
+- Crear una colección de Postman con los endpoints actualizados.

@@ -4,6 +4,10 @@ import { AuthService } from '../../shared/services/auth.service';
 import { Router } from '@angular/router';
 import { RouterModule } from '@angular/router'; 
 import { ToastService } from '../../shared/services/toast.service';
+import { handleHttpError } from '../../shared/utils/http-error';
+import { showToast } from '../../shared/utils/test-messages';
+import { NavigationService } from '../../shared/services/navigation.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 
 
@@ -20,7 +24,8 @@ export class LoginComponent {
  form: FormGroup;
 
 
- constructor(private fb: FormBuilder, private auth: AuthService, private router: Router ,private toast: ToastService) {
+ constructor(private fb: FormBuilder, private auth: AuthService, private router: Router ,private toast: ToastService,
+  private navigation:NavigationService ) {
    this.form = this.fb.group({
      email: ['', [Validators.required, Validators.email]],
      password: ['', Validators.required]
@@ -31,15 +36,12 @@ export class LoginComponent {
  submit(): void {
    this.auth.login(this.form.value).subscribe({
      next: res => {
-       localStorage.setItem('token', res.token);
-
-      this.toast.showToast(`¡Bienvenido, ${this.form.value.email}!`, 'success');
-
-       this.router.navigate(['/dashboard']);
+     showToast(this.toast, 'loginSuccess', this.form.value.email || 'Usuario');
+     this.navigation.goTo ('dashboard')
      },
-     error: err => {
-        this.toast.showToast(err.error.message || 'Error al iniciar sesión', 'error');
-      }
-   });
- }
+       error: (err: HttpErrorResponse) => {
+        handleHttpError(err, this.toast, this.form);
+        },
+      });
+  }
 }

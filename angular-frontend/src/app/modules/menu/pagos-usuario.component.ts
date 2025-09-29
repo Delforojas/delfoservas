@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { AuthService } from '../../shared/services/auth.service';
 import { RouterModule } from '@angular/router'; 
 import { VistasService } from '../../shared/services/vistas.service';
+import { ToastService } from '../../shared/services/toast.service';
+import { handleHttpError } from '../../shared/utils/http-error';
 
 
     @Component({
@@ -28,7 +30,8 @@ import { VistasService } from '../../shared/services/vistas.service';
 
                 constructor(
                     private vistas: VistasService,
-                    private auth: AuthService
+                    private auth: AuthService,
+                    private toast :ToastService
                 ) {}
 
                 ngOnInit(): void {
@@ -36,22 +39,20 @@ import { VistasService } from '../../shared/services/vistas.service';
                     next: (u) => {
                     this.usuarios = u;
                     this.usuarioId = Number(u?.id) || null;
-                    // 🔥 carga automática al entrar por ruta
                     if (this.usuarioId) {
                         this.loadWalletUsuario()
                     }
                     },
-                    error: (e) => console.error('Error cargando usuario', e),
+                   error: (e) => handleHttpError(e, this.toast, undefined, 'cargarUsuarioError'),
                 });
                 }
                 
                 loadWalletUsuario() {
                 if (!this.usuarioId || this.usuarioId <= 0) {
-                    alert('Pon un usuarioId válido');
-                    return;
+                    handleHttpError({ status: 400 } as any, this.toast, undefined, 'walletError');
+                return;
                 }
 
-                // Toggle
                 
                 this.cargando= true;
                 this.vistas.getWalletPorUsuario(this.usuarioId).subscribe({
@@ -60,13 +61,12 @@ import { VistasService } from '../../shared/services/vistas.service';
                     this.mostrarTablaWalletUsuario = true;
                     this.cargando= false;
                     },
-                    error: e => {
+                    error: (e) => {
                     this.mostrarTablaWalletUsuario = false;
                     this.walletUsuario = [];
-                    this.error = 'Error cargando wallet del usuario';
-                    console.error(e);
-                    this.cargando= false;
-                    }
+                    handleHttpError(e, this.toast, undefined, 'walletError');
+                    },
+                    
                 });
                 }
                 togglePagos(){
