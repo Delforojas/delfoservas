@@ -1,57 +1,78 @@
 # 🛠️ Actualizaciones Proyecto Symfony + Angular + Docker
 
 ---
-# 📌 Gestión de Errores y Notificaciones (Angular + Symfony)
 
-## ✅ Avances implementados
-- **Centralización de errores**  
-  Se creó el helper `handleHttpError` en `shared/utils/http-error.ts` para gestionar los errores HTTP desde un solo punto, evitando duplicación de código en los componentes.
-  
-- **Sistema unificado de toasts**  
-  En `shared/utils/test-messages.ts` se definió un **mapa de claves (`ToastKey`)** con todos los mensajes de éxito y error de la aplicación (login, clases, reservas, bonos, etc.).  
-  Cada error o éxito se maneja llamando a:
+## 📦 Refactorización con `load.ts`
 
-  ```ts
-  showToast(this.toast, 'clasesError');
+### 🎯 Objetivo
+Centralizar funciones repetitivas de carga de datos en un archivo común (`shared/loaders/load.ts`) para:
 
-  o en el caso de errores HTTP:
-  handleHttpError(err, this.toast, undefined, 'alumnosError');
-
-### 🔧 Mensajes personalizados por contexto
-
-Usamos claves (`ToastKey`) para mostrar mensajes coherentes en cada parte de la app. Así evitamos repetir textos y mantenemos el mismo tono en toda la UI.
-
-- **Autenticación**
-  - `loginSuccess`, `loginError`, `registerSuccess`, `registerConflict`, `passwordResetSuccess`, `passwordResetError`, etc.
-- **Dominio**
-  - Clases, reservas, alumnos, bonos, profesores, salas, wallet…
-  - Ejemplos: `clasesError`, `alumnosError`, `reservarError`, `reservarSuccess`, `bonosError`, `walletError`, etc.
-- **Éxitos**
-  - Mensajes claros cuando una acción se completa: `reservarSuccess`, `eliminarReservaSuccess`, etc.
-
-> Todos los componentes usan `handleHttpError` y `showToast` en lugar de `alert` o strings duplicados.
-
-```ts
-// Ejemplos
-showToast(this.toast, 'clasesError');
-handleHttpError(err, this.toast, undefined, 'alumnosError');
-### 🧩 Componentes adaptados
-
-Estos componentes ya migraron al sistema centralizado de errores/toasts:
-
-- `ClasesAdminComponent`
-- `ClasesProfesorComponent`
-- `CrearClaseComponent`
-- `ClasesReservaComponent`
-- `UsuarioBonosComponent`
-- `UsuarioReservasComponent`
-- `UsuarioPagosComponent`
+- 🚫 Evitar duplicación de código en los componentes.  
+- ✨ Mantener los componentes más limpios y enfocados en la vista.  
+- 🔁 Facilitar la reutilización de lógica en diferentes módulos.  
+- 🔧 Simplificar la mantenibilidad del proyecto.  
 
 ---
 
-## 🛠️ Beneficios
+### 🛠️ Estructura
+Las funciones de carga se encuentran en:
 
-- Código **más limpio y mantenible**.  
-- **Menos repetición** de mensajes en los componentes.  
-- Mejor **experiencia de usuario** con notificaciones consistentes.  
-- **Escalabilidad**: añadir un nuevo mensaje = agregar un `ToastKey` en `test-messages.ts` y listo.  
+src/app/shared/loaders/load.ts
+
+
+---
+
+### 📌 Ejemplo de función en `load.ts`
+
+// shared/loaders/load.ts
+import { handleHttpError } from './http-error';
+
+export function cargarClases(ctx: any) {
+  ctx.clasesService.getClases().subscribe({
+    next: (d: any) => (ctx.clases = d ?? []),
+    error: (e: any) => handleHttpError(e, ctx.toast),
+  });
+}
+--- 
+
+### 📌 Ejemplo de uso en un componente
+
+import { Component, OnInit } from '@angular/core';
+import { cargarClases, cargarAlumnos, cargarBonosPorUsuario } from '@/shared/loaders/load';
+
+@Component({
+  selector: 'app-dashboard',
+  templateUrl: './dashboard.component.html',
+})
+export class DashboardComponent implements OnInit {
+  clases: any[] = [];
+  alumnos: any[] = [];
+  bonosDeUsuario: any[] = [];
+  usuarioId = 12;
+
+  ngOnInit(): void {
+    cargarClases(this);
+    cargarAlumnos(this);
+    cargarBonosPorUsuario(this, this.usuarioId);
+  }
+}
+
+
+### ✅ Beneficios
+- 🧹 Código más limpio en los componentes.
+- ♻️ Funciones reutilizables en varios puntos del proyecto.
+- 🔄 Mantenimiento más sencillo: si cambia la lógica de carga, solo se edita en un sitio.
+
+
+### 🚀 Próximos pasos
+- Migrar más funciones repetidas
+- Centralizar también lógica de carga de reservas, pagos, etc. en load.ts.
+- Refactorizar servicios
+- Separar la lógica de negocio en services y dejar load.ts solo como orquestador.
+- Actualizar rutas a RESTful
+- Reemplazar rutas con /create, /update, /delete por las estándar:
+
+- Mejorar tipado
+- Sustituir any por interfaces (Clase, Alumno, Bono) para aumentar la robustez del código.
+- Documentación
+- Crear una colección de Postman con los endpoints actualizados.

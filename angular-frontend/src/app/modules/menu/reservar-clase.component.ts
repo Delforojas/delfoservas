@@ -12,6 +12,18 @@ import { ToastService } from '../../shared/services/toast.service';
 import { handleHttpError } from '../../shared/utils/http-error';
 
 
+import {
+  loadClasesReserva,
+  loadClasesLunes,
+  loadClasesMartes,
+  loadClasesMiercoles,
+  loadClasesJueves,
+  loadClasesViernes,
+  loadAlumnosDeClase,
+  reservarClase,
+} from '../../shared/utils/load';
+
+
 // Standalone children
 
 type Dia = 'L'|'M'|'X'|'J'|'V';
@@ -93,105 +105,30 @@ toggleTabla(dia: Dia) {
   ) {}
 
   ngOnInit(): void {
-    this.cargarClases();
-    this.cargarClasesLunes();
-    this.cargarClasesMartes();
-    this.cargarClasesMiercoles();
-    this.cargarClasesJueves();
-    this.cargarClasesViernes();
+  loadClasesReserva(this);
+  loadClasesLunes(this);
+  loadClasesMartes(this);
+  loadClasesMiercoles(this);
+  loadClasesJueves(this);
+  loadClasesViernes(this);
 
-    this.auth.getUser().subscribe({
-      next: (u) => {
-        this.usuarios = u;
-        this.usuarioId = Number(u?.id) || null; // ajusta si tu API usa otro nombre
-      },
-      error: (e) => handleHttpError(e, this.toast, undefined, 'unexpectedError'),
-    });
-   
-
-  }
-
-  cargarClases(): void {
-    this.reservasService.getClases().subscribe((data: ClaseDto[]) => {
-      this.clases = data;
-    });
-  }
-
- cargarClasesLunes(): void {
-    this.reservasService.getClasesLunes().subscribe({
-      next: (data) => this.clasesL = [...data],
-      error: (e) => handleHttpError(e, this.toast, undefined, 'clasesError'),
-    });
-  }
-  cargarClasesMartes(): void {
-    this.reservasService.getClasesMartes().subscribe({
-      next: (data) => this.clasesM = [...data],
-      error: (e) => handleHttpError(e, this.toast, undefined, 'clasesError'),
-    });
-  }
-  cargarClasesMiercoles(): void {
-    this.reservasService.getClasesMiercoles().subscribe({
-      next: (data) => this.clasesX = [...data],
-      error: (e) => handleHttpError(e, this.toast, undefined, 'clasesError'),
-    });
-  }
-  cargarClasesJueves(): void {
-    this.reservasService.getClasesJueves().subscribe({
-      next: (data) => this.clasesJ = [...data],
-      error: (e) => handleHttpError(e, this.toast, undefined, 'clasesError'),
-    });
-  }
-  cargarClasesViernes(): void {
-    this.reservasService.getClasesViernes().subscribe({
-      next: (data) => this.clasesV = [...data],
-      error: (e) => handleHttpError(e, this.toast, undefined, 'clasesError'),
-    });
-  }
-
-  cargarAlumnos(id: number): void {
-
-
-  this.cargandoAlumnos = true;
-  this.errorAlumnos = null;
-  this.alumnos = [];
-  this.claseSeleccionadaId = id;
-
-  this.claseService.getAlumnosDeClase(id).subscribe({
-    next: (rows) => {
-      this.alumnos = rows;
-      this.mostrarTablaAlumnos = true;
-      this.cargandoAlumnos = false;
+  this.auth.getUser().subscribe({
+    next: (u) => {
+      this.usuarios = u;
+      this.usuarioId = Number(u?.id) || null;
     },
-    error: (e) => handleHttpError(e, this.toast, undefined, 'alumnosError'),
+    error: (e) => handleHttpError(e, this.toast, undefined, 'unexpectedError'),
   });
 }
+
+cargarAlumnos(id: number): void {
+  loadAlumnosDeClase(this, id);
+}
+
 reservar(id: number): void {
-  const claseId = Number(id);
-  if (!Number.isFinite(claseId) || claseId <= 0) {
-    handleHttpError({ status: 400 } as any, this.toast, undefined, 'reservarError');
-    return;
-  }
-
-  this.reservandoId = claseId;
-
-  this.reservasService.reservarClase(claseId).subscribe({
-    next: () => {
-      handleHttpError({ status: 200 } as any, this.toast, undefined, 'reservarSuccess');
-      if (this.mostrarTablaL) this.cargarClasesLunes();
-      if (this.mostrarTablaM) this.cargarClasesMartes();
-      if (this.mostrarTablaX) this.cargarClasesMiercoles();
-      if (this.mostrarTablaJ) this.cargarClasesJueves();
-      if (this.mostrarTablaV) this.cargarClasesViernes();
-
-      // Si la subtabla de alumnos está abierta para esa clase, recárgala
-      if (this.mostrarTablaAlumnos && this.claseSeleccionadaId === claseId) {
-        this.cargarAlumnos(claseId);
-      }
-    },
-    error: (e) => handleHttpError(e, this.toast, undefined, 'reservarError'),
-    
-  });
+  reservarClase(this, id);
 }
+
 
 toggleTablaL() {
     this.mostrarTablaL = !this.mostrarTablaL;

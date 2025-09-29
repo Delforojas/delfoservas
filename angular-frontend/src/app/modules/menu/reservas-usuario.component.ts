@@ -7,7 +7,7 @@ import { ReservationService } from '../../shared/services/reservation.service';
 import { ReservaUsuarioDto } from '../../shared/interfaces/reservaUsuarioDto.interface';
 import { ToastService } from '../../shared/services/toast.service';
 import { handleHttpError } from '../../shared/utils/http-error';
-import { showToast } from '../../shared/utils/test-messages';
+import { loadReservasUsuario, deleteReservaUsuario } from '../../shared/utils/load';
 
 
         @Component({
@@ -38,40 +38,27 @@ import { showToast } from '../../shared/utils/test-messages';
                 private toast :ToastService
             ) {}
 
-            ngOnInit(): void {
-            this.auth.getUser().subscribe({
-                next: (u) => {
-                this.usuarios = u;
-                this.usuarioId = Number(u?.id) || null;
-                if (this.usuarioId) {
-                    this.loadReservasUsuario();
-                    
-                }
-                },
-                error: (e) => handleHttpError(e, this.toast, undefined, 'cargarUsuarioError'),
-            });
-            }
-  
+           
+  ngOnInit(): void {
+    this.auth.getUser().subscribe({
+      next: (u) => {
+        this.usuarios = u;
+        this.usuarioId = Number(u?.id) || null;
+        if (this.usuarioId) {
+          loadReservasUsuario(this);   // <- helper
+        }
+      },
+      error: (e) => handleHttpError(e, this.toast, undefined, 'cargarUsuarioError'),
+    });
+  }
 
-            loadReservasUsuario() {
-            if (!this.usuarioId || this.usuarioId <= 0) { 
-            handleHttpError({ status: 400 } as any, this.toast, undefined, 'reservasUsuarioError');
-                return; 
-            }
-            this.cargando = true;
-            this.vistas.getReservasPorUsuario(this.usuarioId).subscribe({
-                next: d => {
-                this.reservasUsuario = d ?? [];
-                this.mostrarTablaReservasUsuario = true;
-                this.cargando=false;
-                },
-                error: (e) => {
-                this.mostrarTablaReservasUsuario = false;
-                this.reservasUsuario = [];
-                handleHttpError(e, this.toast, undefined, 'reservasUsuarioError');
-                }
-            });
-            }
+  // reemplazos 1:1
+  loadReservasUsuario(): void { loadReservasUsuario(this); }
+
+  eliminarReservaAlumno(reservaId: number): void {
+    deleteReservaUsuario(this, reservaId);
+  }
+
 
 
             toggleReservas() {
@@ -84,19 +71,7 @@ import { showToast } from '../../shared/utils/test-messages';
             }
         
             
-  eliminarReservaAlumno(reservaId: number) {
-    if (reservaId == null) return;
-    this.eliminandoId = reservaId;
-
-    this.reservationService.eliminarReservation(reservaId).subscribe({
-      next: () => {
-        this.reservasUsuario = this.reservasUsuario.filter(r => r.reserva_id !== reservaId);
-        this.eliminandoId = null;
-        showToast(this.toast, 'eliminarReservaSuccess');
-      },
-      error: (e) => handleHttpError(e, this.toast, undefined, 'eliminarReservaError'),
-    });
-  }
+  
 
   trackByReservaId = (_: number, r: ReservaUsuarioDto) => r.reserva_id;
 }

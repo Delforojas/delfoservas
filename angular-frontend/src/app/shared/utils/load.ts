@@ -1,0 +1,457 @@
+// loaders.ts
+import { handleHttpError } from '../utils/http-error';
+import { finalize } from 'rxjs';
+import { showToast } from '../utils/test-messages';
+
+
+
+// --- BONOS ---
+export function loadBonosPorUsuario(ctx: any): void {
+    const id = Number(ctx.usuarioId);
+    if (!id || id <= 0) {
+        handleHttpError({ status: 400 } as any, ctx.toast, undefined, 'bonosError');
+        return;
+    }
+
+    ctx.cargando = true;
+    ctx.error = null;
+
+    ctx.vistas.getBonosPorUsuario(id).subscribe({
+        next: (rows: any[]) => {
+            ctx.bonosDeUsuario = rows ?? [];
+            ctx.mostrarTablaBonosUsuario = true;
+            ctx.cargando = false;
+        },
+        error: (e: any) => {
+            handleHttpError(e, ctx.toast, undefined, 'bonosError');
+            ctx.cargando = false;
+        },
+    });
+}
+
+// --- CLASES ---
+export function loadClases(ctx: any): void {
+    ctx.claseService.getClases().subscribe({
+        next: (rows: any[]) => (ctx.clases = rows ?? []),
+        error: (e: any) => handleHttpError(e, ctx.toast, undefined, 'clasesError'),
+    });
+}
+
+export function loadClasesVista(ctx: any): void {
+    ctx.claseService.getClasesVista().subscribe({
+        next: (rows: any[]) => (ctx.clasesVista = rows ?? []),
+        error: (e: any) => handleHttpError(e, ctx.toast, undefined, 'vistaClasesError'),
+    });
+}
+
+export function loadClasesProfesores(ctx: any): void {
+    ctx.cargando = true;
+    ctx.claseService.getMisClases()
+        .pipe(finalize(() => (ctx.cargando = false)))
+        .subscribe({
+            next: (rows: any[]) => (ctx.clasesprofe = rows ?? []),
+            error: (e: any) => handleHttpError(e, ctx.toast, undefined, 'misClasesError'),
+        });
+}
+
+export function loadAlumnos(ctx: any, id: number): void {
+    ctx.cargandoAlumnos = true;
+    ctx.alumnos = [];
+    ctx.claseSeleccionadaId = id;
+
+    ctx.claseService.getAlumnosDeClase(id)
+        .pipe(finalize(() => (ctx.cargandoAlumnos = false)))
+        .subscribe({
+            next: (rows: any[]) => {
+                ctx.alumnos = rows ?? [];
+                ctx.mostrarTablaAlumnos = true;
+            },
+            error: (e: any) => handleHttpError(e, ctx.toast, undefined, 'alumnosError'),
+        });
+}
+export function loadProfesores(ctx: any): void {
+    ctx.usersService.getProfesores().subscribe({
+        next: (rows: any[]) => (ctx.profesores = rows ?? []),
+        error: (e: any) => handleHttpError(e, ctx.toast, undefined, 'profesoresError'),
+    });
+}
+
+// --- ACCIONES ---
+export function deleteClase(ctx: any, id: number): void {
+    if (!confirm('¿Eliminar esta clase?')) return;
+    ctx.claseService.eliminarClase(id).subscribe({
+        next: () => loadClases(ctx),
+        error: (e: any) => handleHttpError(e, ctx.toast, undefined, 'eliminarClaseError'),
+    });
+}
+
+export function deleteAlumnoDeClase(ctx: any, a: any): void {
+    if (!a?.alumno_reservation_id) {
+        handleHttpError({ status: 400 } as any, ctx.toast, undefined, 'eliminarReservaError');
+        return;
+    }
+    if (!confirm(`¿Eliminar la reserva de ${a.alumno_nombre}?`)) return;
+
+    ctx.eliminandoId = a.alumno_reservation_id;
+
+    ctx.reservationService.eliminarReservation(a.alumno_reservation_id)
+        .pipe(finalize(() => (ctx.eliminandoId = null)))
+        .subscribe({
+            next: () => {
+                ctx.alumnos = (ctx.alumnos ?? []).filter(
+                    (x: any) => x.alumno_reservation_id !== a.alumno_reservation_id
+                );
+                if (ctx.claseSeleccionadaId != null) loadAlumnos(ctx, ctx.claseSeleccionadaId);
+                loadClasesProfesores(ctx);
+            },
+            error: (e: any) => handleHttpError(e, ctx.toast, undefined, 'eliminarReservaError'),
+        });
+}
+// --- catálogos ---
+export function loadTiposClase(ctx: any): void {
+    ctx.tipoClaseService.getTipos().subscribe({
+        next: (rows: any[]) => (ctx.tiposClase = rows ?? []),
+        error: (e: any) => handleHttpError(e, ctx.toast, undefined, 'tiposClaseError'),
+    });
+}
+
+export function loadRooms(ctx: any): void {
+    ctx.roomService.getRooms().subscribe({
+        next: (rows: any[]) => (ctx.rooms = rows ?? []),
+        error: (e: any) => handleHttpError(e, ctx.toast, undefined, 'roomsError'),
+    });
+}
+
+export function crearClase(ctx: any): void {
+    const c = ctx.nuevaClase;
+
+    const payload = {
+        ...c,
+        tipoclase: Number(c.tipoclase),
+        teacher: Number(c.teacher),
+        aforo_clase: Number(c.aforo_clase),
+        room: Number(c.room),
+        nombre: (c.nombre ?? '').trim(),
+        fecha: (c.fecha ?? '').trim(),
+        hora: (c.hora ?? '').trim(),
+    };
+
+    const errores: string[] = [];
+    if (!payload.nombre) errores.push('nombre');
+    if (!payload.fecha) errores.push('fecha');
+    if (!payload.hora) errores.push('hora');
+    if (!Number.isFinite(payload.tipoclase) || payload.tipoclase <= 0) errores.push('tipoclase');
+    if (!Number.isFinite(payload.teacher) || payload.teacher <= 0) errores.push('teacher');
+    if (!Number.isFinite(payload.aforo_clase) || payload.aforo_clase <= 0) errores.push('aforo_clase');
+    if (!Number.isFinite(payload.room) || payload.room <= 0) errores.push('room');
+
+    if (errores.length) {
+        handleHttpError({ status: 400 } as any, ctx.toast, undefined, 'crearClaseFormInvalid');
+        console.warn('Campos inválidos:', errores.join(', '), { payload });
+        return;
+    }
+
+    ctx.claseService.crearClase(payload).subscribe({
+        next: () => {
+            ctx.nuevaClase = { nombre: '', tipoclase: 0, teacher: 0, fecha: '', hora: '', aforo_clase: 0, room: 0 };
+            ctx.cargarClases(); // igual que en tu método original
+        },
+        error: (e: any) => handleHttpError(e, ctx.toast, undefined, 'crearClaseError'),
+    });
+}
+// 1) Usuarios (lista y binding del buscador)
+export function loadUsuariosPagos(ctx: any): void {
+    ctx.vistas.getUsuarios().subscribe({
+        next: (u: any[]) => {
+            ctx.usuarios = u ?? [];
+            // si ya hay valueChanges enganchado, no hacemos nada más
+        },
+        error: (e: any) => console.error('Error cargando usuarios', e),
+    });
+}
+
+// Engancha el valueChanges del input para resolver usuario_id
+export function bindNombreUsuarioToId(ctx: any): void {
+    ctx.nombreUsuario?.valueChanges?.subscribe((nombre: string) => {
+        const usuario = (ctx.usuarios ?? []).find((u: any) => u.nombre === nombre);
+        ctx.usuario_id = usuario ? usuario.id : null;
+    });
+}
+
+// 2) Tipos de clase
+
+// 3) Meses disponibles (autoselecciona mes actual y carga wallets del mes)
+export function loadMesesWallet(ctx: any): void {
+    ctx.vistas.getMesesWallet().subscribe({
+        next: (m: string[]) => {
+            ctx.meses = m ?? [];
+
+            const mesesEs = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio',
+                'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+            const mesActual = mesesEs[new Date().getMonth()];
+            ctx.mesSeleccionado = (ctx.meses ?? []).find(
+                (x: string) => x?.toLowerCase?.() === mesActual.toLowerCase()
+            ) ?? null;
+
+            if (ctx.mesSeleccionado) {
+                loadWalletMes(ctx, ctx.mesSeleccionado);
+            }
+        },
+        error: (e: any) => console.error('Error cargando meses', e),
+    });
+}
+
+// 4) Wallets base
+export function loadWallets(ctx: any): void {
+    ctx.cargando = true;
+    ctx.walletService.getWallets().subscribe({
+        next: (data: any[]) => {
+            ctx.wallets = data ?? [];
+            ctx.cargando = false;
+        },
+        error: (err: any) => {
+            console.error(err);
+            ctx.error = 'Error al cargar las wallets';
+            ctx.cargando = false;
+        },
+    });
+}
+
+export function createWallet(ctx: any): void {
+    const w = ctx.nuevaWallet ?? {};
+    if (!w.fecha || !w.usuario_id || !w.tipoclase_id) {
+        alert('Completa todos los campos');
+        return;
+    }
+    ctx.walletService.crearWallet(w as any).subscribe({
+        next: () => {
+            ctx.nuevaWallet = { fecha: '', usuario_id: 0, tipoclase_id: 0 };
+            loadWallets(ctx);
+        },
+        error: (err: any) => {
+            console.error(err);
+            ctx.error = 'Error al crear la wallet';
+        },
+    });
+}
+
+export function deleteWallet(ctx: any, id: number): void {
+    if (!confirm('¿Seguro que quieres eliminar esta wallet?')) return;
+    ctx.walletService.eliminarWallet(id).subscribe({
+        next: () => loadWalletAll(ctx),
+        error: (err: any) => {
+            console.error(err);
+            ctx.error = 'Error al eliminar wallet';
+        },
+    });
+}
+
+// 5) Vistas agregadas
+export function loadWalletAll(ctx: any): void {
+    ctx.vistas.getVistaUsuarioWalletAll().subscribe({
+        next: (d: any[]) => (ctx.walletAll = d ?? []),
+        error: (e: any) => console.error(e),
+    });
+}
+
+export function loadWalletUsuario(ctx: any, id: number): void {
+    ctx.vistas.getVistaUsuarioWalletByUser(id).subscribe({
+        next: (d: any[]) => (ctx.walletUser = d ?? []),
+        error: (e: any) => console.error(e),
+    });
+}
+
+export function loadWalletMes(ctx: any, mes: string | null): void {
+    if (!mes) { ctx.walletMes = []; return; }
+    ctx.vistas.getWalletMes(mes).subscribe({
+        next: (d: any[]) => (ctx.walletMes = d ?? []),
+        error: (e: any) => console.error('Error al cargar wallets por mes', e),
+    });
+}
+
+export function loadWalletTipo(ctx: any, tipoId: number): void {
+    ctx.vistas.getWalletPorTipoClase(tipoId).subscribe({
+        next: (d: any[]) => {
+            ctx.tiposClaseFiltrados = d ?? [];
+            console.log('Pagos filtrados desde backend:', ctx.tiposClaseFiltrados);
+        },
+        error: (e: any) => console.error('Error al cargar wallets por tipo de clase', e),
+    });
+}
+
+export function loadWalletPorMesYTipo(ctx: any): void {
+    if (!ctx.mesSeleccionado || !ctx.tipoSeleccionadoId) {
+        ctx.walletMesTipo = [];
+        return;
+    }
+    ctx.vistas.getWalletPorMesYTipo(ctx.mesSeleccionado, ctx.tipoSeleccionadoId).subscribe({
+        next: (d: any[]) => {
+            ctx.walletMesTipo = d ?? [];
+            console.log('Resultados mes + tipo:', ctx.walletMesTipo);
+        },
+        error: (e: any) => console.error('Error al cargar wallets por mes y tipo', e),
+    });
+}
+
+// 6) Handlers de UI (si quieres externalizar también)
+export function onUsuarioSeleccionado(ctx: any): void {
+    if (ctx.usuarioSeleccionadoId) {
+        ctx.usuarioSeleccionado = (ctx.usuarios ?? []).find((u: any) => u.id === ctx.usuarioSeleccionadoId) ?? null;
+        loadWalletUsuario(ctx, ctx.usuarioSeleccionadoId);
+    } else {
+        ctx.walletUser = [];
+        ctx.usuarioSeleccionado = null;
+    }
+}
+
+export function onMesSeleccionado(ctx: any): void {
+    if (ctx.mesSeleccionado) {
+        ctx.walletMes = (ctx.walletAll ?? []).filter((wm: any) => wm.mes === ctx.mesSeleccionado);
+    } else {
+        ctx.walletMes = [];
+    }
+}
+
+export function onTipoClaseSeleccionado(ctx: any): void {
+    if (ctx.tipoSeleccionadoId) {
+        loadWalletTipo(ctx, ctx.tipoSeleccionadoId);
+    } else {
+        ctx.tiposClaseFiltrados = [];
+    }
+}
+
+export function onFiltrarMesYTipo(ctx: any): void {
+    if (ctx.mesSeleccionado && ctx.tipoSeleccionadoId) {
+        ctx.vistas.getWalletPorMesYTipo(ctx.mesSeleccionado, ctx.tipoSeleccionadoId).subscribe({
+            next: (data: any[]) => {
+                ctx.walletMesTipo = data ?? [];
+                ctx.mostrarMesTipo = true;
+                console.log('Resultados mes + tipo:', ctx.walletMesTipo);
+            },
+            error: (err: any) => console.error('Error al filtrar por mes y tipo', err),
+        });
+    }
+}
+
+
+// -------- RESERVAR CLASE: CARGAS --------
+export function loadClasesReserva(ctx: any): void {
+    ctx.reservasService.getClases().subscribe({
+        next: (data: any[]) => (ctx.clases = data ?? []),
+        error: (e: any) => handleHttpError(e, ctx.toast, undefined, 'clasesError'),
+    });
+}
+
+export function loadClasesLunes(ctx: any): void {
+    ctx.reservasService.getClasesLunes().subscribe({
+        next: (data: any[]) => (ctx.clasesL = [...(data ?? [])]),
+        error: (e: any) => handleHttpError(e, ctx.toast, undefined, 'clasesError'),
+    });
+}
+export function loadClasesMartes(ctx: any): void {
+    ctx.reservasService.getClasesMartes().subscribe({
+        next: (data: any[]) => (ctx.clasesM = [...(data ?? [])]),
+        error: (e: any) => handleHttpError(e, ctx.toast, undefined, 'clasesError'),
+    });
+}
+export function loadClasesMiercoles(ctx: any): void {
+    ctx.reservasService.getClasesMiercoles().subscribe({
+        next: (data: any[]) => (ctx.clasesX = [...(data ?? [])]),
+        error: (e: any) => handleHttpError(e, ctx.toast, undefined, 'clasesError'),
+    });
+}
+export function loadClasesJueves(ctx: any): void {
+    ctx.reservasService.getClasesJueves().subscribe({
+        next: (data: any[]) => (ctx.clasesJ = [...(data ?? [])]),
+        error: (e: any) => handleHttpError(e, ctx.toast, undefined, 'clasesError'),
+    });
+}
+export function loadClasesViernes(ctx: any): void {
+    ctx.reservasService.getClasesViernes().subscribe({
+        next: (data: any[]) => (ctx.clasesV = [...(data ?? [])]),
+        error: (e: any) => handleHttpError(e, ctx.toast, undefined, 'clasesError'),
+    });
+}
+
+// -------- ALUMNOS DE CLASE --------
+export function loadAlumnosDeClase(ctx: any, id: number): void {
+    ctx.cargandoAlumnos = true;
+    ctx.errorAlumnos = null;
+    ctx.alumnos = [];
+    ctx.claseSeleccionadaId = id;
+
+    ctx.claseService.getAlumnosDeClase(id).subscribe({
+        next: (rows: any[]) => {
+            ctx.alumnos = rows ?? [];
+            ctx.mostrarTablaAlumnos = true;
+            ctx.cargandoAlumnos = false;
+        },
+        error: (e: any) => handleHttpError(e, ctx.toast, undefined, 'alumnosError'),
+    });
+}
+
+// -------- RESERVAR --------
+export function reservarClase(ctx: any, id: number): void {
+    const claseId = Number(id);
+    if (!Number.isFinite(claseId) || claseId <= 0) {
+        handleHttpError({ status: 400 } as any, ctx.toast, undefined, 'reservarError');
+        return;
+    }
+
+    ctx.reservandoId = claseId;
+
+    ctx.reservasService.reservarClase(claseId).subscribe({
+        next: () => {
+            handleHttpError({ status: 200 } as any, ctx.toast, undefined, 'reservarSuccess');
+
+            if (ctx.mostrarTablaL) loadClasesLunes(ctx);
+            if (ctx.mostrarTablaM) loadClasesMartes(ctx);
+            if (ctx.mostrarTablaX) loadClasesMiercoles(ctx);
+            if (ctx.mostrarTablaJ) loadClasesJueves(ctx);
+            if (ctx.mostrarTablaV) loadClasesViernes(ctx);
+
+            if (ctx.mostrarTablaAlumnos && ctx.claseSeleccionadaId === claseId) {
+                loadAlumnosDeClase(ctx, claseId);
+            }
+        },
+        error: (e: any) => handleHttpError(e, ctx.toast, undefined, 'reservarError'),
+    });
+}
+
+
+// --- RESERVAS USUARIO ---
+export function loadReservasUsuario(ctx: any): void {
+    const id = Number(ctx.usuarioId);
+    if (!id || id <= 0) {
+        handleHttpError({ status: 400 } as any, ctx.toast, undefined, 'reservasUsuarioError');
+        return;
+    }
+
+    ctx.cargando = true;
+    ctx.vistas.getReservasPorUsuario(id).subscribe({
+        next: (rows: any[]) => {
+            ctx.reservasUsuario = rows ?? [];
+            ctx.mostrarTablaReservasUsuario = true;
+            ctx.cargando = false;
+        },
+        error: (e: any) => {
+            ctx.mostrarTablaReservasUsuario = false;
+            ctx.reservasUsuario = [];
+            handleHttpError(e, ctx.toast, undefined, 'reservasUsuarioError');
+        },
+    });
+}
+
+export function deleteReservaUsuario(ctx: any, reservaId: number): void {
+    if (reservaId == null) return;
+
+    ctx.eliminandoId = reservaId;
+    ctx.reservationService.eliminarReservation(reservaId).subscribe({
+        next: () => {
+            ctx.reservasUsuario = (ctx.reservasUsuario ?? []).filter((r: any) => r.reserva_id !== reservaId);
+            ctx.eliminandoId = null;
+            showToast(ctx.toast, 'eliminarReservaSuccess');
+        },
+        error: (e: any) => handleHttpError(e, ctx.toast, undefined, 'eliminarReservaError'),
+    });
+}

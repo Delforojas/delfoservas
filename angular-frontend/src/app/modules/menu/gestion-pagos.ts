@@ -2,20 +2,39 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule , ReactiveFormsModule,} from '@angular/forms';
 import { FormControl } from '@angular/forms';
+
 import { WalletService } from '../../shared/services/wallet.service';
 import { VistasService } from '../../shared/services/vistas.service';
 import { TipoClaseService, } from '../../shared/services/tipoclase.service';
 
-import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 
 import { Wallet } from '../../shared/interfaces/wallet.interface';
+
+import {
+  loadUsuariosPagos,
+  bindNombreUsuarioToId,
+  loadTiposClase,
+  loadMesesWallet,
+  loadWallets,
+  createWallet,
+  deleteWallet,
+  loadWalletAll,
+  loadWalletUsuario,
+  loadWalletMes,
+  loadWalletTipo,
+  loadWalletPorMesYTipo,
+  onUsuarioSeleccionado,
+  onMesSeleccionado,
+  onTipoClaseSeleccionado,
+  onFiltrarMesYTipo,
+} from '../../shared/utils/load';
 
 
 @Component({
   selector: 'app-pagos',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, HttpClientModule , RouterModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterModule],
   templateUrl: './gestion-pagos.html',
 
 })
@@ -51,8 +70,8 @@ export class PagosComponent implements OnInit {
   mostrarPagosClase = false;
   mostrarPagosGeneral = false;
 
-mostrarMesTipo = false;
-walletMesTipo: any[] = [];
+  mostrarMesTipo = false;
+  walletMesTipo: any[] = [];
 
 
   nuevaWallet: Partial<Wallet> = {
@@ -69,154 +88,19 @@ walletMesTipo: any[] = [];
     private tipoClaseService: TipoClaseService  
 
   ) {}
+ngOnInit(): void {
+    loadUsuariosPagos(this);
+    bindNombreUsuarioToId(this);
+    loadTiposClase(this);
+    loadMesesWallet(this);
 
-  ngOnInit(): void {
-    this.vistas.getUsuarios().subscribe({
-    next: (u) => { 
-      this.usuarios = u ?? []; 
-      
-      console.log('Usuarios cargados', this.usuarios);
-    },
-    error: (err) => console.error('Error cargando usuarios', err)
-  });
-
-    this.nombreUsuario.valueChanges.subscribe(nombre => {
-      const usuario = this.usuarios.find(u => u.nombre === nombre);
-      this.usuario_id = usuario ? usuario.id : null;
-      console.log('Usuario seleccionado:', nombre, '→ ID:', this.usuario_id);
-    });
-    this.tipoClaseService.getTipos().subscribe({
-      next: (t) => this.tiposClase = t ?? [],
-      error: (e) => console.error('Error cargando tipos de clase', e)
-    });
-
-    this.vistas.getMesesWallet().subscribe({
-    next: (m) => {
-      this.meses = m ?? [];
-      console.log('Meses cargados:', this.meses);
-
-      const mesesEs = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
-      const mesActual = mesesEs[new Date().getMonth()];
-      this.mesSeleccionado = this.meses.find(x => x.toLowerCase() === mesActual.toLowerCase()) ?? null;
-
-      if (this.mesSeleccionado) {
-        this.cargarWalletMes(this.mesSeleccionado);
-      }
-    },
-    error: (e) => console.error('Error cargando meses', e)
-  });
-  if (!this.mesSeleccionado || !this.tipoSeleccionadoId) {
-    this.walletMesTipo = [];
-    return;
-  }
-
-  this.vistas.getWalletPorMesYTipo(this.mesSeleccionado, this.tipoSeleccionadoId).subscribe({
-    next: (d) => {
-      this.walletMesTipo = d ?? [];
-      console.log('Resultados mes + tipo:', this.walletMesTipo);
-    },
-    error: (e) => console.error('Error al cargar wallets por mes y tipo', e)
-  });
-
-  // 5) Wallets generales
-  this.cargarWalletAll();
-  this.cargarWallets();
-  this.cargarPorMesYTipo();
-
-}
-
-  cargarWallets(): void {
-    this.cargando = true;
-    this.walletService.getWallets().subscribe({
-      next: (data) => {
-        this.wallets = data;
-        this.cargando = false;
-      },
-      error: (err) => {
-        console.error(err);
-        this.error = 'Error al cargar las wallets';
-        this.cargando = false;
-      }
-    });
-  }
-
-  crearWallet(): void {
-    if (!this.nuevaWallet.fecha || !this.nuevaWallet.usuario_id || !this.nuevaWallet.tipoclase_id) {
-      alert('Completa todos los campos');
-      return;
-    }
-
-    this.walletService.crearWallet(this.nuevaWallet as any).subscribe({
-      next: () => {
-        this.nuevaWallet = { fecha: '', usuario_id: 0, tipoclase_id: 0 };
-        this.cargarWallets();
-      },
-      error: (err) => {
-        console.error(err);
-        this.error = 'Error al crear la wallet';
-      }
-    });
-  }
-
-  eliminarWallet(id: number): void {
-    if (confirm('¿Seguro que quieres eliminar esta wallet?')) {
-      this.walletService.eliminarWallet(id).subscribe({
-        next: () => this.cargarWalletAll(),
-        error: (err) => {
-          console.error(err);
-          this.error = 'Error al eliminar wallet';
-        }
-      });
-    }
+    loadWalletAll(this);
+    loadWallets(this);
+    loadWalletPorMesYTipo(this); // si ya tienes mes/tipo seleccionados
   }
 
 
-  cargarWalletAll() {
-  this.vistas.getVistaUsuarioWalletAll().subscribe({
-    next: d => this.walletAll = d,
-    error: e => console.error(e)
-  });
-}
-
-  cargarWalletUsuario(id: number) {
-    this.vistas.getVistaUsuarioWalletByUser(id).subscribe({
-      next: d => this.walletUser = d,
-      error: e => console.error(e)
-    });
-  }
-  cargarWalletMes(mes: string | null) {
-    if (!mes) { this.walletMes = []; return; }
-    this.vistas.getWalletMes(mes).subscribe({
-      next: d => this.walletMes = d ?? [],
-      error: e => console.error('Error al cargar wallets por mes', e)
-    });
-  }
-  cargarWalletTipo(id: number) {
-  this.vistas.getWalletPorTipoClase(id).subscribe({
-    next: d => {
-      this.tiposClaseFiltrados = d ?? [];
-      console.log('Pagos filtrados desde backend:', this.tiposClaseFiltrados);
-    },
-    error: e => console.error('Error al cargar wallets por tipo de clase', e)
-  });
-}
-cargarPorMesYTipo(): void {
-  console.log('Mes enviado al backend:', this.mesSeleccionado);
-  console.log('Tipo enviado al backend:', this.tipoSeleccionadoId);
-  
-  if (!this.mesSeleccionado || !this.tipoSeleccionadoId) { 
-    this.walletMesTipo = []; 
-    return; 
-  }
-
-  this.vistas.getWalletPorMesYTipo(this.mesSeleccionado, this.tipoSeleccionadoId).subscribe({
-    next: d => {
-      this.walletMesTipo = d ?? [];
-      console.log('Respuesta backend:', this.walletMesTipo);
-    },
-    error: e => console.error(e)
-  });
-}
+ 
 toggleFormularioPagos() {
   this.mostrarFormularioPagos = !this.mostrarFormularioPagos;
  
@@ -241,41 +125,20 @@ toggleTipoClase() {
 toggleMesyTipoClase(){
   this.mostrarMesTipo = !this.mostrarMesTipo;
 }
-onUsuarioSeleccionado() {
-  if (this.usuarioSeleccionadoId) {
-    this.usuarioSeleccionado =
-      this.usuarios.find(u => u.id === this.usuarioSeleccionadoId) ?? null;
+cargarWallets(): void { loadWallets(this); }
+  crearWallet(): void { createWallet(this); }
+  eliminarWallet(id: number): void { deleteWallet(this, id); }
 
-    this.cargarWalletUsuario(this.usuarioSeleccionadoId);
-  } else {
-    this.walletUser = [];
-    this.usuarioSeleccionado = null;
-  }
-}
-onMesSeleccionado() {
-  if (this.mesSeleccionado) {
-    this.walletMes = this.walletAll.filter(wm => wm.mes === this.mesSeleccionado);
-  } else {
-    this.walletMes = [];
-  }
-}
-onTipoClaseSeleccionado() {
-  if (this.tipoSeleccionadoId) {
-    this.cargarWalletTipo(this.tipoSeleccionadoId);
-  } else {
-    this.tiposClaseFiltrados = [];
-  }
-}
-onFiltrarMesYTipo() {
-  if (this.mesSeleccionado && this.tipoSeleccionadoId) {
-    this.vistas.getWalletPorMesYTipo(this.mesSeleccionado, this.tipoSeleccionadoId).subscribe({
-      next: (data) => {
-        this.walletMesTipo = data ?? [];
-        this.mostrarMesTipo = true;  // 👈 se muestran los resultados
-        console.log('Resultados mes + tipo:', this.walletMesTipo);
-      },
-      error: (err) => console.error('Error al filtrar por mes y tipo', err)
-    });
-  }
-}
+  cargarWalletAll(): void { loadWalletAll(this); }
+  cargarWalletUsuario(id: number): void { loadWalletUsuario(this, id); }
+  cargarWalletMes(mes: string | null): void { loadWalletMes(this, mes); }
+  cargarWalletTipo(id: number): void { loadWalletTipo(this, id); }
+  cargarPorMesYTipo(): void { loadWalletPorMesYTipo(this); }
+
+  onUsuarioSeleccionado(): void { onUsuarioSeleccionado(this); }
+  onMesSeleccionado(): void { onMesSeleccionado(this); }
+  onTipoClaseSeleccionado(): void { onTipoClaseSeleccionado(this); }
+  onFiltrarMesYTipo(): void { onFiltrarMesYTipo(this); }
+
+
 }
