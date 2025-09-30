@@ -336,7 +336,7 @@ export function onFiltrarMesYTipo(ctx: any): void {
 
 // -------- RESERVAR CLASE: CARGAS --------
 export function loadClasesReserva(ctx: any): void {
-    ctx.reservasService.getClases().subscribe({
+    ctx.ClaseService.getClases().subscribe({
         next: (data: any[]) => (ctx.clases = data ?? []),
         error: (e: any) => handleHttpError(e, ctx.toast, undefined, 'clasesError'),
     });

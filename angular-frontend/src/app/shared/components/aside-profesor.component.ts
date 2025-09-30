@@ -9,6 +9,7 @@ import { ClaseDto } from '../interfaces/ClaseDto.interface';
 import { VistaClase } from '../interfaces/vistaClase.interface';
 import { Alumno } from '../interfaces/alumno.interface';
 
+
 @Component({
   selector: 'app-aside-profesor',
   standalone: true,
@@ -66,7 +67,7 @@ toggleTabla(dia: 'L' | 'M' | 'X' | 'J' | 'V') {
   constructor(
     private reservasService: ReservationService,
     private claseService: ClaseService,
-    public auth: AuthService
+    public auth : AuthService
   ) {}
 
   ngOnInit(): void {

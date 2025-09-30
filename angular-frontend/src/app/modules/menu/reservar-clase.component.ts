@@ -67,9 +67,6 @@ export class ClasesReservaComponent implements OnInit {
   }
 }
 
-toggleTabla(dia: Dia) {
-  this.tablaAbierta = dia;
-}
 
 
   usuario$!: Observable<any>; 
@@ -103,9 +100,8 @@ toggleTabla(dia: Dia) {
     public auth: AuthService,
     private toast :ToastService
   ) {}
-
   ngOnInit(): void {
-  loadClasesReserva(this);
+  // carga las clases del lunes y abre directamente la tabla de Lunes
   loadClasesLunes(this);
   loadClasesMartes(this);
   loadClasesMiercoles(this);
@@ -120,6 +116,22 @@ toggleTabla(dia: Dia) {
     error: (e) => handleHttpError(e, this.toast, undefined, 'unexpectedError'),
   });
 }
+  /*ngOnInit(): void {
+  loadClasesReserva(this);
+  loadClasesLunes(this);
+  loadClasesMartes(this);
+  loadClasesMiercoles(this);
+  loadClasesJueves(this);
+  loadClasesViernes(this);
+
+  this.auth.getUser().subscribe({
+    next: (u) => {
+      this.usuarios = u;
+      this.usuarioId = Number(u?.id) || null;
+    },
+    error: (e) => handleHttpError(e, this.toast, undefined, 'unexpectedError'),
+  });
+}*/
 
 cargarAlumnos(id: number): void {
   loadAlumnosDeClase(this, id);
@@ -130,21 +142,13 @@ reservar(id: number): void {
 }
 
 
-toggleTablaL() {
-    this.mostrarTablaL = !this.mostrarTablaL;
+toggleTabla(dia: 'L' | 'M' | 'X' | 'J' | 'V') {
+  if (this.tablaAbierta === dia) {
+    this.tablaAbierta = null;
+  } else {
+    this.tablaAbierta = dia;
   }
-toggleTablaM() {
-    this.mostrarTablaM = !this.mostrarTablaM;
-  }
-toggleTablaX() {
-    this.mostrarTablaX = !this.mostrarTablaX;
-  }
-toggleTablaJ() {
-    this.mostrarTablaJ = !this.mostrarTablaJ;
-  }
-toggleTablaV() {
-    this.mostrarTablaV = !this.mostrarTablaV;
-  }
+}
 
 toggleTablaAlumnos(id: number): void {
 
