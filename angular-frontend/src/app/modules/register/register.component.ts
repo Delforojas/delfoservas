@@ -8,6 +8,7 @@ import { handleHttpError } from '../../shared/utils/http-error';
 import { showToast } from '../../shared/utils/test-messages';
 import { NavigationService } from '../../shared/services/navigation.service';
 import { HttpErrorResponse } from '@angular/common/http';
+import { UsersService } from '../../shared/services/user.service';
 
 
 @Component({
@@ -24,7 +25,8 @@ export class RegisterComponent {
     private auth: AuthService,
     private router: Router,
     private toast : ToastService,
-    private navigation: NavigationService
+    private navigation: NavigationService,
+    private user: UsersService
   ) {
     this.form = this.fb.group({
       nombre: [''],
@@ -36,7 +38,7 @@ export class RegisterComponent {
   submit(): void {
     if (this.form.invalid) return;
 
-    this.auth.register(this.form.value).subscribe({
+    this.user.register(this.form.value).subscribe({
       next: () => {
         showToast(this.toast, 'registerSuccess');
         this.navigation.goTo ('login')

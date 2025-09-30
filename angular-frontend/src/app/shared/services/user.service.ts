@@ -22,7 +22,10 @@ export class UsersService {
   getUsuario(id: number): Observable<Usuario> {
     return this.http.get<Usuario>(USERS_ROUTES.byId(id), {  headers: authHeaders() });
   }
-  
+
+  register(data: any) {
+  return this.http.post(USERS_ROUTES.register(), data );
+}
   
   // ⚠️ Crear usuario:
   // Lo gestionas con AuthService.register() -> POST /api/register

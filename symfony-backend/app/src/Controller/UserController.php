@@ -12,7 +12,11 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use Symfony\Component\HttpFoundation\Response;    
+use Symfony\Component\HttpFoundation\Response; 
+use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
+
+
+
 
 #[Route('/api/users')]
 class UserController extends AbstractController
@@ -59,40 +63,41 @@ public function show(User $user): JsonResponse
         'email'  => $user->getEmail(),
     ]);
 }
-
-#[Route('', name: 'api_register', methods: ['POST'])]
+#[Route('/register', name: 'register', methods: ['POST'])]
     public function register(
-        Request $req,
+        Request $request,
+        UserPasswordHasherInterface $passwordHasher,
         EntityManagerInterface $em,
-        UserRepository $repo,
-        UserPasswordHasherInterface $hasher
+        JWTTokenManagerInterface $jwtManager
     ): JsonResponse {
-        $d = json_decode($req->getContent(), true) ?? [];
+        $data = json_decode($request->getContent(), true) ?? [];
 
-        $email = trim($d['email'] ?? '');
-        $nombre = trim($d['nombre'] ?? '');
-        $plain = (string) ($d['password'] ?? '');
-
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            return $this->json(['error' => 'Email inválido'], Response::HTTP_BAD_REQUEST);
-        }
-        if (strlen($plain) < 8) {
-            return $this->json(['error' => 'La contraseña debe tener al menos 8 caracteres'], Response::HTTP_BAD_REQUEST);
-        }
-        if ($repo->findOneBy(['email' => $email])) {
-            return $this->json(['error' => 'El email ya existe'], Response::HTTP_CONFLICT);
+        // Validaciones básicas
+        if (empty($data['email']) || empty($data['password'])) {
+            return $this->json(['error' => 'email y password son obligatorios'], 400);
         }
 
-        $u = new User();
-        $u->setEmail($email);
-        $u->setNombre($nombre);
-        $u->setRole(RoleEnum::USER);
-        $u->setPassword($hasher->hashPassword($u, $plain));
+        // Evitar duplicados de email
+        $existing = $em->getRepository(User::class)->findOneBy(['email' => $data['email']]);
+        if ($existing) {
+            return $this->json(['error' => 'El email ya está en uso'], 409);
+        }
 
-        $em->persist($u);
+        $user = new User();
+        $user->setNombre(isset($data['nombre']) ? trim((string)$data['nombre']) : '');
+        $user->setEmail($data['email']);
+        $user->setPassword($passwordHasher->hashPassword($user, $data['password']));
+        $user->setRole(RoleEnum::USER);
+
+        $em->persist($user);
         $em->flush();
 
-        return $this->json(['message' => 'Registrado', 'id' => $u->getId()], Response::HTTP_CREATED);
+        return $this->json([
+            'message' => 'Usuario registrado correctamente',
+            'id'      => $user->getId(),
+            'nombre'  => $user->getNombre(), // <-- añadir para verificar
+            'token'   => $jwtManager->create($user)
+        ], 201);
     }
 
 
