@@ -21,34 +21,34 @@ export const routes: Routes = [
   { path: 'login', component: LoginComponent },
 
   {
-    
-  path: 'dashboard',
-  component: AppComponent,
-  canActivate: [AuthGuard],
-  children: [
-    // 👇 redirección por defecto al entrar a /menu5
-    { path: '', redirectTo: 'reservasclase', pathMatch: 'full' },
 
-    // 🔒 rutas solo para ADMIN o TEACHER
-    {
-      path: '',
-      canMatch: [canMatchRoles(['ROLE_ADMIN','ROLE_TEACHER'])],
-      children: [
-        { path: 'crear', component: CrearClaseComponent },
-        { path: 'admin', component: ClasesAdminComponent },
-        { path: 'profe', component: ClasesProfesorComponent },
-        { path: 'pagos', component: PagosComponent },
-      ]
-    },
+    path: 'dashboard',
+    component: AppComponent,
+    canActivate: [AuthGuard],
+    children: [
+      // 👇 redirección por defecto al entrar a /menu5
+      { path: '', redirectTo: 'reservasclase', pathMatch: 'full' },
 
-    // ✅ rutas sin restricción
-    { path: 'bonos', component: UsuarioBonosComponent },
-    { path: 'reservas', component: UsuarioReservasComponent },
-    { path: 'pagosusuario', component: UsuarioPagosComponent },
-    { path: 'reservasclase', component: ClasesReservaComponent },
-    
+      // 🔒 rutas solo para ADMIN o TEACHER
+      {
+        path: '',
+        canMatch: [canMatchRoles(['ROLE_ADMIN', 'ROLE_TEACHER'])],
+        children: [
+          { path: 'crear', component: CrearClaseComponent },
+          { path: 'admin', component: ClasesAdminComponent },
+          { path: 'profe', component: ClasesProfesorComponent },
+          { path: 'pagos', component: PagosComponent },
+        ]
+      },
 
- 
+      // ✅ rutas sin restricción
+      { path: 'bonos', component: UsuarioBonosComponent },
+      { path: 'reservas', component: UsuarioReservasComponent },
+      { path: 'pagosusuario', component: UsuarioPagosComponent },
+      { path: 'reservasclase', component: ClasesReservaComponent },
+
+
+
     ]
   },
 
