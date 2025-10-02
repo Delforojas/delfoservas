@@ -10,7 +10,7 @@ import { VistaClase } from '../interfaces/vistaClase.interface';
 import { RESERVATION_ROUTES } from '../routes/reservation-routes';
 import { authHeaders } from '../utils/auth-headers'; 
 
-export type DiaSemana = 'Lunes' | 'Martes' | 'Miercoles' | 'Jueves' | 'Viernes' | 'sábado' | 'sabado' | 'domingo';
+export type DiaSemana = 'Monday' | 'Tuesday' | 'Wednesday' | 'Thursday' | 'Friday' | 'sábado' | 'sabado' | 'domingo';
 
 @Injectable({ providedIn: 'root' })
 export class ReservationService {
@@ -58,26 +58,26 @@ export class ReservationService {
   }
 
   // ---------- Vistas por día ----------
-  getClasesPorDia(dia: 'lunes'|'martes'|'miercoles'|'jueves'|'viernes') {
+  getClassesByDay(dia: 'monday'|'tuesday'|'wednesday'|'thursday'|'friday') {
   let url = '';
   switch (dia) {
-    case 'lunes': url = RESERVATION_ROUTES.clasesLunes(); break;
-    case 'martes': url = RESERVATION_ROUTES.clasesMartes(); break;
-    case 'miercoles': url = RESERVATION_ROUTES.clasesMiercoles(); break;
-    case 'jueves': url = RESERVATION_ROUTES.clasesJueves(); break;
-    case 'viernes': url = RESERVATION_ROUTES.clasesViernes(); break;
+    case 'monday': url = RESERVATION_ROUTES.classMonday(); break;
+    case 'tuesday': url = RESERVATION_ROUTES.classTuesday(); break;
+    case 'wednesday': url = RESERVATION_ROUTES.classWednesday(); break;
+    case 'thursday': url = RESERVATION_ROUTES.classThursday(); break;
+    case 'friday': url = RESERVATION_ROUTES.classFriday(); break;
     default: throw new Error(`Día no soportado: ${dia}`);
   }
   return this.http.get<VistaClase[]>(url, { headers: authHeaders() });
 }
 
-getClasesLunes()     { return this.getClasesPorDia('lunes'); }
-getClasesMartes()    { return this.getClasesPorDia('martes'); }
-getClasesMiercoles() { return this.getClasesPorDia('miercoles'); }
-getClasesJueves()    { return this.getClasesPorDia('jueves'); }
-getClasesViernes()   { return this.getClasesPorDia('viernes'); }
+getClassMonday()     { return this.getClassesByDay('monday'); }
+getClassTuesday()    { return this.getClassesByDay('tuesday'); }
+getClassWednesday() { return this.getClassesByDay('wednesday'); }
+getClassThursday()    { return this.getClassesByDay('thursday'); }
+getClassFriday()   { return this.getClassesByDay('friday'); }
 
-   getReservasPorDia(userId: number, dia: string): Observable<any[]> {
-    return this.http.get<any[]>(RESERVATION_ROUTES.reservasPorDia(userId, dia), { headers: authHeaders() });
+getReservasPorDia(userId: number, dia: string): Observable<any[]> {
+    return this.http.get<any[]>(RESERVATION_ROUTES.reservationsByDay(userId, dia), { headers: authHeaders() });
 }
 }

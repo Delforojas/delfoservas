@@ -31,17 +31,20 @@ export class LoginComponent {
      password: ['', Validators.required]
    });
  }
+ngOnInit(): void {
+    // Evita usar tokens viejos en la pantalla de login
+    localStorage.removeItem('token');
+  }
 
-
- submit(): void {
-   this.auth.login(this.form.value).subscribe({
-     next: res => {
-     showToast(this.toast, 'loginSuccess', this.form.value.email || 'Usuario');
-     this.navigation.goTo ('dashboard')
-     },
-       error: (err: HttpErrorResponse) => {
-        handleHttpError(err, this.toast, this.form);
-        },
-      });
+   submit(): void {
+    if (this.form.invalid) return;
+    this.auth.login(this.form.value).subscribe({
+      next: () => {
+        showToast(this.toast, 'loginSuccess', this.form.value.email || 'Usuario');
+        // ya hay token guardado en login(); navega a la zona privada
+        this.navigation.goTo('dashboard');
+      },
+      error: (err) => handleHttpError(err, this.toast, this.form),
+    });
   }
 }

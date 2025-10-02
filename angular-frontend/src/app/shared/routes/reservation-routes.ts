@@ -16,11 +16,11 @@ export const RESERVATION_ROUTES = {
   reservarClase:    (claseId: number) => `${RESERVATIONS}/reservar/${claseId}`,
 
   // vistas por día
-  clasesLunes:      () => `${RESERVATIONS}/clases/lunes`,
-  clasesMartes:     () => `${RESERVATIONS}/clases/martes`,
-  clasesMiercoles:  () => `${RESERVATIONS}/clases/miercoles`,
-  clasesJueves:     () => `${RESERVATIONS}/clases/jueves`,
-  clasesViernes:    () => `${RESERVATIONS}/clases/viernes`,
+  classMonday:      () => `${RESERVATIONS}/clases/monday`,
+  classTuesday:     () => `${RESERVATIONS}/clases/tuesday`,
+  classWednesday:  () => `${RESERVATIONS}/clases/wednesday`,
+  classThursday:     () => `${RESERVATIONS}/clases/thursday`,
+  classFriday:    () => `${RESERVATIONS}/clases/friday`,
 
-   reservasPorDia: (userId: number, dia: string) => `${RESERVATIONS}/usuarios/${userId}/reservas/${dia}`,
+  reservationsByDay: (userId: number, dia: string) => `${RESERVATIONS}/usuarios/${userId}/reservas/${dia}`,
 };

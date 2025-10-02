@@ -54,13 +54,13 @@
   class="px-2 py-1 sm:px-3 sm:py-1 rounded text-white text-[11px] sm:text-xs transition
         disabled:opacity-60 disabled:cursor-not-allowed"
   [ngClass]="{
-    'bg-green-600 hover:bg-green-700': !c.reservation_id && reservandoId !== c.id,
+    'bg-green-600 hover:bg-green-700': !c.reservation_id && state.reservandoId !== c.id,
     'bg-red-600': !!c.reservation_id,
-    'bg-yellow-500 hover:bg-yellow-600': reservandoId === c.id
+    'bg-yellow-500 hover:bg-yellow-600': state.reservandoId === c.id
   }"
-  [disabled]="c.reservation_id || reservandoId === c.id"
+  [disabled]="c.reservation_id || state.reservandoId === c.id"
   (click)="!c.reservation_id ? reservar(c.id) : null; $event.stopPropagation()">
-  {{ reservandoId === c.id ? 'Reservando…' : (c.reservation_id ? 'Reservada' : 'Reservar') }}
+  {{ state.reservandoId === c.id ? 'Reservando…' : (c.reservation_id ? 'Reservada' : 'Reservar') }}
 </button>
                 <!--
                 <button
@@ -82,15 +82,15 @@
           </tr>
 
           <!-- Fila expandible (alumnos) -->
-          <tr *ngIf="claseSeleccionadaId === c.id && mostrarTablaAlumnos">
+          <tr *ngIf="state.claseSeleccionadaId === c.id && state.mostrarTablaAlumnos">
           <td colspan="5" class="p-0">
-            <div *ngIf="cargandoAlumnos" class="text-blue-600 p-2">Cargando alumnos…</div>
-            <div *ngIf="errorAlumnos" class="text-red-600 p-2">{{ errorAlumnos }}</div>
+            <div *ngIf="state.cargandoAlumnos" class="text-blue-600 p-2">Cargando alumnos…</div>
+            <div *ngIf="state.errorAlumnos" class="text-red-600 p-2">{{ state.errorAlumnos }}</div>
 
-            <ng-container *ngIf="!cargandoAlumnos && !errorAlumnos">
+            <ng-container *ngIf="!state.cargandoAlumnos && !state.errorAlumnos">
               <table class="w-full text-xs bg-yellow-200">
                 <tbody>
-                  <tr *ngFor="let a of alumnos" class="odd:bg-white even:bg-gray-50">
+                  <tr *ngFor="let a of state.alumnos" class="odd:bg-white even:bg-gray-50">
                     <td class="p-0">
                       <div class="flex justify-between items-center bg-yellow-100 p-2 hover:bg-green-200 hover:text-black">
                         <span class="whitespace-nowrap">{{ a.alumno_nombre }}</span>

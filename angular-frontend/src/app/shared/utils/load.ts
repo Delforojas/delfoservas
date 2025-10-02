@@ -2,6 +2,8 @@
 import { handleHttpError } from '../utils/http-error';
 import { finalize } from 'rxjs';
 import { showToast } from '../utils/test-messages';
+import { ReservarClaseContext } from './interfaces';
+
 
 
 
@@ -334,43 +336,59 @@ export function onFiltrarMesYTipo(ctx: any): void {
 }
 
 
-// -------- RESERVAR CLASE: CARGAS --------
-export function loadClasesReserva(ctx: any): void {
-    ctx.ClaseService.getClases().subscribe({
-        next: (data: any[]) => (ctx.clases = data ?? []),
-        error: (e: any) => handleHttpError(e, ctx.toast, undefined, 'clasesError'),
-    });
+// ----------- LUNES -----------
+export function loadClassMonday(ctx: any): void {
+  ctx.reservasService.getClassMonday().subscribe({
+    next: (data: any[]) => {
+      console.log('📅 Clases Lunes recibidas:', data);
+      ctx.state.clasesPorDia.L = [...(data ?? [])];
+    },
+    error: (e: any) => handleHttpError(e, ctx.toast, undefined, 'clasesError'),
+  });
 }
 
-export function loadClasesLunes(ctx: any): void {
-    ctx.reservasService.getClasesLunes().subscribe({
-        next: (data: any[]) => (ctx.clasesL = [...(data ?? [])]),
-        error: (e: any) => handleHttpError(e, ctx.toast, undefined, 'clasesError'),
-    });
+// ----------- MARTES -----------
+export function loadClassTuesday(ctx: any): void {
+  ctx.reservasService.getClassTuesday().subscribe({
+    next: (data: any[]) => {
+      console.log('📅 Clases Martes recibidas:', data);
+      ctx.state.clasesPorDia.M = [...(data ?? [])];
+    },
+    error: (e: any) => handleHttpError(e, ctx.toast, undefined, 'clasesError'),
+  });
 }
-export function loadClasesMartes(ctx: any): void {
-    ctx.reservasService.getClasesMartes().subscribe({
-        next: (data: any[]) => (ctx.clasesM = [...(data ?? [])]),
-        error: (e: any) => handleHttpError(e, ctx.toast, undefined, 'clasesError'),
-    });
+
+// ----------- MIÉRCOLES -----------
+export function loadClassWednesday(ctx: any): void {
+  ctx.reservasService.getClassWednesday().subscribe({
+    next: (data: any[]) => {
+      console.log('📅 Clases Miércoles recibidas:', data);
+      ctx.state.clasesPorDia.X = [...(data ?? [])];
+    },
+    error: (e: any) => handleHttpError(e, ctx.toast, undefined, 'clasesError'),
+  });
 }
-export function loadClasesMiercoles(ctx: any): void {
-    ctx.reservasService.getClasesMiercoles().subscribe({
-        next: (data: any[]) => (ctx.clasesX = [...(data ?? [])]),
-        error: (e: any) => handleHttpError(e, ctx.toast, undefined, 'clasesError'),
-    });
+
+// ----------- JUEVES -----------
+export function loadClassThursday(ctx: any): void {
+  ctx.reservasService.getClassThursday().subscribe({
+    next: (data: any[]) => {
+      console.log('📅 Clases Jueves recibidas:', data);
+      ctx.state.clasesPorDia.J = [...(data ?? [])];
+    },
+    error: (e: any) => handleHttpError(e, ctx.toast, undefined, 'clasesError'),
+  });
 }
-export function loadClasesJueves(ctx: any): void {
-    ctx.reservasService.getClasesJueves().subscribe({
-        next: (data: any[]) => (ctx.clasesJ = [...(data ?? [])]),
-        error: (e: any) => handleHttpError(e, ctx.toast, undefined, 'clasesError'),
-    });
-}
-export function loadClasesViernes(ctx: any): void {
-    ctx.reservasService.getClasesViernes().subscribe({
-        next: (data: any[]) => (ctx.clasesV = [...(data ?? [])]),
-        error: (e: any) => handleHttpError(e, ctx.toast, undefined, 'clasesError'),
-    });
+
+// ----------- VIERNES -----------
+export function loadClassFriday(ctx: any): void {
+  ctx.reservasService.getClassFriday().subscribe({
+    next: (data: any[]) => {
+      console.log('📅 Clases Viernes recibidas:', data);
+      ctx.state.clasesPorDia.V = [...(data ?? [])];
+    },
+    error: (e: any) => handleHttpError(e, ctx.toast, undefined, 'clasesError'),
+  });
 }
 
 // -------- ALUMNOS DE CLASE --------
@@ -391,10 +409,10 @@ export function loadAlumnosDeClase(ctx: any, id: number): void {
 }
 
 // -------- RESERVAR --------
-export function reservarClase(ctx: any, id: number): void {
+export function reservarClase(ctx: ReservarClaseContext , id: number): void {
     const claseId = Number(id);
     if (!Number.isFinite(claseId) || claseId <= 0) {
-        handleHttpError({ status: 400 } as any, ctx.toast, undefined, 'reservarError');
+        handleHttpError({ status: 400 } as any , ctx.toast, undefined, 'reservarError');
         return;
     }
 
@@ -402,19 +420,19 @@ export function reservarClase(ctx: any, id: number): void {
 
     ctx.reservasService.reservarClase(claseId).subscribe({
         next: () => {
-            handleHttpError({ status: 200 } as any, ctx.toast, undefined, 'reservarSuccess');
+            handleHttpError({ status: 200 } as any , ctx.toast, undefined, 'reservarSuccess');
 
-            if (ctx.mostrarTablaL) loadClasesLunes(ctx);
-            if (ctx.mostrarTablaM) loadClasesMartes(ctx);
-            if (ctx.mostrarTablaX) loadClasesMiercoles(ctx);
-            if (ctx.mostrarTablaJ) loadClasesJueves(ctx);
-            if (ctx.mostrarTablaV) loadClasesViernes(ctx);
+            if (ctx.mostrarTablaL) loadClassMonday(ctx);
+            if (ctx.mostrarTablaM) loadClassTuesday(ctx);
+            if (ctx.mostrarTablaX) loadClassWednesday(ctx);
+            if (ctx.mostrarTablaJ) loadClassThursday(ctx);
+            if (ctx.mostrarTablaV) loadClassFriday(ctx);
 
             if (ctx.mostrarTablaAlumnos && ctx.claseSeleccionadaId === claseId) {
                 loadAlumnosDeClase(ctx, claseId);
             }
         },
-        error: (e: any) => handleHttpError(e, ctx.toast, undefined, 'reservarError'),
+        error: (e: any ) => handleHttpError(e, ctx.toast, undefined, 'reservarError'),
     });
 }
 

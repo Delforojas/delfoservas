@@ -96,27 +96,27 @@ toggleTabla(dia: 'L' | 'M' | 'X' | 'J' | 'V') {
   }
 
   cargarClasesLunes(): void {
-    this.reservasService.getClasesLunes().subscribe((data: VistaClase[]) => {
+    this.reservasService.getClassMonday().subscribe((data: VistaClase[]) => {
       this.clasesL = data;
     });
   }
   cargarClasesMartes(): void {
-    this.reservasService.getClasesMartes().subscribe((data: VistaClase[]) => {
+    this.reservasService.getClassTuesday().subscribe((data: VistaClase[]) => {
       this.clasesM = data;
     });
   }
   cargarClasesMiercoles(): void {
-    this.reservasService.getClasesMiercoles().subscribe((data: VistaClase[]) => {
+    this.reservasService.getClassWednesday().subscribe((data: VistaClase[]) => {
       this.clasesX = data;
     });
   }
   cargarClasesJueves(): void {
-    this.reservasService.getClasesJueves().subscribe((data: VistaClase[]) => {
+    this.reservasService.getClassThursday().subscribe((data: VistaClase[]) => {
       this.clasesJ = data;
     });
   }
   cargarClasesViernes(): void {
-    this.reservasService.getClasesViernes().subscribe((data: VistaClase[]) => {
+    this.reservasService.getClassFriday().subscribe((data: VistaClase[]) => {
       this.clasesV = data;
     });
   }

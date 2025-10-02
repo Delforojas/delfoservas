@@ -13,7 +13,10 @@ export class HeaderComponent implements OnInit {
   user: any = null;
 
   constructor(private auth: AuthService) {}
-  ngOnInit(): void {
+ ngOnInit(): void {
+    const token = localStorage.getItem('token');
+    if (!token) return; // 👈 clave: en /login no pidas /me
+    
     this.auth.getUser().subscribe({
       next: u => this.user = u,
       error: _ => this.user = null

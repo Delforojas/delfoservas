@@ -109,50 +109,50 @@ public function update(Request $request, Reservation $reservation, EntityManager
 
     // ---- CLASES POR DÍA ----
 
-        #[Route('/clases/lunes', name: 'clases_lunes', methods: ['GET'])]
-        public function clasesLunes(ReservationRepository $reservationRepository): JsonResponse
+        #[Route('/clases/monday', name: 'clases_lunes', methods: ['GET'])]
+        public function monday(ReservationRepository $reservationRepository): JsonResponse
         {
             $user = $this->getUser();
             if (!$user || !method_exists($user, 'getId')) {
                 return $this->json(['error' => 'No autenticado'], 401);
             }
-              return $this->json($reservationRepository->lunes($user->getId()));
+              return $this->json($reservationRepository->monday($user->getId()));
         }
-        #[Route('/clases/martes', name: 'clases_martes', methods: ['GET'])]
-        public function clasesMartes(ReservationRepository $reservationRepository): JsonResponse
+        #[Route('/clases/tuesday', name: 'clases_martes', methods: ['GET'])]
+        public function tuesday(ReservationRepository $reservationRepository): JsonResponse
         {
             $user = $this->getUser();
             if (!$user || !method_exists($user, 'getId')) {
                 return $this->json(['error' => 'No autenticado'], 401);
             }
-              return $this->json($reservationRepository->martes($user->getId()));
+              return $this->json($reservationRepository->tuesday($user->getId()));
         }
-        #[Route('/clases/miercoles', name: 'clases_miercoles', methods: ['GET'])]
-        public function clasesMiercoles(ReservationRepository $reservationRepository): JsonResponse
+        #[Route('/clases/wednesday', name: 'clases_miercoles', methods: ['GET'])]
+        public function wednesday(ReservationRepository $reservationRepository): JsonResponse
         {
             $user = $this->getUser();
             if (!$user || !method_exists($user, 'getId')) {
                 return $this->json(['error' => 'No autenticado'], 401);
             }
-              return $this->json($reservationRepository->miercoles($user->getId()));
+              return $this->json($reservationRepository->wednesday($user->getId()));
         }
-        #[Route('/clases/jueves', name: 'clases_jueves', methods: ['GET'])]
-        public function clasesJueves(ReservationRepository $reservationRepository): JsonResponse
+        #[Route('/clases/thursday', name: 'clases_jueves', methods: ['GET'])]
+        public function thursday(ReservationRepository $reservationRepository): JsonResponse
         {
             $user = $this->getUser();
             if (!$user || !method_exists($user, 'getId')) {
                 return $this->json(['error' => 'No autenticado'], 401);
             }
-              return $this->json($reservationRepository->jueves($user->getId()));
+              return $this->json($reservationRepository->thursday($user->getId()));
         }
-        #[Route('/clases/viernes', name: 'clases_viernes', methods: ['GET'])]
-        public function clasesViernes(ReservationRepository $reservationRepository): JsonResponse
+        #[Route('/clases/friday', name: 'clases_viernes', methods: ['GET'])]
+        public function friday(ReservationRepository $reservationRepository): JsonResponse
         {
             $user = $this->getUser();
             if (!$user || !method_exists($user, 'getId')) {
                 return $this->json(['error' => 'No autenticado'], 401);
             }
-              return $this->json($reservationRepository->viernes($user->getId()));
+              return $this->json($reservationRepository->friday($user->getId()));
         }
 
 
