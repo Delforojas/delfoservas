@@ -3,30 +3,31 @@ import { handleHttpError } from '../utils/http-error';
 import { finalize } from 'rxjs';
 import { showToast } from '../utils/test-messages';
 import { ReservarClaseContext } from './interfaces';
+import { UsuarioBonosContext } from './interfaces';
 
 
 // --- BONOS ---
-export function loadBonosPorUsuario(ctx: any): void {
-    const id = Number(ctx.usuarioId);
-    if (!id || id <= 0) {
-        handleHttpError({ status: 400 } as any, ctx.toast, undefined, 'bonosError');
-        return;
-    }
+export function loadBonosPorUsuario(ctx: UsuarioBonosContext): void {
+  const id = ctx.state.usuarioId;
+  if (!id || id <= 0) {
+    handleHttpError({ status: 400 } as any, ctx.toast, undefined, 'bonosError');
+    return;
+  }
 
-    ctx.cargando = true;
-    ctx.error = null;
+  ctx.state.cargando = true;
+  ctx.state.error = null;
 
-    ctx.vistas.getBonosPorUsuario(id).subscribe({
-        next: (rows: any[]) => {
-            ctx.bonosDeUsuario = rows ?? [];
-            ctx.mostrarTablaBonosUsuario = true;
-            ctx.cargando = false;
-        },
-        error: (e: any) => {
-            handleHttpError(e, ctx.toast, undefined, 'bonosError');
-            ctx.cargando = false;
-        },
-    });
+  ctx.vistas.getBonosPorUsuario(id).subscribe({
+    next: (rows: any[]) => {
+      ctx.state.bonosDeUsuario = rows ?? [];
+      ctx.state.mostrarTablaBonosUsuario = true;
+      ctx.state.cargando = false;
+    },
+    error: (e: any) => {
+      handleHttpError(e, ctx.toast, undefined, 'bonosError');
+      ctx.state.cargando = false;
+    },
+  });
 }
 
 // --- CLASES ---

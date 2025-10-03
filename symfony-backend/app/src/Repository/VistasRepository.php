@@ -37,30 +37,26 @@ class VistasRepository
 
 
 
-            public function vistaBonosPorUsuario(int $usuarioId): array
-            {
-           
-            
-            $sql = <<<'SQL'
-                    SELECT
-                    w.usuario_id       AS usuario_id,
-                    u.nombre           AS cliente,
-                    tc.nombre          AS tipo_clase,
-                    b.clases_totales   AS total_clases,
-                    b.clases_restantes AS clases_restantes,
-                    b.estado           AS estado,
-                    w.mes              AS mes
-                    FROM bonos b
-                    JOIN wallet w      ON b.wallet_id  = w.id
-                    JOIN users u       ON w.usuario_id = u.id
-                    JOIN tipo_clase tc ON b.tipoclase  = tc.id
-                    WHERE w.usuario_id = :uid
-                    ORDER BY b.id
-                SQL;
+    public function vistaBonosPorUsuario(int $usuarioId): array
+    {
+        $sql = '
+            SELECT
+              w.usuario_id       AS usuario_id,
+              u.nombre           AS cliente,
+              tc.nombre          AS tipo_clase,
+              b.clases_totales   AS total_clases,
+              b.clases_restantes AS clases_restantes,
+              b.estado           AS estado
+            FROM bonos b
+            JOIN wallet w      ON b.wallet_id  = w.id
+            JOIN "user" u      ON w.usuario_id = u.id
+            JOIN tipo_clase tc ON b.tipoclase  = tc.id
+            WHERE w.usuario_id = :uid
+            ORDER BY b.id
+        ';
 
-                return $this->conn->fetchAllAssociative($sql, ['uid' => $usuarioId]);
-            }
-
+        return $this->conn->fetchAllAssociative($sql, ['uid' => $usuarioId]); // ✅ usamos $this->conn
+    }
 
 
 
