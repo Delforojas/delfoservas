@@ -5,8 +5,6 @@ import { showToast } from '../utils/test-messages';
 import { ReservarClaseContext } from './interfaces';
 
 
-
-
 // --- BONOS ---
 export function loadBonosPorUsuario(ctx: any): void {
     const id = Number(ctx.usuarioId);
@@ -392,22 +390,22 @@ export function loadClassFriday(ctx: any): void {
 }
 
 // -------- ALUMNOS DE CLASE --------
-export function loadAlumnosDeClase(ctx: any, id: number): void {
-    ctx.cargandoAlumnos = true;
-    ctx.errorAlumnos = null;
-    ctx.alumnos = [];
-    ctx.claseSeleccionadaId = id;
+export function loadAlumnosDeClase(ctx: ReservarClaseContext, id: number): void {
+  ctx.state.cargandoAlumnos = true;
+  ctx.state.errorAlumnos = null;
+  ctx.state.alumnos = [];
+  ctx.state.claseSeleccionadaId = id;
 
-    ctx.claseService.getAlumnosDeClase(id).subscribe({
-        next: (rows: any[]) => {
-            ctx.alumnos = rows ?? [];
-            ctx.mostrarTablaAlumnos = true;
-            ctx.cargandoAlumnos = false;
-        },
-        error: (e: any) => handleHttpError(e, ctx.toast, undefined, 'alumnosError'),
-    });
+  ctx.claseService.getAlumnosDeClase(id).subscribe({
+    next: (rows: any[]) => {
+      ctx.state.alumnos = rows ?? [];
+      ctx.state.mostrarTablaAlumnos = true;
+      ctx.state.cargandoAlumnos = false;
+    },
+    error: (e: any) =>
+      handleHttpError(e, ctx.toast, undefined, 'alumnosError'),
+  });
 }
-
 // -------- RESERVAR --------
 export function reservarClase(ctx: ReservarClaseContext , id: number): void {
     const claseId = Number(id);

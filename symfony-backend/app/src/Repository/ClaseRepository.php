@@ -144,18 +144,17 @@ class ClaseRepository extends ServiceEntityRepository
             {
                 $conn = $this->getEntityManager()->getConnection();
 
-                $sql = "
-                    SELECT 
-                        alumno_reservation_id,
-                        alumno_id,
-                        alumno_nombre,
-                        alumno_email
-                    FROM vista_alumnos_por_clase
-                    WHERE clase_id = :id
-                    ORDER BY alumno_nombre
-                ";
+                $sql = '
+                SELECT
+                r.clase_id,
+                u.id           AS alumno_id,
+                u.nombre       AS alumno_nombre,
+                u.email        AS alumno_email
+                FROM reservation r
+                JOIN "user" u ON u.id = r.usuario_id
+                WHERE r.clase_id = :claseId ;';
 
-                return $conn->fetchAllAssociative($sql, ['id' => $claseId]);
+                   return $conn->fetchAllAssociative($sql, ['claseId' => $claseId]);
             }
             
 }

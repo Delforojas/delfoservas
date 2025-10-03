@@ -21,7 +21,7 @@ export class ClaseService {
   getClases(): Observable<ClaseDto[]> {
     return this.http.get<ClaseDto[]>(CLASES_ROUTES.list(), { headers: authHeaders() });
   }
-  
+
   // Vista de clases
   getClasesVista(): Observable<VistaClase[]> {
     return this.http.get<VistaClase[]>(CLASES_ROUTES.vista(), { headers: authHeaders() });
