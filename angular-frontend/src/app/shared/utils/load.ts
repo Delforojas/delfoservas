@@ -6,6 +6,10 @@ import { ReservarClaseContext } from './interfaces';
 import { UsuarioBonosContext } from './interfaces';
 import { UsuarioReservasContext } from './interfaces';
 import { UsuarioPagosContext } from './interfaces';
+import { CrearClaseContext } from './interfaces';
+import { ClasesProfesorContext } from '../utils/interfaces';
+
+
 
 
 
@@ -34,11 +38,11 @@ export function loadBonosPorUsuario(ctx: UsuarioBonosContext): void {
 }
 
 // --- CLASES ---
-export function loadClases(ctx: any): void {
-    ctx.claseService.getClases().subscribe({
-        next: (rows: any[]) => (ctx.clases = rows ?? []),
-        error: (e: any) => handleHttpError(e, ctx.toast, undefined, 'clasesError'),
-    });
+export function loadClases(ctx: CrearClaseContext): void {
+  ctx.claseService.getClases().subscribe({
+    next: d => (ctx.state.clases = d ?? []),
+    error: e => handleHttpError(e, ctx.toast, undefined, 'clasesError'),
+  });
 }
 
 export function loadClasesVista(ctx: any): void {
@@ -48,36 +52,41 @@ export function loadClasesVista(ctx: any): void {
     });
 }
 
-export function loadClasesProfesores(ctx: any): void {
-    ctx.cargando = true;
-    ctx.claseService.getMisClases()
-        .pipe(finalize(() => (ctx.cargando = false)))
-        .subscribe({
-            next: (rows: any[]) => (ctx.clasesprofe = rows ?? []),
-            error: (e: any) => handleHttpError(e, ctx.toast, undefined, 'misClasesError'),
-        });
-}
 
-export function loadAlumnos(ctx: any, id: number): void {
-    ctx.cargandoAlumnos = true;
-    ctx.alumnos = [];
-    ctx.claseSeleccionadaId = id;
+// --- PROFESOR: sus clases ---
+export function loadClasesProfesores(ctx: ClasesProfesorContext): void {
+  ctx.state.cargando = true;
 
-    ctx.claseService.getAlumnosDeClase(id)
-        .pipe(finalize(() => (ctx.cargandoAlumnos = false)))
-        .subscribe({
-            next: (rows: any[]) => {
-                ctx.alumnos = rows ?? [];
-                ctx.mostrarTablaAlumnos = true;
-            },
-            error: (e: any) => handleHttpError(e, ctx.toast, undefined, 'alumnosError'),
-        });
-}
-export function loadProfesores(ctx: any): void {
-    ctx.usersService.getProfesores().subscribe({
-        next: (rows: any[]) => (ctx.profesores = rows ?? []),
-        error: (e: any) => handleHttpError(e, ctx.toast, undefined, 'profesoresError'),
+  ctx.claseService.getMisClases()
+    .pipe(finalize(() => (ctx.state.cargando = false)))
+    .subscribe({
+      next: (rows: any[]) => (ctx.state.clasesProfe = rows ?? []),
+      error: (e: any) => handleHttpError(e, ctx.toast, undefined, 'misClasesError'),
     });
+}
+
+// --- Alumnos de una clase ---
+export function loadAlumnos(ctx: ClasesProfesorContext, id: number): void {
+  ctx.state.cargandoAlumnos = true;
+  ctx.state.errorAlumnos = null;
+  ctx.state.alumnos = [];
+  ctx.state.claseSeleccionadaId = id;
+
+  ctx.claseService.getAlumnosDeClase(id)
+    .pipe(finalize(() => (ctx.state.cargandoAlumnos = false)))
+    .subscribe({
+      next: (rows: any[]) => {
+        ctx.state.alumnos = rows ?? [];
+        ctx.state.mostrarTablaAlumnos = true;
+      },
+      error: (e: any) => handleHttpError(e, ctx.toast, undefined, 'alumnosError'),
+    });
+}
+export function loadProfesores(ctx: CrearClaseContext): void {
+  ctx.usersService.getProfesores().subscribe({
+    next: d => (ctx.state.profesores = d ?? []),
+    error: e => handleHttpError(e, ctx.toast, undefined, 'profesoresError'),
+  });
 }
 
 // --- ACCIONES ---
@@ -112,56 +121,65 @@ export function deleteAlumnoDeClase(ctx: any, a: any): void {
         });
 }
 // --- catálogos ---
-export function loadTiposClase(ctx: any): void {
-    ctx.tipoClaseService.getTipos().subscribe({
-        next: (rows: any[]) => (ctx.tiposClase = rows ?? []),
-        error: (e: any) => handleHttpError(e, ctx.toast, undefined, 'tiposClaseError'),
-    });
+
+export function loadTiposClase(ctx: CrearClaseContext): void {
+  ctx.tipoClaseService.getTipos().subscribe({
+    next: d => (ctx.state.tiposClase = d ?? []),
+    error: e => handleHttpError(e, ctx.toast, undefined, 'tiposClaseError'),
+  });
 }
 
-export function loadRooms(ctx: any): void {
-    ctx.roomService.getRooms().subscribe({
-        next: (rows: any[]) => (ctx.rooms = rows ?? []),
-        error: (e: any) => handleHttpError(e, ctx.toast, undefined, 'roomsError'),
-    });
+export function loadRooms(ctx: CrearClaseContext): void {
+  ctx.roomService.getRooms().subscribe({
+    next: d => (ctx.state.rooms = d ?? []),
+    error: e => handleHttpError(e, ctx.toast, undefined, 'roomsError'),
+  });
 }
+export function crearClase(ctx: CrearClaseContext): void {
+  const c = ctx.state.nuevaClase;
 
-export function crearClase(ctx: any): void {
-    const c = ctx.nuevaClase;
+  const payload = {
+    ...c,
+    tipoclase: Number(c.tipoclase),
+    teacher: Number(c.teacher),
+    aforo_clase: Number(c.aforo_clase),
+    room: Number(c.room),
+    nombre: (c.nombre ?? '').trim(),
+    fecha: (c.fecha ?? '').trim(),
+    hora: (c.hora ?? '').trim(),
+  };
 
-    const payload = {
-        ...c,
-        tipoclase: Number(c.tipoclase),
-        teacher: Number(c.teacher),
-        aforo_clase: Number(c.aforo_clase),
-        room: Number(c.room),
-        nombre: (c.nombre ?? '').trim(),
-        fecha: (c.fecha ?? '').trim(),
-        hora: (c.hora ?? '').trim(),
-    };
+  const missing: string[] = [];
+  if (!payload.nombre) missing.push('nombre');
+  if (!payload.fecha) missing.push('fecha');
+  if (!payload.hora) missing.push('hora');
+  if (!Number.isFinite(payload.tipoclase) || payload.tipoclase <= 0) missing.push('tipoclase');
+  if (!Number.isFinite(payload.teacher) || payload.teacher <= 0) missing.push('teacher');
+  if (!Number.isFinite(payload.aforo_clase) || payload.aforo_clase <= 0) missing.push('aforo_clase');
+  if (!Number.isFinite(payload.room) || payload.room <= 0) missing.push('room');
 
-    const errores: string[] = [];
-    if (!payload.nombre) errores.push('nombre');
-    if (!payload.fecha) errores.push('fecha');
-    if (!payload.hora) errores.push('hora');
-    if (!Number.isFinite(payload.tipoclase) || payload.tipoclase <= 0) errores.push('tipoclase');
-    if (!Number.isFinite(payload.teacher) || payload.teacher <= 0) errores.push('teacher');
-    if (!Number.isFinite(payload.aforo_clase) || payload.aforo_clase <= 0) errores.push('aforo_clase');
-    if (!Number.isFinite(payload.room) || payload.room <= 0) errores.push('room');
+  if (missing.length) {
+    handleHttpError({ status: 400 } as any, ctx.toast, undefined, 'crearClaseFormInvalid');
+    return;
+  }
 
-    if (errores.length) {
-        handleHttpError({ status: 400 } as any, ctx.toast, undefined, 'crearClaseFormInvalid');
-        console.warn('Campos inválidos:', errores.join(', '), { payload });
-        return;
-    }
-
-    ctx.claseService.crearClase(payload).subscribe({
-        next: () => {
-            ctx.nuevaClase = { nombre: '', tipoclase: 0, teacher: 0, fecha: '', hora: '', aforo_clase: 0, room: 0 };
-            ctx.cargarClases(); // igual que en tu método original
-        },
-        error: (e: any) => handleHttpError(e, ctx.toast, undefined, 'crearClaseError'),
-    });
+  ctx.claseService.crearClase(payload).subscribe({
+    next: () => {
+      showToast(ctx.toast, 'classSuccess'); 
+      ctx.state.nuevaClase = {
+        nombre: '',
+        tipoclase: 0,
+        teacher: 0,
+        fecha: '',
+        hora: '',
+        aforo_clase: 0,
+        room: 0,
+      };
+      loadClases(ctx);
+      loadClasesVista(ctx);
+    },
+    error: (e) => handleHttpError(e, ctx.toast, undefined, 'crearClaseError'),
+  });
 }
 // 1) Usuarios (lista y binding del buscador)
 export function loadUsuariosPagos(ctx: any): void {

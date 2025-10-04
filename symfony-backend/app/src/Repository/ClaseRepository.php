@@ -116,28 +116,73 @@ class ClaseRepository extends ServiceEntityRepository
                 $em->flush();
                 return true;
             }
-
+        
             public function listarVista(): array
-            {
-                $conn = $this->getEntityManager()->getConnection();
-                $sql = "SELECT * FROM vista_clases ORDER BY fecha, hora";
-                return $conn->fetchAllAssociative($sql);
-            }
+{
+    $conn = $this->getEntityManager()->getConnection();
+
+    $sql = <<<'SQL'
+SELECT
+  c.id,
+  c.nombre,
+  c.aforo_clase,
+  c.fecha,
+  TO_CHAR(c.hora, 'HH24:MI') AS hora,
+  u.nombre       AS profesor,
+  rm.descripcion AS sala,
+  tc.id          AS tipoclase_id,
+  tc.nombre      AS tipoclase_nombre,
+  COALESCE(COUNT(r.id), 0)                 AS reservas,
+  c.aforo_clase - COALESCE(COUNT(r.id), 0) AS plazas,
+  (c.aforo_clase - COALESCE(COUNT(r.id), 0)) <= 0 AS completa
+FROM clase c
+LEFT JOIN "user"      u  ON u.id  = c.teacher_id
+LEFT JOIN room        rm ON rm.id = c.room_id
+LEFT JOIN tipo_clase  tc ON tc.id = c.tipoclase
+LEFT JOIN reservation r  ON r.clase_id = c.id
+GROUP BY
+  c.id, c.nombre, c.aforo_clase, c.fecha, c.hora,
+  u.nombre, rm.descripcion, tc.id, tc.nombre
+ORDER BY c.fecha, c.hora
+SQL;
+
+    return $conn->fetchAllAssociative($sql);
+}
 
 
 
-            public function listarDeProfesor(int $teacherId): array
-            {
-                $conn = $this->getEntityManager()->getConnection();
+ public function listarDeProfesor(int $teacherId): array
+{
+    $conn = $this->getEntityManager()->getConnection();
 
-                $sql = "
-                    SELECT *
-                    FROM vista_clases
-                    ORDER BY fecha, hora
-                ";
+    $sql = '
+        SELECT
+            c.id,
+            c.nombre,
+            c.aforo_clase,
+            c.fecha,
+            TO_CHAR(c.hora, \'HH24:MI\') AS hora,
+            u.nombre       AS profesor,
+            rm.descripcion AS sala,
+            tc.id          AS tipoclase_id,
+            tc.nombre      AS tipoclase_nombre,
+            COALESCE(COUNT(r.id), 0)                 AS reservas,
+            c.aforo_clase - COALESCE(COUNT(r.id), 0) AS plazas,
+            (c.aforo_clase - COALESCE(COUNT(r.id), 0)) <= 0 AS completa
+        FROM clase c
+        LEFT JOIN "user"      u  ON u.id  = c.teacher_id
+        LEFT JOIN room        rm ON rm.id = c.room_id
+        LEFT JOIN tipo_clase  tc ON tc.id = c.tipoclase
+        LEFT JOIN reservation r  ON r.clase_id = c.id
+        WHERE c.teacher_id = :uid
+        GROUP BY
+          c.id, c.nombre, c.aforo_clase, c.fecha, c.hora,
+          u.nombre, rm.descripcion, tc.id, tc.nombre
+        ORDER BY c.fecha, c.hora;
+    ';
 
-                return $conn->fetchAllAssociative($sql, ['uid' => $teacherId]);
-            }
+    return $conn->fetchAllAssociative($sql, ['uid' => $teacherId]);
+}
 
         
             public function porClase(int $claseId): array

@@ -5,6 +5,7 @@ export type ToastKey =
   | 'loginSuccess'
   | 'loginError'
   | 'registerSuccess'
+  | 'classSuccess'
   | 'registerFormInvalid'
   | 'passwordMismatch'
   | 'registerConflict'
@@ -13,6 +14,7 @@ export type ToastKey =
   | 'passwordResetSuccess'
   | 'passwordResetError'
   | 'unexpectedError'
+   
   // --- Dominio ---
   | 'bonosError'
   | 'clasesError'
@@ -47,6 +49,8 @@ export function showToast(
       toast.showToast('Credenciales incorrectas. Intenta de nuevo.', 'error'); break;
     case 'registerSuccess':
       toast.showToast('Usuario registrado con éxito', 'success'); break;
+    case 'classSuccess':
+      toast.showToast('Clase creada correctamente ', 'success'); break;
     case 'registerFormInvalid':
       toast.showToast(arg || 'Completa los campos obligatorios.', 'error'); break;
     case 'passwordMismatch':
