@@ -5,7 +5,8 @@ import { VistasService } from "../services/vistas.service";
 import { Alumno } from '../interfaces/alumno.interface';
 import { ClasesReservaState } from "../models/reservas.models";
 import { UsuarioBonosState } from '../models/bonos.models';
-
+import { UsuarioReservasState } from '../models/reservas-usuario.models';
+import { UsuarioPagosState } from '../models/pagos-usuario.models';
 
 
 export interface ReservarClaseContext {
@@ -34,4 +35,23 @@ export interface UsuarioBonosContext {
   vistas: VistasService;
   auth?: any; // opcional si lo usas aquí
   toast: ToastService;
+}
+
+export interface UsuarioReservasContext {
+  state: UsuarioReservasState;
+  vistas: VistasService;
+  reservationService: ReservationService;
+  toast: ToastService;
+}
+
+
+export interface UsuarioPagosContext {
+  state: UsuarioPagosState;
+  vistas: VistasService;
+  toast: ToastService;
+
+  usuarios?: any[];
+  usuarioSeleccionadoId?: number | null;
+  usuarioSeleccionado?: any | null;
+  walletUser?: any[];
 }

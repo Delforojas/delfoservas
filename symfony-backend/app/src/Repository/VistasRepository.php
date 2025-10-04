@@ -77,10 +77,26 @@ class VistasRepository
             {
                
 
-                $sql = 'SELECT * 
-                        FROM reservas_por_usuario 
-                        WHERE id_usuario = :id
-                        ORDER BY fecha, hora';
+                $sql = '
+        SELECT 
+            r.usuario_id       AS id_usuario,
+            u.nombre           AS usuario_nombre,
+            r.id               AS reserva_id,
+            r.clase_id,
+            r.bono_id,
+            c.nombre           AS clase_nombre,
+            c.fecha,
+            c.hora,
+            tc.nombre          AS tipoclase_nombre,
+            b.estado           AS bono_estado
+        FROM reservation r
+        JOIN "user" u  ON u.id = r.usuario_id       -- 👈 con comillas, tabla real
+        JOIN clase c   ON c.id = r.clase_id
+        JOIN tipo_clase tc ON tc.id = c.tipoclase
+        JOIN bonos b   ON b.id = r.bono_id
+        WHERE r.usuario_id = :id
+        ORDER BY c.fecha, c.hora
+    ';
 
                  return $this->conn->fetchAllAssociative($sql, ['id' => $usuarioId]);
 
@@ -89,18 +105,26 @@ class VistasRepository
 
 
             public function getWalletPorUsuario(int $usuarioId): array
-            {
-                
+{
+    $sql = '
+        SELECT 
+            w.usuario_id       AS id_usuario,
+            u.id               AS usuario_id,
+            u.nombre           AS usuario_nombre,
+            u.email            AS usuario_email,
+            w.id               AS wallet_id,
+            w.tipoclase        AS tipoclase_id,
+            tc.nombre          AS tipoclase_nombre,
+            w.fecha
+        FROM wallet w
+        JOIN "user" u   ON u.id = w.usuario_id
+        JOIN tipo_clase tc ON tc.id = w.tipoclase
+        WHERE w.usuario_id = :id
+        ORDER BY w.fecha DESC
+    ';
 
-                $sql = 'SELECT * 
-                        FROM vista_wallet_usuario 
-                        WHERE id_usuario = :id
-                        ORDER BY mes DESC';
-
-
-                return $this->conn->fetchAllAssociative($sql, ['id' => $usuarioId]);
-            }
-
+    return $this->conn->fetchAllAssociative($sql, ['id' => $usuarioId]);
+}
 
 
             public function getBonosPorUsuario(int $usuarioId): array

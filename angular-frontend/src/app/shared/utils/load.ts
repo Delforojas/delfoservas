@@ -4,6 +4,9 @@ import { finalize } from 'rxjs';
 import { showToast } from '../utils/test-messages';
 import { ReservarClaseContext } from './interfaces';
 import { UsuarioBonosContext } from './interfaces';
+import { UsuarioReservasContext } from './interfaces';
+import { UsuarioPagosContext } from './interfaces';
+
 
 
 // --- BONOS ---
@@ -255,11 +258,30 @@ export function loadWalletAll(ctx: any): void {
     });
 }
 
-export function loadWalletUsuario(ctx: any, id: number): void {
-    ctx.vistas.getVistaUsuarioWalletByUser(id).subscribe({
-        next: (d: any[]) => (ctx.walletUser = d ?? []),
-        error: (e: any) => console.error(e),
-    });
+export function loadWalletUsuario(ctx: UsuarioPagosContext): void {
+  const id = Number(ctx.state.usuarioId);
+
+  if (!id || id <= 0) {
+    handleHttpError({ status: 400 } as any, ctx.toast, undefined, 'walletError');
+    return;
+  }
+
+  ctx.state.cargando = true;
+  ctx.state.error = null;
+
+  ctx.vistas.getVistaUsuarioWalletByUser(id).subscribe({
+    next: (rows: any[]) => {
+      ctx.state.walletUsuario = rows ?? [];
+      ctx.state.mostrarTablaWalletUsuario = true;
+      ctx.state.cargando = false;
+    },
+    error: (e: any) => {
+      ctx.state.mostrarTablaWalletUsuario = false;
+      ctx.state.walletUsuario = [];
+      ctx.state.cargando = false;
+      handleHttpError(e, ctx.toast, undefined, 'walletError');
+    },
+  });
 }
 
 export function loadWalletMes(ctx: any, mes: string | null): void {
@@ -294,15 +316,16 @@ export function loadWalletPorMesYTipo(ctx: any): void {
     });
 }
 
-// 6) Handlers de UI (si quieres externalizar también)
-export function onUsuarioSeleccionado(ctx: any): void {
-    if (ctx.usuarioSeleccionadoId) {
-        ctx.usuarioSeleccionado = (ctx.usuarios ?? []).find((u: any) => u.id === ctx.usuarioSeleccionadoId) ?? null;
-        loadWalletUsuario(ctx, ctx.usuarioSeleccionadoId);
-    } else {
-        ctx.walletUser = [];
-        ctx.usuarioSeleccionado = null;
-    }
+
+export function onUsuarioSeleccionado(ctx: UsuarioPagosContext): void {
+  if (ctx.usuarioSeleccionadoId) {
+    ctx.usuarioSeleccionado =
+      (ctx.usuarios ?? []).find((u: any) => u.id === ctx.usuarioSeleccionadoId) ?? null;
+    loadWalletUsuario(ctx);
+  } else {
+    ctx.walletUser = [];
+    ctx.usuarioSeleccionado = null;
+  }
 }
 
 export function onMesSeleccionado(ctx: any): void {
@@ -437,38 +460,46 @@ export function reservarClase(ctx: ReservarClaseContext , id: number): void {
 
 
 // --- RESERVAS USUARIO ---
-export function loadReservasUsuario(ctx: any): void {
-    const id = Number(ctx.usuarioId);
-    if (!id || id <= 0) {
-        handleHttpError({ status: 400 } as any, ctx.toast, undefined, 'reservasUsuarioError');
-        return;
-    }
+export function loadReservasUsuario(ctx: UsuarioReservasContext): void {
+  const uid = ctx.state.usuarioId;
+  if (!uid || uid <= 0) {
+    handleHttpError({ status: 400 } as any, ctx.toast, undefined, 'cargarUsuarioError');
+    return;
+  }
 
-    ctx.cargando = true;
-    ctx.vistas.getReservasPorUsuario(id).subscribe({
-        next: (rows: any[]) => {
-            ctx.reservasUsuario = rows ?? [];
-            ctx.mostrarTablaReservasUsuario = true;
-            ctx.cargando = false;
-        },
-        error: (e: any) => {
-            ctx.mostrarTablaReservasUsuario = false;
-            ctx.reservasUsuario = [];
-            handleHttpError(e, ctx.toast, undefined, 'reservasUsuarioError');
-        },
-    });
+  ctx.state.cargando = true;
+  ctx.state.error = null;
+
+  ctx.vistas.getReservasPorUsuario(uid).subscribe({
+    next: (rows: any[]) => {
+      ctx.state.reservasUsuario = rows ?? [];
+      ctx.state.mostrarTablaReservasUsuario = true;
+      ctx.state.cargando = false;
+    },
+    error: (e: any) => {
+      ctx.state.cargando = false;
+      handleHttpError(e, ctx.toast, undefined, 'reservasUsuarioError');
+    },
+  });
 }
 
-export function deleteReservaUsuario(ctx: any, reservaId: number): void {
-    if (reservaId == null) return;
+export function deleteReservaUsuario(ctx: UsuarioReservasContext, reservaId: number): void {
+  if (!Number.isFinite(reservaId) || reservaId <= 0) {
+    handleHttpError({ status: 400 } as any, ctx.toast, undefined, 'eliminarReservaSuccess');
+    return;
+  }
 
-    ctx.eliminandoId = reservaId;
-    ctx.reservationService.eliminarReservation(reservaId).subscribe({
-        next: () => {
-            ctx.reservasUsuario = (ctx.reservasUsuario ?? []).filter((r: any) => r.reserva_id !== reservaId);
-            ctx.eliminandoId = null;
-            showToast(ctx.toast, 'eliminarReservaSuccess');
-        },
-        error: (e: any) => handleHttpError(e, ctx.toast, undefined, 'eliminarReservaError'),
-    });
+  ctx.state.eliminandoId = reservaId;
+
+  ctx.reservationService.eliminarReservation(reservaId).subscribe({
+    next: () => {
+      // quita del listado en memoria
+      ctx.state.reservasUsuario = (ctx.state.reservasUsuario ?? []).filter(r => r.reserva_id !== reservaId);
+      ctx.state.eliminandoId = null;
+    },
+    error: (e: any) => {
+      ctx.state.eliminandoId = null;
+      handleHttpError(e, ctx.toast, undefined, 'eliminarReservaError');
+    },
+  });
 }

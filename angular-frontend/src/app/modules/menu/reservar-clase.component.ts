@@ -55,13 +55,10 @@ export class ClasesReservaComponent implements OnInit, ReservarClaseContext {
 
     this.auth.getUser().subscribe({
       next: (u) => {
-        console.log('✅ Usuario recibido en componente:', u);
+        
         this.state.usuarios = u;
         this.state.usuarioId = Number(u?.id) || null;
 
-        console.log('👉 Estado inicial usuarioId:', this.state.usuarioId);
-
-        console.log('📥 Cargando clases por día...');
         loadClassMonday(this);
         loadClassTuesday(this);
         loadClassWednesday(this);
@@ -69,7 +66,6 @@ export class ClasesReservaComponent implements OnInit, ReservarClaseContext {
         loadClassFriday(this);
       },
       error: (e) => {
-        console.error('❌ Error obteniendo usuario:', e);
         handleHttpError(e, this.toast, undefined, 'unexpectedError');
       },
     });
@@ -78,40 +74,33 @@ export class ClasesReservaComponent implements OnInit, ReservarClaseContext {
   get clasesDelDia() {
     const d = this.state.tablaAbierta;
     const result = d ? this.state.clasesPorDia[d] : [];
-    console.log(`📅 Getter clasesDelDia -> día: ${d}`, result);
     return result;
   }
 
   cargarAlumnos(id: number): void {
-    console.log('👥 Cargando alumnos para clase:', id);
     loadAlumnosDeClase(this, id);
   }
 
   reservar(id: number): void {
-    console.log('🟢 Intentando reservar clase con id:', id);
     reservarClase(this, id);
   }
 
   toggleTabla(dia: Dia) {
     this.state.tablaAbierta =
       this.state.tablaAbierta === dia ? null : dia;
-    console.log('🔀 Toggle tabla -> Día abierto ahora:', this.state.tablaAbierta);
   }
 
   toggleTablaAlumnos(id: number): void {
     if (this.state.mostrarTablaAlumnos && this.state.claseSeleccionadaId === id) {
-      console.log('❌ Cerrando tabla de alumnos para clase:', id);
       this.state.mostrarTablaAlumnos = false;
       this.state.claseSeleccionadaId = null;
       return;
     }
-    console.log('👀 Abriendo tabla de alumnos para clase:', id);
     this.state.claseSeleccionadaId = id;
     this.cargarAlumnos(id);
   }
 
   trackByClase = (_: number, c: VistaClase) => {
-    console.log('🔎 trackByClase ->', c.id);
     return c.id;
   };
 }
