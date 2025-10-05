@@ -1,144 +1,53 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule , ReactiveFormsModule,} from '@angular/forms';
-import { FormControl } from '@angular/forms';
-
-import { WalletService } from '../../shared/services/wallet.service';
-import { VistasService } from '../../shared/services/vistas.service';
-import { TipoClaseService, } from '../../shared/services/tipoclase.service';
-
 import { RouterModule } from '@angular/router';
 
-import { Wallet } from '../../shared/interfaces/wallet.interface';
+import { AuthService } from '../../shared/services/auth.service';
+import { VistasService } from '../../shared/services/vistas.service';
+import { ToastService } from '../../shared/services/toast.service';
+import { handleHttpError } from '../../shared/utils/http-error';
 
+import { loadWalletUsuario } from '../../shared/utils/load';
 import {
-  loadUsuariosPagos,
-  bindNombreUsuarioToId,
-  loadTiposClase,
-  loadMesesWallet,
-  loadWallets,
-  createWallet,
-  deleteWallet,
-  loadWalletAll,
-  loadWalletUsuario,
-  loadWalletMes,
-  loadWalletTipo,
-  loadWalletPorMesYTipo,
-  onUsuarioSeleccionado,
-  onMesSeleccionado,
-  onTipoClaseSeleccionado,
-  onFiltrarMesYTipo,
-} from '../../shared/utils/load';
-
+  UsuarioPagosState,
+  createInitialUsuarioPagosState,
+} from '../../shared/models/pagos-usuario.models';
+import { UsuarioPagosContext } from '../../shared/utils/interfaces';
 
 @Component({
-  selector: 'app-pagos',
+  selector: 'app-pagos-usuario',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterModule],
-  templateUrl: './gestion-pagos.html',
-
+  imports: [CommonModule, RouterModule],
+  templateUrl: 'pagos-usuario.html',
 })
-export class PagosComponent implements OnInit {
-  
-  usuario_id: number | null = null;
-  usuarios: any[] = []; 
-  nombreUsuario = new FormControl('');
-  tiposClase: any[] = [];
-  meses: string[] = [];          
-
-  wallets: Wallet[] = [];
-  walletAll: any[] = [];   
-  walletUser: any[] = []; 
-  
-  tiposClaseFiltrados: any[] = [];
-  tipoSeleccionadoId: number | null = null;
-
-
-  walletMes: any[] = [];
-
-  mostrarFormularioPagos = false;
-
-
-  usuarioSeleccionadoId: number | null = null;
-  usuarioSeleccionado: any = null;
-  mostrarPagosUsuario = false;  
-
-  
-
-  mesSeleccionado: string | null = null;
-  mostrarPagosMes = false;
-  mostrarPagosClase = false;
-  mostrarPagosGeneral = false;
-
-  mostrarMesTipo = false;
-  walletMesTipo: any[] = [];
-
-
-  nuevaWallet: Partial<Wallet> = {
-    fecha: '',
-    usuario_id: 0,
-    tipoclase_id: 0
-  };
-  cargando = false;
-  error: string | null = null;
+export class UsuarioPagosComponent implements OnInit, UsuarioPagosContext {
+  state: UsuarioPagosState = createInitialUsuarioPagosState();
 
   constructor(
-    private walletService: WalletService,
-    private vistas: VistasService,
-    private tipoClaseService: TipoClaseService  
-
+    public vistas: VistasService,
+    public auth: AuthService,
+    public toast: ToastService
   ) {}
-ngOnInit(): void {
-    loadUsuariosPagos(this);
-    bindNombreUsuarioToId(this);
-    loadTiposClase(this);
-    loadMesesWallet(this);
 
-    loadWalletAll(this);
-    loadWallets(this);
-    loadWalletPorMesYTipo(this); // si ya tienes mes/tipo seleccionados
+  ngOnInit(): void {
+    const token = localStorage.getItem('token');
+    if (!token) return;
+
+    this.auth.getUser().subscribe({
+      next: (u) => {
+        this.state.usuarios = u;
+        this.state.usuarioId = Number(u?.id) || null;
+        if (this.state.usuarioId) loadWalletUsuario(this);
+      },
+      error: (e) => handleHttpError(e, this.toast, undefined, 'cargarUsuarioError'),
+    });
   }
 
-
- 
-toggleFormularioPagos() {
-  this.mostrarFormularioPagos = !this.mostrarFormularioPagos;
- 
-  if (!this.mostrarFormularioPagos) {
-    this.nuevaWallet = { fecha: '', usuario_id: 0, tipoclase_id: 0 };
+  togglePagos(): void {
+    this.state.mostrarTablaWalletUsuario = !this.state.mostrarTablaWalletUsuario;
+    if (this.state.mostrarTablaWalletUsuario) {
+      this.state.mostrarTablaBonosUsuario = false;
+      this.state.mostrarTablaReservasUsuario = false;
+    }
   }
-}
-togglePagosGeneral() {
-  this.mostrarPagosGeneral = !this.mostrarPagosGeneral;
-}
-togglePagosUsuario() {
-  this.mostrarPagosUsuario = !this.mostrarPagosUsuario;
-}
-
-togglePagosMes() {
-  this.mostrarPagosMes = !this.mostrarPagosMes;
-}
-
-toggleTipoClase() {
-  this.mostrarPagosClase = !this.mostrarPagosClase;
-}
-toggleMesyTipoClase(){
-  this.mostrarMesTipo = !this.mostrarMesTipo;
-}
-cargarWallets(): void { loadWallets(this); }
-  crearWallet(): void { createWallet(this); }
-  eliminarWallet(id: number): void { deleteWallet(this, id); }
-
-  cargarWalletAll(): void { loadWalletAll(this); }
-  cargarWalletUsuario(id: number): void { loadWalletUsuario(this, id); }
-  cargarWalletMes(mes: string | null): void { loadWalletMes(this, mes); }
-  cargarWalletTipo(id: number): void { loadWalletTipo(this, id); }
-  cargarPorMesYTipo(): void { loadWalletPorMesYTipo(this); }
-
-  onUsuarioSeleccionado(): void { onUsuarioSeleccionado(this); }
-  onMesSeleccionado(): void { onMesSeleccionado(this); }
-  onTipoClaseSeleccionado(): void { onTipoClaseSeleccionado(this); }
-  onFiltrarMesYTipo(): void { onFiltrarMesYTipo(this); }
-
-
 }

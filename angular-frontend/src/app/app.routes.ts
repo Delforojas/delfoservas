@@ -12,7 +12,7 @@ import { UsuarioBonosComponent } from './modules/menu/bonos-usuario.component';
 import { UsuarioReservasComponent } from './modules/menu/reservas-usuario.component';
 import { UsuarioPagosComponent } from './modules/menu/pagos-usuario.component';
 import { ClasesReservaComponent } from './modules/menu/reservar-clase.component';
-import { PagosComponent } from './modules/menu/gestion-pagos';
+
 
 
 
@@ -37,7 +37,7 @@ export const routes: Routes = [
           { path: 'crear', component: CrearClaseComponent },
           { path: 'admin', component: ClasesAdminComponent },
           { path: 'profe', component: ClasesProfesorComponent },
-          { path: 'pagos', component: PagosComponent },
+          { path: 'pagos', component: UsuarioPagosComponent },
         ]
       },
 

@@ -19,7 +19,7 @@
             <!-- Normalizamos padding/altura/linea entre filas -->
             <tbody class="[&>tr>td]:px-4 [&>tr>td]:py-2 [&>tr]:border-b [&>tr:last-child]:border-0 [&>tr]:align-middle">
 
-              <ng-container *ngFor="let c of clasesprofe">
+              <ng-container *ngFor="let c of state.clasesProfe">
                 <!-- Fila normal (6 celdas = 6 columnas del thead) -->
                 <tr (click)="toggleTablaAlumnos(c.id)"
                     class="cursor-pointer text-black text-left hover:bg-green-200 hover:text-yellow-700">
@@ -50,24 +50,24 @@
                 </tr>
 
                 <!-- Fila expandida (alumnos) -> colspan = 6 -->
-                <tr *ngIf="claseSeleccionadaId === c.id && mostrarTablaAlumnos">
+                <tr *ngIf="state.claseSeleccionadaId === c.id && state.mostrarTablaAlumnos">
                   <td [attr.colspan]="6">
-                    <div *ngIf="cargandoAlumnos" class="text-blue-600">Cargando alumnos…</div>
-                    <div *ngIf="errorAlumnos" class="text-red-600">{{ errorAlumnos }}</div>
+                    <div *ngIf="state.cargandoAlumnos" class="text-blue-600">Cargando alumnos…</div>
+                    <div *ngIf="state.errorAlumnos" class="text-red-600">{{ state.errorAlumnos }}</div>
 
-                    <ng-container *ngIf="!cargandoAlumnos && !errorAlumnos">
-                      <table *ngIf="alumnos.length; else sinAlumnos" class="w-full text-xs bg-yellow-200">
+                    <ng-container *ngIf="!state.cargandoAlumnos && !state.errorAlumnos">
+                      <table *ngIf="state.alumnos.length; else sinAlumnos" class="w-full text-xs bg-yellow-200">
                         <tbody>
-                          <tr *ngFor="let a of alumnos" class="odd:bg-white even:bg-gray-50">
+                          <tr *ngFor="let a of state.alumnos" class="odd:bg-white even:bg-gray-50">
                             <td class="p-0">
                               <div class="flex justify-between items-center bg-black text-left text-yellow-200
                                           hover:bg-green-300 hover:text-black p-2">
                                 <span class="whitespace-nowrap">{{ a.alumno_nombre }}</span>
                                 <button *ngIf="a.alumno_reservation_id != null"
                                         (click)="eliminarAlumnoDeClase(a); $event.stopPropagation()"
-                                        [disabled]="eliminandoId === a.alumno_reservation_id"
+                                        [disabled]="state.eliminandoId === a.alumno_reservation_id"
                                         class="px-3 py-1 rounded-full text-red-700 hover:bg-red-200 text-xs sm:text-sm">
-                                  {{ eliminandoId === a.alumno_reservation_id ? 'Borrando…' : 'Eliminar' }}
+                                  {{ state.eliminandoId === a.alumno_reservation_id ? 'Borrando…' : 'Eliminar' }}
                                 </button>
                               </div>
                             </td>

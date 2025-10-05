@@ -1,14 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 
-import { ClaseService} from '../../shared/services/clases.service';
-import { AuthService } from '../../shared/services/auth.service';
+import { ClaseService } from '../../shared/services/clases.service';
 import { ReservationService } from '../../shared/services/reservation.service';
+import { AuthService } from '../../shared/services/auth.service';
+import { ToastService } from '../../shared/services/toast.service';
 
-import { Clase } from '../../shared/interfaces/clase.interface';
 import { VistaClase } from '../../shared/interfaces/vistaClase.interface';
+import { Clase } from '../../shared/interfaces/clase.interface';
 import { ClaseProfe } from '../../shared/interfaces/claseProfe.interface';
-import { Alumno } from '../../shared/interfaces/alumno.interface'
+import { Alumno } from '../../shared/interfaces/alumno.interface';
 
 import {
   loadClases,
@@ -19,75 +21,46 @@ import {
   deleteAlumnoDeClase,
 } from '../../shared/utils/load';
 
-import { RouterModule } from '@angular/router';
-import { handleHttpError } from '../../shared/utils/http-error';
-import { ToastService } from '../../shared/services/toast.service';
+import {
+  ClasesState,
+  createInitialClasesState,
+} from '../../shared/models/clases.models';
 
+import { ClasesProfesorContext } from '../../shared/utils/interfaces';
 
 @Component({
   selector: 'app-clases-profesor',
   standalone: true,
-  imports: [CommonModule,  RouterModule],
+  imports: [CommonModule, RouterModule],
   templateUrl: './clases-profesor.html',
- 
 })
-export class ClasesProfesorComponent implements OnInit 
-      {
+export class ClasesProfesorComponent implements OnInit, ClasesProfesorContext {
+  state = createInitialClasesState();
 
-          clasesVista: VistaClase[] = [];
-          clases: Clase[] = [];
+  constructor(
+    public claseService: ClaseService,
+    public reservationService: ReservationService,
+    public auth: AuthService,
+    public toast: ToastService
+  ) {}
 
-          cargando = false;
-          error: string | null = null;
+  ngOnInit(): void {
+    loadClasesVista(this);
+    loadClasesProfesores(this);
+  }
 
-          claseSeleccionadaId: number | null = null;
+  eliminarClase(id: number) { deleteClase(this, id); }
+  eliminarAlumnoDeClase(a: any) { deleteAlumnoDeClase(this, a); }
 
-          clasesprofe: ClaseProfe[] = [];
-          alumnos: Alumno[] = []; 
-          
-          cargandoAlumnos = false;
-          errorAlumnos: string | null = null;
+  toggleTablaAlumnos(id: number) {
+    if (this.state.mostrarTablaAlumnos && this.state.claseSeleccionadaId === id) {
+      this.state.mostrarTablaAlumnos = false;
+      this.state.claseSeleccionadaId = null;
+      return;
+    }
+    loadAlumnos(this, id);
+  }
 
-
-          mostrarTabla = false;
-          mostrarTablaProfesores = false;
-          mostrarTablaAlumnos = false;
-          
-
-          eliminandoId: number | null = null;
-
-
-          constructor(
-            private claseService: ClaseService,
-            private reservationService: ReservationService,
-            public auth: AuthService,
-            private toast: ToastService
-            ) {}
-
-          ngOnInit(): void {
-            loadClases(this);
-            loadClasesVista(this);
-            loadClasesProfesores(this);
-          }
-        
-          eliminarClase(id: number): void {
-            deleteClase(this, id);
-          }
-
-          eliminarAlumnoDeClase(a: any): void {
-            deleteAlumnoDeClase(this, a);
-          }
-
-        
-
-        toggleTablaAlumnos(id: number): void {
-          if (this.mostrarTablaAlumnos && this.claseSeleccionadaId === id) {
-            this.mostrarTablaAlumnos = false;
-            this.claseSeleccionadaId = null;
-            return;
-          }
-          loadAlumnos(this, id);
-        }
-
-        
-      }
+  trackByClase = (_: number, c: VistaClase) => c.id;
+  trackByAlumno = (_: number, a: Alumno) => (a as any).alumno_id ?? `${(a as any).alumno_nombre}-${(a as any).alumno_email}`;
+}

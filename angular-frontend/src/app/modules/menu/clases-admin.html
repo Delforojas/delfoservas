@@ -17,7 +17,7 @@
               </tr>
             </thead>
             <tbody>
-              <ng-container *ngFor="let cl of clasesVista">
+              <ng-container *ngFor="let cl of state.clasesVista">
                 <!-- Fila normal -->
                 <tr 
                 (click)="toggleTablaAlumnos(cl.id)" 
@@ -44,23 +44,23 @@
                 </tr>
 
                 <!-- Fila expandida (alumnos) -->
-                <tr *ngIf="claseSeleccionadaId === cl.id && mostrarTablaAlumnos">
+                <tr *ngIf="state.claseSeleccionadaId === cl.id && state.mostrarTablaAlumnos">
                   <td [attr.colspan]="8">
-                    <div *ngIf="cargandoAlumnos" class="text-blue-600">Cargando alumnos…</div>
+                    <div *ngIf="state.cargandoAlumnos" class="text-blue-600">Cargando alumnos…</div>
                    
 
-                    <ng-container *ngIf="!cargandoAlumnos">
-                      <table *ngIf="alumnos.length; else sinAlumnos" class="w-full text-xs bg-yellow-200">
+                    <ng-container *ngIf="!state.cargandoAlumnos">
+                      <table *ngIf="state.alumnos.length; else sinAlumnos" class="w-full text-xs bg-yellow-200">
                         <tbody>
-                          <tr *ngFor="let a of alumnos" class="odd:bg-white even:bg-gray-50">
+                          <tr *ngFor="let a of state.alumnos" class="odd:bg-white even:bg-gray-50">
                             <td>
                               <div class="flex justify-between items-center text-black bg-yellow-100 hover:bg-black hover:bg-green-200 hover:text-black p-2">
                                 <span class="whitespace-nowrap">{{ a.alumno_nombre }}</span>
                                 <button *ngIf="a.alumno_reservation_id != null"
                                         (click)="eliminarAlumnoDeClase(a)"
-                                        [disabled]="eliminandoId === a.alumno_reservation_id"
+                                        [disabled]="state.eliminandoId === a.alumno_reservation_id"
                                         class="px-3 py-1 rounded-full text-red-700 hover:bg-red-200 text-xs sm:text-sm">
-                                  {{ eliminandoId === a.alumno_reservation_id ? 'Borrando…' : 'Eliminar' }}
+                                  {{ state.eliminandoId === a.alumno_reservation_id ? 'Borrando…' : 'Eliminar' }}
                                 </button>
                               </div>
                             </td>

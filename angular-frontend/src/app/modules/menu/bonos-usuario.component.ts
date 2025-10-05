@@ -11,53 +11,51 @@ import { loadBonosPorUsuario } from '../../shared/utils/load';
 import { handleHttpError } from '../../shared/utils/http-error';
 
 
+import {
+  UsuarioBonosState,
+  createInitialUsuarioBonosState,
+} from '../../shared/models/bonos.models';
+import { UsuarioBonosContext } from '../../shared/utils/interfaces';
+
+
 @Component({
     selector: 'bonos-usuario',
     standalone: true,
     templateUrl: './bonos-usuario.html',
     imports: [CommonModule, RouterModule],
 })
-export class UsuarioBonosComponent implements OnInit {
-    usuarios: any = null
-    usuarioId: number | null = null;
+export class UsuarioBonosComponent implements OnInit, UsuarioBonosContext {
+  state: UsuarioBonosState = createInitialUsuarioBonosState();
 
-    bonosDeUsuario: any[] = [];
-
-    mostrarTablaBonosUsuario = false;
-    mostrarTablaReservasUsuario = false;
-    mostrarTablaWalletUsuario = false;
-
-    cargando = false;
-    error: string | null = null;
-
-    constructor(
-        private vistas: VistasService,
-        private auth: AuthService,
-        private toast: ToastService,
-    ) { }
+  constructor(
+    public vistas: VistasService,
+    public auth: AuthService,
+    public toast: ToastService
+  ) {}
+    
 
     ngOnInit(): void {
-        this.auth.getUser().subscribe({
-            next: (u) => {
-                this.usuarios = u;
-                this.usuarioId = Number(u?.id) || null;
-                if (this.usuarioId) {
-                    loadBonosPorUsuario(this);
-                }
-            },
-            error: (e) => {
-                handleHttpError(e, this.toast);
-            },
-        });
+  const token = localStorage.getItem('token');
+  if (!token) return; // sin token no pidas /me ni bonos
+
+  this.auth.getUser().subscribe({
+    next: (u) => {
+      this.state.usuarios = u;
+      this.state.usuarioId = Number(u?.id) || null;
+      if (this.state.usuarioId) {
+        loadBonosPorUsuario(this); // <- esta versión debe usar ctx.state.*
+      }
+    },
+    error: (e) => handleHttpError(e, this.toast),
+  });
+}
+
+  toggleBonos() {
+    this.state.mostrarTablaBonosUsuario = !this.state.mostrarTablaBonosUsuario;
+
+    if (this.state.mostrarTablaBonosUsuario) {
+      this.state.mostrarTablaWalletUsuario = false;
+      this.state.mostrarTablaReservasUsuario = false;
     }
-
-    toggleBonos() {
-        this.mostrarTablaBonosUsuario = !this.mostrarTablaBonosUsuario;
-
-        if (this.mostrarTablaBonosUsuario) {
-            this.mostrarTablaWalletUsuario = false;
-            this.mostrarTablaReservasUsuario = false;
-        }
-    }
-
+  }
 }

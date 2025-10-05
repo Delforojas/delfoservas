@@ -1,170 +1,106 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Observable } from 'rxjs';
+
 import { ClaseService } from '../../shared/services/clases.service';
 import { ReservationService } from '../../shared/services/reservation.service';
 import { AuthService } from '../../shared/services/auth.service';
 
-import { Alumno } from '../../shared/interfaces/alumno.interface';
-import { ClaseDto } from '../../shared/interfaces/ClaseDto.interface';
 import { VistaClase } from '../../shared/interfaces/vistaClase.interface';
 import { ToastService } from '../../shared/services/toast.service';
 import { handleHttpError } from '../../shared/utils/http-error';
 
+import { ReservarClaseContext } from '../../shared/utils/interfaces';
 
 import {
-  loadClasesReserva,
-  loadClasesLunes,
-  loadClasesMartes,
-  loadClasesMiercoles,
-  loadClasesJueves,
-  loadClasesViernes,
+  
+  loadClassMonday,
+  loadClassTuesday,
+  loadClassWednesday,
+  loadClassThursday,
+  loadClassFriday,
   loadAlumnosDeClase,
   reservarClase,
 } from '../../shared/utils/load';
 
-
-// Standalone children
-
-type Dia = 'L'|'M'|'X'|'J'|'V';
-
+import {
+  ClasesReservaState,
+  Dia,
+  createInitialClasesReservaState,
+} from '../../shared/models/reservas.models';
 
 @Component({
   selector: 'app-reservar-clases',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './reservar-clases.html' ,
-  
+  templateUrl: './reservar-clases.html',
 })
-export class ClasesReservaComponent implements OnInit {
-  
-  usuarios: any = null;
-  usuarioId: number | null = null;
-  clases: ClaseDto[] = [];
-
-
- clasesL: VistaClase[] = [];
- clasesM: VistaClase[] = [];
- clasesX: VistaClase[] = [];
- clasesJ: VistaClase[] = [];
- clasesV: VistaClase[] = [];
-
-
- tablaAbierta: 'L' | 'M' | 'X' | 'J' | 'V' | null = null;
-
- cancelandoId: number | null = null;
-
-
-
- get clasesDelDia(): VistaClase[] {
-  switch (this.tablaAbierta) {
-    case 'L': return this.clasesL;
-    case 'M': return this.clasesM;
-    case 'X': return this.clasesX;
-    case 'J': return this.clasesJ;
-    case 'V': return this.clasesV;
-    default:  return [];
-  }
-}
-
-
-
-  usuario$!: Observable<any>; 
-  mostrarTablaL = false;
-  mostrarTablaM = false;
-  mostrarTablaX = false;
-  mostrarTablaJ = false;
-  mostrarTablaV = false;
-
-
-
-  
-  mostrarTablaAlumnos = false;
-  claseSeleccionadaId: number | null = null;
-  alumnos: Alumno[] = []; 
-  cargandoAlumnos = false;
-  errorAlumnos: string | null = null;
-
-  diaSeleccionado: string | null = null;
-
-  reservandoId: number | null = null;
-
-
- seleccionarDia(dia: string) {
-    this.diaSeleccionado = dia;
-  }
+export class ClasesReservaComponent implements OnInit, ReservarClaseContext {
+  state: ClasesReservaState = createInitialClasesReservaState();
 
   constructor(
-    private reservasService: ReservationService,
-    private claseService: ClaseService,
+    public reservasService: ReservationService,
+    public claseService: ClaseService,
     public auth: AuthService,
-    private toast :ToastService
+    public toast: ToastService
   ) {}
+
   ngOnInit(): void {
-  // carga las clases del lunes y abre directamente la tabla de Lunes
-  loadClasesLunes(this);
-  loadClasesMartes(this);
-  loadClasesMiercoles(this);
-  loadClasesJueves(this);
-  loadClasesViernes(this);
+    const token = localStorage.getItem('token');
+    console.log('🔑 Token encontrado en localStorage:', token);
 
-  this.auth.getUser().subscribe({
-    next: (u) => {
-      this.usuarios = u;
-      this.usuarioId = Number(u?.id) || null;
-    },
-    error: (e) => handleHttpError(e, this.toast, undefined, 'unexpectedError'),
-  });
-}
-  /*ngOnInit(): void {
-  loadClasesReserva(this);
-  loadClasesLunes(this);
-  loadClasesMartes(this);
-  loadClasesMiercoles(this);
-  loadClasesJueves(this);
-  loadClasesViernes(this);
+    if (!token) {
+      console.warn('⚠️ No hay token, no se carga el usuario ni las clases');
+      return;
+    }
 
-  this.auth.getUser().subscribe({
-    next: (u) => {
-      this.usuarios = u;
-      this.usuarioId = Number(u?.id) || null;
-    },
-    error: (e) => handleHttpError(e, this.toast, undefined, 'unexpectedError'),
-  });
-}*/
+    this.auth.getUser().subscribe({
+      next: (u) => {
+        
+        this.state.usuarios = u;
+        this.state.usuarioId = Number(u?.id) || null;
 
-cargarAlumnos(id: number): void {
-  loadAlumnosDeClase(this, id);
-}
-
-reservar(id: number): void {
-  reservarClase(this, id);
-}
-
-
-toggleTabla(dia: 'L' | 'M' | 'X' | 'J' | 'V') {
-  if (this.tablaAbierta === dia) {
-    this.tablaAbierta = null;
-  } else {
-    this.tablaAbierta = dia;
+        loadClassMonday(this);
+        loadClassTuesday(this);
+        loadClassWednesday(this);
+        loadClassThursday(this);
+        loadClassFriday(this);
+      },
+      error: (e) => {
+        handleHttpError(e, this.toast, undefined, 'unexpectedError');
+      },
+    });
   }
-}
 
-toggleTablaAlumnos(id: number): void {
-
-  if (this.mostrarTablaAlumnos && this.claseSeleccionadaId === id) {
-    this.mostrarTablaAlumnos = false;
-    this.claseSeleccionadaId = null;
-    return;
+  get clasesDelDia() {
+    const d = this.state.tablaAbierta;
+    const result = d ? this.state.clasesPorDia[d] : [];
+    return result;
   }
-  this.claseSeleccionadaId = id;
-  this.cargarAlumnos(id);
-}
 
+  cargarAlumnos(id: number): void {
+    loadAlumnosDeClase(this, id);
+  }
 
+  reservar(id: number): void {
+    reservarClase(this, id);
+  }
 
+  toggleTabla(dia: Dia) {
+    this.state.tablaAbierta =
+      this.state.tablaAbierta === dia ? null : dia;
+  }
 
-  trackByClase = (_: number, c: VistaClase) => c.id;
+  toggleTablaAlumnos(id: number): void {
+    if (this.state.mostrarTablaAlumnos && this.state.claseSeleccionadaId === id) {
+      this.state.mostrarTablaAlumnos = false;
+      this.state.claseSeleccionadaId = null;
+      return;
+    }
+    this.state.claseSeleccionadaId = id;
+    this.cargarAlumnos(id);
+  }
 
-
+  trackByClase = (_: number, c: VistaClase) => {
+    return c.id;
+  };
 }

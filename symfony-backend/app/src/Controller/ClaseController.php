@@ -24,21 +24,6 @@ class ClaseController extends AbstractController
         return $this->json($repo->listarIndex());
     }
 
-    #[Route('/{id}', name: 'clase_show', methods: ['GET'], requirements: ['id' => '\d+'])]
-    public function show(Clase $clase): JsonResponse
-    {
-        return $this->json([
-            'id' => $clase->getId(),
-            'nombre' => $clase->getNombre(),
-            'tipoclase' => $clase->getTipoclase()?->getId(),
-            'teacher' => $clase->getTeacher()?->getId(),
-            'fecha' => $clase->getFecha()?->format('Y-m-d'),
-            'hora' => $clase->getHora()?->format('H:i'),
-            'aforo_clase' => $clase->getAforoClase(),
-            'room' => $clase->getRoom()?->getId(),
-        ]);
-    }
-    
 
     #[Security("is_granted('ROLE_TEACHER') or is_granted('ROLE_ADMIN')")]
     #[Route('', name: 'clase_create', methods: ['POST'])]
@@ -55,26 +40,6 @@ class ClaseController extends AbstractController
             ['message' => 'Clase creada con éxito', 'id' => $clase->getId()],
             201
         );
-    }
-
-    
-    #[Security("is_granted('ROLE_TEACHER') or is_granted('ROLE_ADMIN')")]
-    #[Route('/{id}', name: 'clase_update', methods: ['PUT'])]
-    public function update(int $id, Request $request, ClaseRepository $repo): JsonResponse
-    {
-        $clase = $repo->find($id);
-        if (!$clase) {
-            return $this->json(['error' => 'Clase no encontrada'], 404);
-        }
-
-        $data = json_decode($request->getContent(), true) ?? [];
-
-        $ok = $repo->actualizarDesdeArray($clase, $data);
-        if (!$ok) {
-            return $this->json(['error' => 'Datos de relación no válidos'], 400);
-        }
-
-        return $this->json(['message' => 'Clase actualizada con éxito']);
     }
 
 

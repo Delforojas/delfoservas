@@ -1,10 +1,17 @@
 import { HttpHeaders } from '@angular/common/http';
 
 export function authHeaders(): HttpHeaders {
-  const token = localStorage.getItem('token') || '';
-  console.log('Token usado en headers:', token); // 👀 log para comprobar
-  return new HttpHeaders({
+  const token = localStorage.getItem('token');
+  const headers: Record<string, string> = {
     'Content-Type': 'application/json',
-    Authorization: `Bearer ${token}`
-  });
+  };
+
+  if (token && token.trim() !== '') {
+    console.log('📤 Token usado en headers:', token);
+    headers['Authorization'] = `Bearer ${token}`;
+  } else {
+    console.warn('⚠️ No hay token en localStorage, petición irá sin Authorization');
+  }
+
+  return new HttpHeaders(headers);
 }
