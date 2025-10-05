@@ -9,6 +9,8 @@ use App\Entity\Bonos;
 use App\Repository\ReservationRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
+
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -158,112 +160,98 @@ public function update(Request $request, Reservation $reservation, EntityManager
 
  
 #[Route('/reservar/{claseId}', name: 'reservation_reservar', methods: ['POST'])]
-    public function reservar(int $claseId, Connection $conn): JsonResponse
-    {
-        $user = $this->getUser();
-        if (!$user || !method_exists($user, 'getId')) {
-            return $this->json(['error' => 'No autenticado'], 401);
-        }
-        $uid = (int)$user->getId();
-
-        try {
-            $conn->beginTransaction();
-
-            // 1) Clase (tipo y aforo). Bloqueamos la fila para concurrencia.
-            $clase = $conn->fetchAssociative(
-                "SELECT id, tipoclase, aforo_clase 
-                 FROM clase 
-                 WHERE id = :cid
-                 FOR UPDATE",
-                ['cid' => $claseId]
-            );
-            if (!$clase) {
-                $conn->rollBack();
-                return $this->json(['error' => 'Clase no encontrada'], 404);
-            }
-            $tipoId = (int)$clase['tipoclase'];
-
-            // 2) ¿Reserva duplicada?
-            $dup = $conn->fetchOne(
-                "SELECT 1 FROM reservation 
-                 WHERE usuario_id = :uid AND clase_id = :cid 
-                 LIMIT 1",
-                ['uid' => $uid, 'cid' => $claseId]
-            );
-            if ($dup) {
-                $conn->rollBack();
-                return $this->json(['error' => 'Ya tienes reserva en esta clase'], 409);
-            }
-
-            // 3) (Opcional) Comprobar aforo si no confías 100% en los triggers
-            $count = (int)$conn->fetchOne(
-                "SELECT COUNT(*) FROM reservation WHERE clase_id = :cid",
-                ['cid' => $claseId]
-            );
-            if ($count >= (int)$clase['aforo_clase']) {
-                $conn->rollBack();
-                return $this->json(['error' => 'Clase completa'], 409);
-            }
-
-            // 4) Localizar bono activo para este usuario + tipo (vía VISTA)
-            $bonoRow = $conn->fetchAssociative(
-                "SELECT bono_id
-                   FROM vista_usuarios_bonos_activos
-                  WHERE usuario_id = :uid
-                    AND tipoclase = :tipo
-               ORDER BY bono_id
-                  LIMIT 1",
-                ['uid' => $uid, 'tipo' => $tipoId]
-            );
-            if (!$bonoRow || !isset($bonoRow['bono_id'])) {
-                $conn->rollBack();
-                return $this->json(['error' => 'No tienes un bono activo para este tipo de clase'], 409);
-            }
-            $bonoId = (int)$bonoRow['bono_id'];
-
-            // 5) Insertar reserva (los triggers se ocupan de plazas/bono)
-            $reservationId = $conn->fetchOne(
-                "INSERT INTO reservation (usuario_id, clase_id, bono_id)
-                 VALUES (:uid, :cid, :bid)
-                 RETURNING id",
-                ['uid' => $uid, 'cid' => $claseId, 'bid' => $bonoId]
-            );
-
-            $conn->commit();
-            return $this->json([
-                'message' => 'Reserva creada con éxito',
-                'reservation_id' => (int)$reservationId,
-            ], 201);
-            
-            $clase = $conn->fetchAssociative(
-                    "SELECT id, tipoclase, plazas, completa
-                    FROM clase
-                    WHERE id = :cid
-                    FOR UPDATE",
-                    ['cid' => $claseId]
-                );
-                if (!$clase) {
-                    $conn->rollBack();
-                    return $this->json(['error' => 'Clase no encontrada'], 404);
-                }
-                // si usas boolean en PG: 't'/'f' o cast explícito
-                $completa = filter_var($clase['completa'], FILTER_VALIDATE_BOOLEAN) || (int)$clase['plazas'] <= 0;
-                if ($completa) {
-                    $conn->rollBack();
-                    return $this->json(['error' => 'Clase completa'], 409);
-                }
-                $tipoId = (int)$clase['tipoclase'];
-
-
-
-        } catch (UniqueConstraintViolationException $e) {
-            if ($conn->isTransactionActive()) $conn->rollBack();
-            return $this->json(['error' => 'Ya tienes reserva en esta clase'], 409);
-        } catch (\Throwable $e) {
-            if ($conn->isTransactionActive()) $conn->rollBack();
-            return $this->json(['error' => 'Error al reservar'], 500);
-        }
+public function reservar(int $claseId, Connection $conn): JsonResponse
+{
+    $user = $this->getUser();
+    if (!$user || !method_exists($user, 'getId')) {
+        return $this->json(['error' => 'No autenticado'], 401);
     }
+    $uid = (int) $user->getId();
+
+    try {
+        $conn->beginTransaction();
+
+        // 1) Bloquear fila de clase
+        $clase = $conn->fetchAssociative(
+            'SELECT id, tipoclase, aforo_clase
+               FROM clase
+              WHERE id = :cid
+              FOR UPDATE',
+            ['cid' => $claseId]
+        );
+        if (!$clase) {
+            $conn->rollBack();
+            return $this->json(['error' => 'Clase no encontrada'], 404);
+        }
+        $tipoId = (int) $clase['tipoclase'];
+
+        // 2) Evitar reservas duplicadas
+        $dup = $conn->fetchOne(
+            'SELECT 1
+               FROM reservation
+              WHERE usuario_id = :uid AND clase_id = :cid
+              LIMIT 1',
+            ['uid' => $uid, 'cid' => $claseId]
+        );
+        if ($dup) {
+            $conn->rollBack();
+            return $this->json(['error' => 'Ya tienes reserva en esta clase'], 409);
+        }
+
+        // 3) Comprobar aforo (por si no confías 100% en triggers)
+        $count = (int) $conn->fetchOne(
+            'SELECT COUNT(*) FROM reservation WHERE clase_id = :cid',
+            ['cid' => $claseId]
+        );
+        if ($count >= (int) $clase['aforo_clase']) {
+            $conn->rollBack();
+            return $this->json(['error' => 'Clase completa'], 409);
+        }
+
+        // 4) Buscar bono activo del usuario para el tipo de clase
+        $bonoRow = $conn->fetchAssociative(
+            'SELECT bono_id
+               FROM vista_usuarios_bonos_activos
+              WHERE usuario_id = :uid
+                AND tipoclase = :tipo
+           ORDER BY bono_id
+              LIMIT 1',
+            ['uid' => $uid, 'tipo' => $tipoId]
+        );
+        if (!$bonoRow || !isset($bonoRow['bono_id'])) {
+            $conn->rollBack();
+            return $this->json(['error' => 'No tienes un bono activo para este tipo de clase'], 409);
+        }
+        $bonoId = (int) $bonoRow['bono_id'];
+
+        // 5) Insertar reserva (triggers actualizan plazas/bono)
+        $reservationId = $conn->fetchOne(
+            'INSERT INTO reservation (usuario_id, clase_id, bono_id)
+             VALUES (:uid, :cid, :bid)
+             RETURNING id',
+            ['uid' => $uid, 'cid' => $claseId, 'bid' => $bonoId]
+        );
+
+        $conn->commit();
+
+        return $this->json([
+            'message'        => 'Reserva creada con éxito',
+            'reservation_id' => (int) $reservationId,
+        ], 201);
+
+    } catch (UniqueConstraintViolationException $e) {
+        if ($conn->isTransactionActive()) {
+            $conn->rollBack();
+        }
+        return $this->json(['error' => 'Ya tienes reserva en esta clase'], 409);
+
+    } catch (\Throwable $e) {
+        if ($conn->isTransactionActive()) {
+            $conn->rollBack();
+        }
+        return $this->json(['error' => 'Error al reservar'], 500);
+    }
+}
 
     #[Route('/usuarios/{userId}/reservas/{dia}', methods: ['GET'])]
     public function reservasPorDia(int $userId, string $dia, Connection $conn): JsonResponse

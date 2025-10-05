@@ -38,10 +38,7 @@ class BonosViewController extends AbstractController
         return $this->json($repo->getClasesPorUsuario($id));
     }
      #[Route('/wallet/tipoclase/{id}', name: 'vistas_wallet_tipoclase', methods: ['GET'], requirements: ['id' => '\d+'])]
-    public function walletPorTipoClase(int $id, VistasRepository $repo): JsonResponse
-    {
-        return $this->json($repo->getWalletPorTipoClase($id));
-    }
+  
 
     #[Route('/usuarioreservas/{id}/reservas', name: 'usuario_reservas', methods: ['GET'], requirements: ['id' => '\d+'])]
     public function getReservasUsuario(int $id, VistasRepository $repo): JsonResponse
