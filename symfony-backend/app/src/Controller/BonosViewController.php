@@ -13,10 +13,7 @@ use Symfony\Component\HttpFoundation\Request;
 #[Route('/api/vistas')]
 class BonosViewController extends AbstractController
 {
-    // ─────────── VISTA BONOS (GENERAL) ───────────
      
-    
-
      #[Route('/vistabonos/{usuarioId}', name: 'bonos_view_user', methods: ['GET'], requirements: ['usuarioId' => '\d+'])]
     public function bonosViewPorUsuario(int $usuarioId, VistasRepository $repo): JsonResponse
     {

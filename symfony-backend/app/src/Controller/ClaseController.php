@@ -52,8 +52,6 @@ class ClaseController extends AbstractController
 
         return $this->json(['message' => 'Clase eliminada con éxito']);
     }
-
-    // ---- VISTA ----
     
     #[Route('/vista', name: 'clases_vista', methods: ['GET'])]
     public function vistaClases(ClaseRepository $repo): JsonResponse

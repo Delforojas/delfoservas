@@ -229,7 +229,6 @@ export function onUsuarioSeleccionado(ctx: UsuarioPagosContext): void {
 export function loadClassMonday(ctx: any): void {
   ctx.reservasService.getClassMonday().subscribe({
     next: (data: any[]) => {
-      console.log('📅 Clases Lunes recibidas:', data);
       ctx.state.clasesPorDia.L = [...(data ?? [])];
     },
     error: (e: any) => handleHttpError(e, ctx.toast, undefined, 'clasesError'),
@@ -240,7 +239,6 @@ export function loadClassMonday(ctx: any): void {
 export function loadClassTuesday(ctx: any): void {
   ctx.reservasService.getClassTuesday().subscribe({
     next: (data: any[]) => {
-      console.log('📅 Clases Martes recibidas:', data);
       ctx.state.clasesPorDia.M = [...(data ?? [])];
     },
     error: (e: any) => handleHttpError(e, ctx.toast, undefined, 'clasesError'),
@@ -251,7 +249,6 @@ export function loadClassTuesday(ctx: any): void {
 export function loadClassWednesday(ctx: any): void {
   ctx.reservasService.getClassWednesday().subscribe({
     next: (data: any[]) => {
-      console.log('📅 Clases Miércoles recibidas:', data);
       ctx.state.clasesPorDia.X = [...(data ?? [])];
     },
     error: (e: any) => handleHttpError(e, ctx.toast, undefined, 'clasesError'),
@@ -262,7 +259,6 @@ export function loadClassWednesday(ctx: any): void {
 export function loadClassThursday(ctx: any): void {
   ctx.reservasService.getClassThursday().subscribe({
     next: (data: any[]) => {
-      console.log('📅 Clases Jueves recibidas:', data);
       ctx.state.clasesPorDia.J = [...(data ?? [])];
     },
     error: (e: any) => handleHttpError(e, ctx.toast, undefined, 'clasesError'),
@@ -273,7 +269,6 @@ export function loadClassThursday(ctx: any): void {
 export function loadClassFriday(ctx: any): void {
   ctx.reservasService.getClassFriday().subscribe({
     next: (data: any[]) => {
-      console.log('📅 Clases Viernes recibidas:', data);
       ctx.state.clasesPorDia.V = [...(data ?? [])];
     },
     error: (e: any) => handleHttpError(e, ctx.toast, undefined, 'clasesError'),

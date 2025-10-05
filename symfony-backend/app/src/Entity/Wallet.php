@@ -25,8 +25,6 @@ class Wallet
     #[ORM\JoinColumn(name: 'tipoclase', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
     private ?TipoClase $tipoclase = null;
 
-    // Getters y Setters
-
     public function getId(): ?int
     {
         return $this->id;

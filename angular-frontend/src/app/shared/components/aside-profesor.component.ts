@@ -122,7 +122,6 @@ toggleTabla(dia: 'L' | 'M' | 'X' | 'J' | 'V') {
   }
 
   cargarAlumnos(id: number): void {
-  console.log('Entrando a cargarAlumnos con id:', id);
 
   this.cargandoAlumnos = true;
   this.errorAlumnos = null;
@@ -131,7 +130,6 @@ toggleTabla(dia: 'L' | 'M' | 'X' | 'J' | 'V') {
 
   this.claseService.getAlumnosDeClase(id).subscribe({
     next: (rows) => {
-      console.log('Alumnos recibidos:', rows);
       this.alumnos = rows;
       this.mostrarTablaAlumnos = true;
       this.cargandoAlumnos = false;
@@ -249,8 +247,7 @@ eliminarReserva(reservationId: number, claseId?: number): void {
   }
 
   toggleCrear() {
-    console.log('Toggle Crear clase desde Aside');
-    // Aquí si quieres navegar o cambiar estado, lo pones
+    
   }
 
   toggleTablaAdmin() {

@@ -1,6 +1,6 @@
 <?php
 
-// src/Repository/ClaseRepository.php
+
 namespace App\Repository;
 use App\Entity\Clase;
 use App\Entity\TipoClase;
@@ -20,7 +20,7 @@ class ClaseRepository extends ServiceEntityRepository
 
     public function listarIndex(): array
     {
-        // Opción A: con entidades + map (sencillo, ya que usas findAll())
+       
         $clases = $this->findAll();
 
         return array_map(function ($c) {

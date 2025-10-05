@@ -26,14 +26,13 @@ class CreateAdminCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        // 👉 puedes parametrizar esto luego con argumentos/opciones
         $email    = 'admin@test.com';
         $nombre   = 'Administrador';
-        $password = 'Admin123,'; // cámbialo luego
+        $password = 'Admin123,'; 
 
         $repo = $this->em->getRepository(User::class);
 
-        // Evitar duplicados por email (único en tu entidad)
+    
         if ($repo->findOneBy(['email' => $email])) {
             $output->writeln('<comment>Ya existe un usuario con ese email.</comment>');
             return Command::SUCCESS;
