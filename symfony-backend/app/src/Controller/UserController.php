@@ -45,6 +45,7 @@ public function index(UserRepository $repo): JsonResponse
         if (!$user) {
             return $this->json(['error' => 'No autenticado'], 401);
         }
+/** @var \App\Entity\User $user */
 
         return $this->json([
             'id'     => $user->getId(),
