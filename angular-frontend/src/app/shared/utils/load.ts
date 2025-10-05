@@ -181,100 +181,8 @@ export function crearClase(ctx: CrearClaseContext): void {
     error: (e) => handleHttpError(e, ctx.toast, undefined, 'crearClaseError'),
   });
 }
-// 1) Usuarios (lista y binding del buscador)
-export function loadUsuariosPagos(ctx: any): void {
-    ctx.vistas.getUsuarios().subscribe({
-        next: (u: any[]) => {
-            ctx.usuarios = u ?? [];
-            // si ya hay valueChanges enganchado, no hacemos nada más
-        },
-        error: (e: any) => console.error('Error cargando usuarios', e),
-    });
-}
 
-// Engancha el valueChanges del input para resolver usuario_id
-export function bindNombreUsuarioToId(ctx: any): void {
-    ctx.nombreUsuario?.valueChanges?.subscribe((nombre: string) => {
-        const usuario = (ctx.usuarios ?? []).find((u: any) => u.nombre === nombre);
-        ctx.usuario_id = usuario ? usuario.id : null;
-    });
-}
 
-// 2) Tipos de clase
-
-// 3) Meses disponibles (autoselecciona mes actual y carga wallets del mes)
-export function loadMesesWallet(ctx: any): void {
-    ctx.vistas.getMesesWallet().subscribe({
-        next: (m: string[]) => {
-            ctx.meses = m ?? [];
-
-            const mesesEs = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio',
-                'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
-            const mesActual = mesesEs[new Date().getMonth()];
-            ctx.mesSeleccionado = (ctx.meses ?? []).find(
-                (x: string) => x?.toLowerCase?.() === mesActual.toLowerCase()
-            ) ?? null;
-
-            if (ctx.mesSeleccionado) {
-                loadWalletMes(ctx, ctx.mesSeleccionado);
-            }
-        },
-        error: (e: any) => console.error('Error cargando meses', e),
-    });
-}
-
-// 4) Wallets base
-export function loadWallets(ctx: any): void {
-    ctx.cargando = true;
-    ctx.walletService.getWallets().subscribe({
-        next: (data: any[]) => {
-            ctx.wallets = data ?? [];
-            ctx.cargando = false;
-        },
-        error: (err: any) => {
-            console.error(err);
-            ctx.error = 'Error al cargar las wallets';
-            ctx.cargando = false;
-        },
-    });
-}
-
-export function createWallet(ctx: any): void {
-    const w = ctx.nuevaWallet ?? {};
-    if (!w.fecha || !w.usuario_id || !w.tipoclase_id) {
-        alert('Completa todos los campos');
-        return;
-    }
-    ctx.walletService.crearWallet(w as any).subscribe({
-        next: () => {
-            ctx.nuevaWallet = { fecha: '', usuario_id: 0, tipoclase_id: 0 };
-            loadWallets(ctx);
-        },
-        error: (err: any) => {
-            console.error(err);
-            ctx.error = 'Error al crear la wallet';
-        },
-    });
-}
-
-export function deleteWallet(ctx: any, id: number): void {
-    if (!confirm('¿Seguro que quieres eliminar esta wallet?')) return;
-    ctx.walletService.eliminarWallet(id).subscribe({
-        next: () => loadWalletAll(ctx),
-        error: (err: any) => {
-            console.error(err);
-            ctx.error = 'Error al eliminar wallet';
-        },
-    });
-}
-
-// 5) Vistas agregadas
-export function loadWalletAll(ctx: any): void {
-    ctx.vistas.getVistaUsuarioWalletAll().subscribe({
-        next: (d: any[]) => (ctx.walletAll = d ?? []),
-        error: (e: any) => console.error(e),
-    });
-}
 
 export function loadWalletUsuario(ctx: UsuarioPagosContext): void {
   const id = Number(ctx.state.usuarioId);
@@ -302,37 +210,6 @@ export function loadWalletUsuario(ctx: UsuarioPagosContext): void {
   });
 }
 
-export function loadWalletMes(ctx: any, mes: string | null): void {
-    if (!mes) { ctx.walletMes = []; return; }
-    ctx.vistas.getWalletMes(mes).subscribe({
-        next: (d: any[]) => (ctx.walletMes = d ?? []),
-        error: (e: any) => console.error('Error al cargar wallets por mes', e),
-    });
-}
-
-export function loadWalletTipo(ctx: any, tipoId: number): void {
-    ctx.vistas.getWalletPorTipoClase(tipoId).subscribe({
-        next: (d: any[]) => {
-            ctx.tiposClaseFiltrados = d ?? [];
-            console.log('Pagos filtrados desde backend:', ctx.tiposClaseFiltrados);
-        },
-        error: (e: any) => console.error('Error al cargar wallets por tipo de clase', e),
-    });
-}
-
-export function loadWalletPorMesYTipo(ctx: any): void {
-    if (!ctx.mesSeleccionado || !ctx.tipoSeleccionadoId) {
-        ctx.walletMesTipo = [];
-        return;
-    }
-    ctx.vistas.getWalletPorMesYTipo(ctx.mesSeleccionado, ctx.tipoSeleccionadoId).subscribe({
-        next: (d: any[]) => {
-            ctx.walletMesTipo = d ?? [];
-            console.log('Resultados mes + tipo:', ctx.walletMesTipo);
-        },
-        error: (e: any) => console.error('Error al cargar wallets por mes y tipo', e),
-    });
-}
 
 
 export function onUsuarioSeleccionado(ctx: UsuarioPagosContext): void {
@@ -346,34 +223,6 @@ export function onUsuarioSeleccionado(ctx: UsuarioPagosContext): void {
   }
 }
 
-export function onMesSeleccionado(ctx: any): void {
-    if (ctx.mesSeleccionado) {
-        ctx.walletMes = (ctx.walletAll ?? []).filter((wm: any) => wm.mes === ctx.mesSeleccionado);
-    } else {
-        ctx.walletMes = [];
-    }
-}
-
-export function onTipoClaseSeleccionado(ctx: any): void {
-    if (ctx.tipoSeleccionadoId) {
-        loadWalletTipo(ctx, ctx.tipoSeleccionadoId);
-    } else {
-        ctx.tiposClaseFiltrados = [];
-    }
-}
-
-export function onFiltrarMesYTipo(ctx: any): void {
-    if (ctx.mesSeleccionado && ctx.tipoSeleccionadoId) {
-        ctx.vistas.getWalletPorMesYTipo(ctx.mesSeleccionado, ctx.tipoSeleccionadoId).subscribe({
-            next: (data: any[]) => {
-                ctx.walletMesTipo = data ?? [];
-                ctx.mostrarMesTipo = true;
-                console.log('Resultados mes + tipo:', ctx.walletMesTipo);
-            },
-            error: (err: any) => console.error('Error al filtrar por mes y tipo', err),
-        });
-    }
-}
 
 
 // ----------- LUNES -----------

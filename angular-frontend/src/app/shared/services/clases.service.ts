@@ -27,19 +27,9 @@ export class ClaseService {
     return this.http.get<VistaClase[]>(CLASES_ROUTES.vista(), { headers: authHeaders() });
   }
 
-  // Obtener una clase por ID
-  getClase(id: number): Observable<Clase> {
-    return this.http.get<Clase>(CLASES_ROUTES.byId(id), { headers: authHeaders() });
-  }
-
   // Crear una clase
   crearClase(data: Omit<Clase, 'id'>): Observable<any> {
     return this.http.post(CLASES_ROUTES.create(), data, { headers: authHeaders() });
-  }
-
-  // Actualizar una clase
-  actualizarClase(id: number, data: Partial<Clase>): Observable<any> {
-    return this.http.put(CLASES_ROUTES.update(id), data, { headers: authHeaders() });
   }
 
   // Eliminar una clase

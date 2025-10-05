@@ -26,30 +26,6 @@ export class ReservationService {
     });
   }
 
-  // ---------- CRUD de reservas ----------
-  getReservations(): Observable<Reservation[]> {
-    return this.http.get<Reservation[]>(RESERVATION_ROUTES.list(), {
-      headers: authHeaders(),
-    });
-  }
-
-  getReservation(id: number): Observable<Reservation> {
-    return this.http.get<Reservation>(RESERVATION_ROUTES.byId(id), {
-      headers: authHeaders(),
-    });
-  }
-
-  crearReservation(data: { usuario_id: number; clase_id: number; bono_id: number }): Observable<any> {
-    return this.http.post(RESERVATION_ROUTES.create(), data, {
-      headers: authHeaders(),
-    });
-  }
-
-  actualizarReservation(id: number, data: Partial<Reservation>): Observable<any> {
-    return this.http.put(RESERVATION_ROUTES.update(id), data, {
-      headers: authHeaders(),
-    });
-  }
 
   eliminarReservation(id: number): Observable<any> {
     return this.http.delete(RESERVATION_ROUTES.delete(id), {

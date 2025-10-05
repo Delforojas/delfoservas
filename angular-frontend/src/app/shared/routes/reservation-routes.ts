@@ -5,11 +5,6 @@ const RESERVATIONS = `${API}/reservations`;
 
 export const RESERVATION_ROUTES = {
 
-  // reservas CRUD
-  list:             () => RESERVATIONS,
-  byId:             (id: number) => `${RESERVATIONS}/${id}`,
-  create:           () => RESERVATIONS,
-  update:           (id: number) => `${RESERVATIONS}/${id}`,
   delete:           (id: number) => `${RESERVATIONS}/${id}`,
 
   // acciones
