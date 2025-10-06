@@ -37,8 +37,6 @@ class Clase
     #[ORM\JoinColumn(name: 'room_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
     private ?Room $room = null;
 
-    // Getters y setters
-
     public function getId(): ?int { return $this->id; }
 
     public function getNombre(): ?string { return $this->nombre; }

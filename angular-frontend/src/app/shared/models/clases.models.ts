@@ -1,4 +1,3 @@
-// src/app/shared/models/clases.models.ts
 import { Clase } from '../interfaces/clase.interface';
 import { VistaClase } from '../interfaces/vistaClase.interface';
 import { TipoClase } from '../interfaces/tipoClase.interface';
@@ -28,7 +27,7 @@ export interface ClasesState {
   cargandoAlumnos: boolean;
   error: string | null;
   errorAlumnos: string | null;
- eliminandoId: number | null; // 👈 añade esto
+ eliminandoId: number | null; 
 
 }
 

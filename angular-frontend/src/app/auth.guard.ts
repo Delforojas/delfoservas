@@ -17,18 +17,18 @@ export class AuthGuard implements CanActivate {
 
 
    if (!token) {
-     // Si no hay token, redirige directamente
+
      return of(this.router.createUrlTree(['/login']));
    }
 
 
    return this.auth.getUser().pipe(
      map(user => {
-       // Aquí podríamos comprobar roles si lo necesitas también
-       return user; // acceso permitido si hay usuario
+       
+       return user; 
      }),
      catchError(() => {
-       // Si el token es inválido o la petición falla, redirige y borra el token del LocalStorage
+       
        localStorage.removeItem('token');
        return of(this.router.createUrlTree(['/login']));
      })

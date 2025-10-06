@@ -24,7 +24,6 @@ export interface ClaseDto {
   completa: boolean;
   profesor?: string | null;
   sala?: string | null;
-  // opcionalmente:
   teacher?: string | null;
   room?: string | null;
 }

@@ -1,4 +1,3 @@
-// src/app/components/header/header.component.ts
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../shared/services/auth.service';
@@ -15,7 +14,7 @@ export class HeaderComponent implements OnInit {
   constructor(private auth: AuthService) {}
  ngOnInit(): void {
     const token = localStorage.getItem('token');
-    if (!token) return; // 👈 clave: en /login no pidas /me
+    if (!token) return; 
     
     this.auth.getUser().subscribe({
       next: u => this.user = u,

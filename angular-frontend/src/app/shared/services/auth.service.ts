@@ -14,7 +14,6 @@ export class AuthService {
 
   constructor(private http: HttpClient, private router: Router) { }
 
-  // -------- Helpers de roles ----------
   setRoles(roles: string[] | string) {
     const arr = Array.isArray(roles) ? roles : [roles];
     this.roles = arr.map(r => r.toUpperCase());
@@ -37,8 +36,6 @@ export class AuthService {
     return this.hasAnyRole(['ROLE_TEACHER']);
   }
 
-  // -------- API ----------
-
   login(data: any): Observable<any> {
   return this.http.post<{ token: string }>(AUTH_ROUTES.login(), data).pipe(
     tap(res => {
@@ -50,12 +47,7 @@ export class AuthService {
     })
   );
 }
-/*
-  getUser(): Observable<any> {
-    return this.http.get(AUTH_ROUTES.me(), {
-      headers: authHeaders()
-    });
-  }*/
+
  getUser(): Observable<any> {
   const headers = authHeaders();
   return this.http.get(AUTH_ROUTES.me(), { headers });

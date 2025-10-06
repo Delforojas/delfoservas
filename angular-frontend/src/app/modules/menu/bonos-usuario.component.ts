@@ -36,14 +36,14 @@ export class UsuarioBonosComponent implements OnInit, UsuarioBonosContext {
 
     ngOnInit(): void {
   const token = localStorage.getItem('token');
-  if (!token) return; // sin token no pidas /me ni bonos
+  if (!token) return; 
 
   this.auth.getUser().subscribe({
     next: (u) => {
       this.state.usuarios = u;
       this.state.usuarioId = Number(u?.id) || null;
       if (this.state.usuarioId) {
-        loadBonosPorUsuario(this); // <- esta versión debe usar ctx.state.*
+        loadBonosPorUsuario(this); 
       }
     },
     error: (e) => handleHttpError(e, this.toast),

@@ -1,4 +1,3 @@
-// src/app/services/room.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -10,8 +9,6 @@ import { authHeaders } from '../utils/auth-headers';
 export class RoomService {
   constructor(private http: HttpClient) {}
 
-
-  // ✅ Obtener todas las salas
   getRooms(): Observable<Room[]> {
     return this.http.get<Room[]>(ROOM_ROUTES.list(), { headers: authHeaders() });
   }

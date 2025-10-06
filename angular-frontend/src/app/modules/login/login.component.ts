@@ -9,9 +9,6 @@ import { showToast } from '../../shared/utils/test-messages';
 import { NavigationService } from '../../shared/services/navigation.service';
 import { HttpErrorResponse } from '@angular/common/http';
 
-
-
-
 @Component({
  selector: 'app-login',
  standalone: true,
@@ -32,7 +29,7 @@ export class LoginComponent {
    });
  }
 ngOnInit(): void {
-    // Evita usar tokens viejos en la pantalla de login
+   
     localStorage.removeItem('token');
   }
 
@@ -41,7 +38,7 @@ ngOnInit(): void {
     this.auth.login(this.form.value).subscribe({
       next: () => {
         showToast(this.toast, 'loginSuccess', this.form.value.email || 'Usuario');
-        // ya hay token guardado en login(); navega a la zona privada
+      
         this.navigation.goTo('dashboard');
       },
       error: (err) => handleHttpError(err, this.toast, this.form),

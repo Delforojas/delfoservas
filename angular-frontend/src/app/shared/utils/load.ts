@@ -1,4 +1,4 @@
-// loaders.ts
+
 import { handleHttpError } from '../utils/http-error';
 import { finalize } from 'rxjs';
 import { showToast } from '../utils/test-messages';
@@ -10,10 +10,6 @@ import { CrearClaseContext } from './interfaces';
 import { ClasesProfesorContext } from '../utils/interfaces';
 
 
-
-
-
-// --- BONOS ---
 export function loadBonosPorUsuario(ctx: UsuarioBonosContext): void {
   const id = ctx.state.usuarioId;
   if (!id || id <= 0) {
@@ -37,7 +33,6 @@ export function loadBonosPorUsuario(ctx: UsuarioBonosContext): void {
   });
 }
 
-// --- CLASES ---
 export function loadClases(ctx: CrearClaseContext): void {
   ctx.claseService.getClases().subscribe({
     next: d => (ctx.state.clases = d ?? []),
@@ -53,7 +48,6 @@ export function loadClasesVista(ctx: any): void {
 }
 
 
-// --- PROFESOR: sus clases ---
 export function loadClasesProfesores(ctx: ClasesProfesorContext): void {
   ctx.state.cargando = true;
 
@@ -65,7 +59,6 @@ export function loadClasesProfesores(ctx: ClasesProfesorContext): void {
     });
 }
 
-// --- Alumnos de una clase ---
 export function loadAlumnos(ctx: ClasesProfesorContext, id: number): void {
   ctx.state.cargandoAlumnos = true;
   ctx.state.errorAlumnos = null;
@@ -89,7 +82,6 @@ export function loadProfesores(ctx: CrearClaseContext): void {
   });
 }
 
-// --- ACCIONES ---
 export function deleteClase(ctx: any, id: number): void {
     if (!confirm('¿Eliminar esta clase?')) return;
     ctx.claseService.eliminarClase(id).subscribe({
@@ -120,7 +112,6 @@ export function deleteAlumnoDeClase(ctx: any, a: any): void {
             error: (e: any) => handleHttpError(e, ctx.toast, undefined, 'eliminarReservaError'),
         });
 }
-// --- catálogos ---
 
 export function loadTiposClase(ctx: CrearClaseContext): void {
   ctx.tipoClaseService.getTipos().subscribe({
@@ -223,9 +214,6 @@ export function onUsuarioSeleccionado(ctx: UsuarioPagosContext): void {
   }
 }
 
-
-
-// ----------- LUNES -----------
 export function loadClassMonday(ctx: any): void {
   ctx.reservasService.getClassMonday().subscribe({
     next: (data: any[]) => {
@@ -235,7 +223,6 @@ export function loadClassMonday(ctx: any): void {
   });
 }
 
-// ----------- MARTES -----------
 export function loadClassTuesday(ctx: any): void {
   ctx.reservasService.getClassTuesday().subscribe({
     next: (data: any[]) => {
@@ -245,7 +232,6 @@ export function loadClassTuesday(ctx: any): void {
   });
 }
 
-// ----------- MIÉRCOLES -----------
 export function loadClassWednesday(ctx: any): void {
   ctx.reservasService.getClassWednesday().subscribe({
     next: (data: any[]) => {
@@ -255,7 +241,6 @@ export function loadClassWednesday(ctx: any): void {
   });
 }
 
-// ----------- JUEVES -----------
 export function loadClassThursday(ctx: any): void {
   ctx.reservasService.getClassThursday().subscribe({
     next: (data: any[]) => {
@@ -265,7 +250,6 @@ export function loadClassThursday(ctx: any): void {
   });
 }
 
-// ----------- VIERNES -----------
 export function loadClassFriday(ctx: any): void {
   ctx.reservasService.getClassFriday().subscribe({
     next: (data: any[]) => {
@@ -275,7 +259,6 @@ export function loadClassFriday(ctx: any): void {
   });
 }
 
-// -------- ALUMNOS DE CLASE --------
 export function loadAlumnosDeClase(ctx: ReservarClaseContext, id: number): void {
   ctx.state.cargandoAlumnos = true;
   ctx.state.errorAlumnos = null;
@@ -292,7 +275,7 @@ export function loadAlumnosDeClase(ctx: ReservarClaseContext, id: number): void 
       handleHttpError(e, ctx.toast, undefined, 'alumnosError'),
   });
 }
-// -------- RESERVAR --------
+
 export function reservarClase(ctx: ReservarClaseContext , id: number): void {
     const claseId = Number(id);
     if (!Number.isFinite(claseId) || claseId <= 0) {
@@ -321,7 +304,6 @@ export function reservarClase(ctx: ReservarClaseContext , id: number): void {
 }
 
 
-// --- RESERVAS USUARIO ---
 export function loadReservasUsuario(ctx: UsuarioReservasContext): void {
   const uid = ctx.state.usuarioId;
   if (!uid || uid <= 0) {
@@ -355,7 +337,6 @@ export function deleteReservaUsuario(ctx: UsuarioReservasContext, reservaId: num
 
   ctx.reservationService.eliminarReservation(reservaId).subscribe({
     next: () => {
-      // quita del listado en memoria
       ctx.state.reservasUsuario = (ctx.state.reservasUsuario ?? []).filter(r => r.reserva_id !== reservaId);
       ctx.state.eliminandoId = null;
     },

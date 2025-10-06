@@ -8,7 +8,7 @@ export const canMatchRoles = (required: string[]): CanMatchFn =>
     if (!token) return false;
 
     try {
-      const payload = jwtDecode<TokenPayload>(token); // tipado opcional
+      const payload = jwtDecode<TokenPayload>(token); 
       const roles = payload.roles ?? [];
       return required.some(r => roles.includes(r));
     } catch {

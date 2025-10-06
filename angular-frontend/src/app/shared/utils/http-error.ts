@@ -3,24 +3,18 @@ import { FormGroup } from '@angular/forms';
 import { ToastService } from '../services/toast.service';
 import { showToast, ToastKey } from './test-messages';
 
-/**
- * Manejo genérico de errores HTTP.
- * - Si pasas customKey -> muestra ese toast siempre.
- * - Si no, usa el status code para decidir.
- */
 export function handleHttpError(
   err: HttpErrorResponse,
   toast: ToastService,
   form?: FormGroup,
   customKey?: ToastKey
 ) {
-  // 👀 Si hay clave personalizada (clasesError, reservaError, etc.)
+
   if (customKey) {
     showToast(toast, customKey, err.error?.message || err.error?.error);
     return;
   }
 
-  // 🚦 Switch por códigos HTTP
   switch (err.status) {
     case 0:
       showToast(toast, 'unexpectedError', 'Sin conexión con el servidor.');

@@ -109,8 +109,6 @@ public function update(Request $request, Reservation $reservation, EntityManager
     }
  
 
-    // ---- CLASES POR DÍA ----
-
         #[Route('/clases/monday', name: 'clases_lunes', methods: ['GET'])]
         public function monday(ReservationRepository $reservationRepository): JsonResponse
         {
@@ -265,7 +263,7 @@ public function reservar(int $claseId, Connection $conn): JsonResponse
         $diaBD = $map[$key];
 
         $data = $conn->transactional(function (Connection $c) use ($userId, $diaBD) {
-            // 👇 aquí no uses parámetro, tienes que interpolar directo
+            
             $c->executeStatement("SET LOCAL app.user_id = {$userId}");
 
             return $c->fetchAllAssociative(

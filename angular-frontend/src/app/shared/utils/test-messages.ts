@@ -1,7 +1,6 @@
 import { ToastService } from '../services/toast.service';
 
 export type ToastKey =
-  // --- Auth ---
   | 'loginSuccess'
   | 'loginError'
   | 'registerSuccess'
@@ -14,8 +13,6 @@ export type ToastKey =
   | 'passwordResetSuccess'
   | 'passwordResetError'
   | 'unexpectedError'
-   
-  // --- Dominio ---
   | 'bonosError'
   | 'clasesError'
   | 'vistaClasesError'
@@ -33,8 +30,7 @@ export type ToastKey =
   | 'reservarSuccess'
   | 'reservarError'
   | 'reservasUsuarioError'
-  | 'eliminarReservaSuccess';         // 👈 AÑADIDA
-
+  | 'eliminarReservaSuccess';         
 
 export function showToast(
   toast: ToastService,
@@ -42,7 +38,6 @@ export function showToast(
   arg?: string
 ) {
   switch (key) {
-    // --- Auth ---
     case 'loginSuccess':
       toast.showToast(`¡Bienvenido, ${arg || 'Usuario'}!`, 'success'); break;
     case 'loginError':
@@ -65,8 +60,6 @@ export function showToast(
       toast.showToast('Contraseña actualizada. Inicia sesión.', 'success'); break;
     case 'passwordResetError':
       toast.showToast(arg || 'No se pudo restablecer la contraseña.', 'error'); break;
-
-    // --- Dominio ---
     case 'bonosError':
       toast.showToast(arg || 'Error al cargar los bonos', 'error'); break;
     case 'clasesError':
@@ -81,7 +74,6 @@ export function showToast(
       toast.showToast(arg || 'Error al eliminar la clase', 'error'); break;
     case 'eliminarReservaSuccess': 
       toast.showToast(arg || 'Reserva eliminada', 'success'); break; 
-
     case 'eliminarReservaError':
       toast.showToast(arg || 'No se pudo eliminar la reserva', 'error'); break;
     case 'tiposClaseError':
@@ -104,8 +96,6 @@ export function showToast(
       toast.showToast(arg || 'Error al reservar la clase', 'error'); break;
     case 'reservasUsuarioError':
       toast.showToast(arg || 'Error cargando reservas del usuario', 'error'); break;
-
-    // --- Fallback ---
     case 'unexpectedError':
     default:
       toast.showToast(arg || 'Error inesperado. Vuelve a intentarlo más tarde.', 'error'); break;

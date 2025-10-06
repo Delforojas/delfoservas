@@ -1,4 +1,3 @@
-// src/app/shared/routes/vistas-routes.ts
 import { API } from "../../environments/environments";
 
 const VISTAS = `${API}/vistas`;

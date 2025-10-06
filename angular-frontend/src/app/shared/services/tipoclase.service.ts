@@ -1,4 +1,3 @@
-// src/app/services/tipoclase.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -10,8 +9,6 @@ import { authHeaders } from '../utils/auth-headers';
 export class TipoClaseService {
   constructor(private http: HttpClient) {}
 
-
-  // ✅ Obtener todos los tipos de clase
   getTipos(): Observable<TipoClase[]> {
     return this.http.get<TipoClase[]>(TIPO_CLASE_ROUTES.list(), { headers: authHeaders() });
   }

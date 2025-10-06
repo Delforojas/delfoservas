@@ -26,10 +26,10 @@ export const routes: Routes = [
     component: AppComponent,
     canActivate: [AuthGuard],
     children: [
-      // 👇 redirección por defecto al entrar a /menu5
+      
       { path: '', redirectTo: 'reservasclase', pathMatch: 'full' },
 
-      // 🔒 rutas solo para ADMIN o TEACHER
+    
       {
         path: '',
         canMatch: [canMatchRoles(['ROLE_ADMIN', 'ROLE_TEACHER'])],
@@ -41,14 +41,11 @@ export const routes: Routes = [
         ]
       },
 
-      // ✅ rutas sin restricción
+   
       { path: 'bonos', component: UsuarioBonosComponent },
       { path: 'reservas', component: UsuarioReservasComponent },
       { path: 'pagosusuario', component: UsuarioPagosComponent },
       { path: 'reservasclase', component: ClasesReservaComponent },
-
-
-
     ]
   },
 

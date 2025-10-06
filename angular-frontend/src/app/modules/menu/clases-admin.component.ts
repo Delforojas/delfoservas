@@ -29,7 +29,6 @@ import {
   templateUrl: './clases-admin.html',
 })
 export class ClasesAdminComponent implements OnInit {
-  // 🔹 Estado único
   state: ClasesState = createInitialClasesState();
 
   constructor(
@@ -45,7 +44,6 @@ export class ClasesAdminComponent implements OnInit {
    
   }
 
-  // Acciones
   cargarAlumnos(id: number): void {
     loadAlumnos(this, id);
   }
@@ -58,7 +56,6 @@ export class ClasesAdminComponent implements OnInit {
     deleteAlumnoDeClase(this, a);
   }
 
-  // Toggles UI
   toggleTabla(): void {
     this.state.mostrarTabla = !this.state.mostrarTabla;
     if (this.state.mostrarTabla) this.state.mostrarTablaProfesores = false;

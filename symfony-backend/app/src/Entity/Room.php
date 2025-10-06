@@ -18,8 +18,6 @@ class Room
 
     #[ORM\Column(type: 'integer')]
     private ?int $aforo_sala = null;
-
-    // Getters y setters
     public function getId(): ?int
     {
         return $this->id;

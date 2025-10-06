@@ -14,10 +14,9 @@ import { UsersService } from '../services/user.service';
 
 
 export interface ReservarClaseContext {
-   // Estado centralizado de la pantalla
+
   state: ClasesReservaState;
 
-  // Servicios que usan las utils
   reservasService: ReservationService;
   claseService: ClaseService;
   toast: ToastService;
@@ -37,7 +36,7 @@ export interface ReservarClaseContext {
 export interface UsuarioBonosContext {
   state: UsuarioBonosState;
   vistas: VistasService;
-  auth?: any; // opcional si lo usas aquí
+  auth?: any; 
   toast: ToastService;
 }
 

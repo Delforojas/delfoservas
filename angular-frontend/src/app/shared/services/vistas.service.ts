@@ -1,11 +1,10 @@
-// src/app/services/vistas.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 import { ReservaUsuarioDto } from '../interfaces/reservaUsuarioDto.interface';
 import { VISTAS_ROUTES } from '../routes/vistas-routes';
-import { authHeaders } from '../utils/auth-headers';  // 👈 Importas la función
+import { authHeaders } from '../utils/auth-headers';  
 
 @Injectable({ providedIn: 'root' })
 export class VistasService {

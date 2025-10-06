@@ -2,8 +2,8 @@ export interface VistaClase {
   id: number;
   nombre: string;
 
-  fecha: string;      // 'YYYY-MM-DD'
-  hora: string;       // 'HH:MM'
+  fecha: string;     
+  hora: string;    
 
   plazas: number;
   aforo_clase: number;
@@ -14,10 +14,8 @@ export interface VistaClase {
   profesor?: string | null;
   sala?: string | null;
 
-  // fallbacks que la vista usa con bracket notation
   teacher?: any;
   room?: any;
 
-  // reserva del usuario autenticado (si la hay)
   reservation_id?: number | null;
 }

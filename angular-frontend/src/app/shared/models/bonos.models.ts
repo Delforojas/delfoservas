@@ -1,4 +1,3 @@
-// src/app/shared/models/bonos.models.ts
 export interface UsuarioBonosState {
   usuarios: any | null;
   usuarioId: number | null;
@@ -13,7 +12,7 @@ export interface UsuarioBonosState {
   error: string | null;
 }
 
-// Estado inicial para no repetir código
+
 export function createInitialUsuarioBonosState(): UsuarioBonosState {
   return {
     usuarios: null,
