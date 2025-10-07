@@ -7,7 +7,6 @@ export function authHeaders(): HttpHeaders {
   };
 
   if (token && token.trim() !== '') {
-    console.log('📤 Token usado en headers:', token);
     headers['Authorization'] = `Bearer ${token}`;
   } else {
     console.warn('⚠️ No hay token en localStorage, petición irá sin Authorization');

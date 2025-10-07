@@ -14,22 +14,18 @@ class Reservation
     #[ORM\Column(type: 'integer')]
     private ?int $id = null;
 
-    // FK a users
+
     #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(name: 'usuario_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
     private ?User $usuario = null;
 
-    // FK a clase
     #[ORM\ManyToOne(targetEntity: Clase::class)]
     #[ORM\JoinColumn(name: 'clase_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
     private ?Clase $clase = null;
 
-    // FK a bonos
     #[ORM\ManyToOne(targetEntity: Bonos::class)]
     #[ORM\JoinColumn(name: 'bono_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
     private ?Bonos $bono = null;
-
-    // Getters y setters
     public function getId(): ?int
     {
         return $this->id;

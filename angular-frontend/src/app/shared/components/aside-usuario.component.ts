@@ -42,7 +42,7 @@ toggleTabla(dia: 'L' | 'M' | 'X' | 'J' | 'V') {
   this.tablaAbierta = this.tablaAbierta === dia ? null : dia;
 }
  
-  usuario$!: Observable<any>; // 👈 observable del usuario logueado
+  usuario$!: Observable<any>; 
   mostrarTablaL = false;
   mostrarTablaM = false;
   mostrarTablaX = false;
@@ -85,7 +85,7 @@ toggleTabla(dia: 'L' | 'M' | 'X' | 'J' | 'V') {
     this.auth.getUser().subscribe({
       next: (u) => {
         this.usuarios = u;
-        this.usuarioId = Number(u?.id) || null; // ajusta si tu API usa otro nombre
+        this.usuarioId = Number(u?.id) || null; 
       },
       error: (e) => console.error('Error cargando usuario', e),
     });
@@ -126,8 +126,6 @@ toggleTabla(dia: 'L' | 'M' | 'X' | 'J' | 'V') {
   }
 
   cargarAlumnos(id: number): void {
-  console.log('Entrando a cargarAlumnos con id:', id);
-
   this.cargandoAlumnos = true;
   this.errorAlumnos = null;
   this.alumnos = [];
@@ -135,7 +133,6 @@ toggleTabla(dia: 'L' | 'M' | 'X' | 'J' | 'V') {
 
   this.claseService.getAlumnosDeClase(id).subscribe({
     next: (rows) => {
-      console.log('Alumnos recibidos:', rows);
       this.alumnos = rows;
       this.mostrarTablaAlumnos = true;
       this.cargandoAlumnos = false;
@@ -158,14 +155,13 @@ reservar(id: number): void {
 
   this.reservasService.reservarClase(claseId).subscribe({
     next: () => {
-      // Recarga solo las tablas visibles
+      
       if (this.mostrarTablaL) this.cargarClasesLunes();
       if (this.mostrarTablaM) this.cargarClasesMartes();
       if (this.mostrarTablaX) this.cargarClasesMiercoles();
       if (this.mostrarTablaJ) this.cargarClasesJueves();
       if (this.mostrarTablaV) this.cargarClasesViernes();
 
-      // Si la subtabla de alumnos está abierta para esa clase, recárgala
       if (this.mostrarTablaAlumnos && this.claseSeleccionadaId === claseId) {
         this.cargarAlumnos(claseId);
       }
@@ -214,26 +210,23 @@ toggleMenuAdmin() {
     this.mostrarMenuAdmin = !this.mostrarMenuAdmin;
   }
 
-  // Menu4Component.ts
 eliminarReserva(reservationId: number, claseId?: number): void {
   if (!confirm('¿Seguro que quieres eliminar la reserva?')) return;
 
   this.cancelandoId = reservationId;
   this.reservasService.eliminarReservation(reservationId).subscribe({
     next: () => {
-      // refresca las tablas
+
       this.cargarClasesLunes();
       this.cargarClasesMartes();
       this.cargarClasesMiercoles();
       this.cargarClasesJueves();
       this.cargarClasesViernes();
 
-      // si está abierta la subtabla de esa clase, recárgala
       if (claseId != null && this.mostrarTablaAlumnos && this.claseSeleccionadaId === claseId) {
         this.cargarAlumnos(claseId);
       }
 
-      // limpia la lista de alumnos si la tienes en pantalla
       this.alumnos = this.alumnos.filter(a => a.alumno_reservation_id !== reservationId);
     },
     error: (err) => alert(err?.error?.error ?? 'No se pudo eliminar la reserva'),
@@ -253,8 +246,6 @@ eliminarReserva(reservationId: number, claseId?: number): void {
   }
 
   toggleCrear() {
-    console.log('Toggle Crear clase desde Aside');
-    // Aquí si quieres navegar o cambiar estado, lo pones
   }
 
   toggleTablaAdmin() {

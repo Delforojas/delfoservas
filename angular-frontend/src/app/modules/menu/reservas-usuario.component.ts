@@ -47,7 +47,6 @@ export class UsuarioReservasComponent implements OnInit, UsuarioReservasContext 
     });
   }
 
-  // acciones UI
   toggleReservas() {
     this.state.mostrarTablaReservasUsuario = !this.state.mostrarTablaReservasUsuario;
     if (this.state.mostrarTablaReservasUsuario) {

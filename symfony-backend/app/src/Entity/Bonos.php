@@ -34,8 +34,6 @@ class Bonos
     #[ORM\JoinColumn(name: 'wallet_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
     private ?Wallet $wallet = null;
 
-    // Getters y setters
-
     public function getId(): ?int
     {
         return $this->id;

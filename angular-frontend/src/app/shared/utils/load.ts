@@ -1,4 +1,4 @@
-// loaders.ts
+
 import { handleHttpError } from '../utils/http-error';
 import { finalize } from 'rxjs';
 import { showToast } from '../utils/test-messages';
@@ -10,10 +10,6 @@ import { CrearClaseContext } from './interfaces';
 import { ClasesProfesorContext } from '../utils/interfaces';
 
 
-
-
-
-// --- BONOS ---
 export function loadBonosPorUsuario(ctx: UsuarioBonosContext): void {
   const id = ctx.state.usuarioId;
   if (!id || id <= 0) {
@@ -37,7 +33,6 @@ export function loadBonosPorUsuario(ctx: UsuarioBonosContext): void {
   });
 }
 
-// --- CLASES ---
 export function loadClases(ctx: CrearClaseContext): void {
   ctx.claseService.getClases().subscribe({
     next: d => (ctx.state.clases = d ?? []),
@@ -53,7 +48,6 @@ export function loadClasesVista(ctx: any): void {
 }
 
 
-// --- PROFESOR: sus clases ---
 export function loadClasesProfesores(ctx: ClasesProfesorContext): void {
   ctx.state.cargando = true;
 
@@ -65,7 +59,6 @@ export function loadClasesProfesores(ctx: ClasesProfesorContext): void {
     });
 }
 
-// --- Alumnos de una clase ---
 export function loadAlumnos(ctx: ClasesProfesorContext, id: number): void {
   ctx.state.cargandoAlumnos = true;
   ctx.state.errorAlumnos = null;
@@ -89,7 +82,6 @@ export function loadProfesores(ctx: CrearClaseContext): void {
   });
 }
 
-// --- ACCIONES ---
 export function deleteClase(ctx: any, id: number): void {
     if (!confirm('¿Eliminar esta clase?')) return;
     ctx.claseService.eliminarClase(id).subscribe({
@@ -120,7 +112,6 @@ export function deleteAlumnoDeClase(ctx: any, a: any): void {
             error: (e: any) => handleHttpError(e, ctx.toast, undefined, 'eliminarReservaError'),
         });
 }
-// --- catálogos ---
 
 export function loadTiposClase(ctx: CrearClaseContext): void {
   ctx.tipoClaseService.getTipos().subscribe({
@@ -181,100 +172,8 @@ export function crearClase(ctx: CrearClaseContext): void {
     error: (e) => handleHttpError(e, ctx.toast, undefined, 'crearClaseError'),
   });
 }
-// 1) Usuarios (lista y binding del buscador)
-export function loadUsuariosPagos(ctx: any): void {
-    ctx.vistas.getUsuarios().subscribe({
-        next: (u: any[]) => {
-            ctx.usuarios = u ?? [];
-            // si ya hay valueChanges enganchado, no hacemos nada más
-        },
-        error: (e: any) => console.error('Error cargando usuarios', e),
-    });
-}
 
-// Engancha el valueChanges del input para resolver usuario_id
-export function bindNombreUsuarioToId(ctx: any): void {
-    ctx.nombreUsuario?.valueChanges?.subscribe((nombre: string) => {
-        const usuario = (ctx.usuarios ?? []).find((u: any) => u.nombre === nombre);
-        ctx.usuario_id = usuario ? usuario.id : null;
-    });
-}
 
-// 2) Tipos de clase
-
-// 3) Meses disponibles (autoselecciona mes actual y carga wallets del mes)
-export function loadMesesWallet(ctx: any): void {
-    ctx.vistas.getMesesWallet().subscribe({
-        next: (m: string[]) => {
-            ctx.meses = m ?? [];
-
-            const mesesEs = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio',
-                'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
-            const mesActual = mesesEs[new Date().getMonth()];
-            ctx.mesSeleccionado = (ctx.meses ?? []).find(
-                (x: string) => x?.toLowerCase?.() === mesActual.toLowerCase()
-            ) ?? null;
-
-            if (ctx.mesSeleccionado) {
-                loadWalletMes(ctx, ctx.mesSeleccionado);
-            }
-        },
-        error: (e: any) => console.error('Error cargando meses', e),
-    });
-}
-
-// 4) Wallets base
-export function loadWallets(ctx: any): void {
-    ctx.cargando = true;
-    ctx.walletService.getWallets().subscribe({
-        next: (data: any[]) => {
-            ctx.wallets = data ?? [];
-            ctx.cargando = false;
-        },
-        error: (err: any) => {
-            console.error(err);
-            ctx.error = 'Error al cargar las wallets';
-            ctx.cargando = false;
-        },
-    });
-}
-
-export function createWallet(ctx: any): void {
-    const w = ctx.nuevaWallet ?? {};
-    if (!w.fecha || !w.usuario_id || !w.tipoclase_id) {
-        alert('Completa todos los campos');
-        return;
-    }
-    ctx.walletService.crearWallet(w as any).subscribe({
-        next: () => {
-            ctx.nuevaWallet = { fecha: '', usuario_id: 0, tipoclase_id: 0 };
-            loadWallets(ctx);
-        },
-        error: (err: any) => {
-            console.error(err);
-            ctx.error = 'Error al crear la wallet';
-        },
-    });
-}
-
-export function deleteWallet(ctx: any, id: number): void {
-    if (!confirm('¿Seguro que quieres eliminar esta wallet?')) return;
-    ctx.walletService.eliminarWallet(id).subscribe({
-        next: () => loadWalletAll(ctx),
-        error: (err: any) => {
-            console.error(err);
-            ctx.error = 'Error al eliminar wallet';
-        },
-    });
-}
-
-// 5) Vistas agregadas
-export function loadWalletAll(ctx: any): void {
-    ctx.vistas.getVistaUsuarioWalletAll().subscribe({
-        next: (d: any[]) => (ctx.walletAll = d ?? []),
-        error: (e: any) => console.error(e),
-    });
-}
 
 export function loadWalletUsuario(ctx: UsuarioPagosContext): void {
   const id = Number(ctx.state.usuarioId);
@@ -302,37 +201,6 @@ export function loadWalletUsuario(ctx: UsuarioPagosContext): void {
   });
 }
 
-export function loadWalletMes(ctx: any, mes: string | null): void {
-    if (!mes) { ctx.walletMes = []; return; }
-    ctx.vistas.getWalletMes(mes).subscribe({
-        next: (d: any[]) => (ctx.walletMes = d ?? []),
-        error: (e: any) => console.error('Error al cargar wallets por mes', e),
-    });
-}
-
-export function loadWalletTipo(ctx: any, tipoId: number): void {
-    ctx.vistas.getWalletPorTipoClase(tipoId).subscribe({
-        next: (d: any[]) => {
-            ctx.tiposClaseFiltrados = d ?? [];
-            console.log('Pagos filtrados desde backend:', ctx.tiposClaseFiltrados);
-        },
-        error: (e: any) => console.error('Error al cargar wallets por tipo de clase', e),
-    });
-}
-
-export function loadWalletPorMesYTipo(ctx: any): void {
-    if (!ctx.mesSeleccionado || !ctx.tipoSeleccionadoId) {
-        ctx.walletMesTipo = [];
-        return;
-    }
-    ctx.vistas.getWalletPorMesYTipo(ctx.mesSeleccionado, ctx.tipoSeleccionadoId).subscribe({
-        next: (d: any[]) => {
-            ctx.walletMesTipo = d ?? [];
-            console.log('Resultados mes + tipo:', ctx.walletMesTipo);
-        },
-        error: (e: any) => console.error('Error al cargar wallets por mes y tipo', e),
-    });
-}
 
 
 export function onUsuarioSeleccionado(ctx: UsuarioPagosContext): void {
@@ -346,92 +214,51 @@ export function onUsuarioSeleccionado(ctx: UsuarioPagosContext): void {
   }
 }
 
-export function onMesSeleccionado(ctx: any): void {
-    if (ctx.mesSeleccionado) {
-        ctx.walletMes = (ctx.walletAll ?? []).filter((wm: any) => wm.mes === ctx.mesSeleccionado);
-    } else {
-        ctx.walletMes = [];
-    }
-}
-
-export function onTipoClaseSeleccionado(ctx: any): void {
-    if (ctx.tipoSeleccionadoId) {
-        loadWalletTipo(ctx, ctx.tipoSeleccionadoId);
-    } else {
-        ctx.tiposClaseFiltrados = [];
-    }
-}
-
-export function onFiltrarMesYTipo(ctx: any): void {
-    if (ctx.mesSeleccionado && ctx.tipoSeleccionadoId) {
-        ctx.vistas.getWalletPorMesYTipo(ctx.mesSeleccionado, ctx.tipoSeleccionadoId).subscribe({
-            next: (data: any[]) => {
-                ctx.walletMesTipo = data ?? [];
-                ctx.mostrarMesTipo = true;
-                console.log('Resultados mes + tipo:', ctx.walletMesTipo);
-            },
-            error: (err: any) => console.error('Error al filtrar por mes y tipo', err),
-        });
-    }
-}
-
-
-// ----------- LUNES -----------
 export function loadClassMonday(ctx: any): void {
   ctx.reservasService.getClassMonday().subscribe({
     next: (data: any[]) => {
-      console.log('📅 Clases Lunes recibidas:', data);
       ctx.state.clasesPorDia.L = [...(data ?? [])];
     },
     error: (e: any) => handleHttpError(e, ctx.toast, undefined, 'clasesError'),
   });
 }
 
-// ----------- MARTES -----------
 export function loadClassTuesday(ctx: any): void {
   ctx.reservasService.getClassTuesday().subscribe({
     next: (data: any[]) => {
-      console.log('📅 Clases Martes recibidas:', data);
       ctx.state.clasesPorDia.M = [...(data ?? [])];
     },
     error: (e: any) => handleHttpError(e, ctx.toast, undefined, 'clasesError'),
   });
 }
 
-// ----------- MIÉRCOLES -----------
 export function loadClassWednesday(ctx: any): void {
   ctx.reservasService.getClassWednesday().subscribe({
     next: (data: any[]) => {
-      console.log('📅 Clases Miércoles recibidas:', data);
       ctx.state.clasesPorDia.X = [...(data ?? [])];
     },
     error: (e: any) => handleHttpError(e, ctx.toast, undefined, 'clasesError'),
   });
 }
 
-// ----------- JUEVES -----------
 export function loadClassThursday(ctx: any): void {
   ctx.reservasService.getClassThursday().subscribe({
     next: (data: any[]) => {
-      console.log('📅 Clases Jueves recibidas:', data);
       ctx.state.clasesPorDia.J = [...(data ?? [])];
     },
     error: (e: any) => handleHttpError(e, ctx.toast, undefined, 'clasesError'),
   });
 }
 
-// ----------- VIERNES -----------
 export function loadClassFriday(ctx: any): void {
   ctx.reservasService.getClassFriday().subscribe({
     next: (data: any[]) => {
-      console.log('📅 Clases Viernes recibidas:', data);
       ctx.state.clasesPorDia.V = [...(data ?? [])];
     },
     error: (e: any) => handleHttpError(e, ctx.toast, undefined, 'clasesError'),
   });
 }
 
-// -------- ALUMNOS DE CLASE --------
 export function loadAlumnosDeClase(ctx: ReservarClaseContext, id: number): void {
   ctx.state.cargandoAlumnos = true;
   ctx.state.errorAlumnos = null;
@@ -448,7 +275,7 @@ export function loadAlumnosDeClase(ctx: ReservarClaseContext, id: number): void 
       handleHttpError(e, ctx.toast, undefined, 'alumnosError'),
   });
 }
-// -------- RESERVAR --------
+
 export function reservarClase(ctx: ReservarClaseContext , id: number): void {
     const claseId = Number(id);
     if (!Number.isFinite(claseId) || claseId <= 0) {
@@ -477,7 +304,6 @@ export function reservarClase(ctx: ReservarClaseContext , id: number): void {
 }
 
 
-// --- RESERVAS USUARIO ---
 export function loadReservasUsuario(ctx: UsuarioReservasContext): void {
   const uid = ctx.state.usuarioId;
   if (!uid || uid <= 0) {
@@ -511,7 +337,6 @@ export function deleteReservaUsuario(ctx: UsuarioReservasContext, reservaId: num
 
   ctx.reservationService.eliminarReservation(reservaId).subscribe({
     next: () => {
-      // quita del listado en memoria
       ctx.state.reservasUsuario = (ctx.state.reservasUsuario ?? []).filter(r => r.reserva_id !== reservaId);
       ctx.state.eliminandoId = null;
     },

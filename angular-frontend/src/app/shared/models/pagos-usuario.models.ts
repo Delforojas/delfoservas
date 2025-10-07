@@ -1,7 +1,7 @@
 export interface UsuarioPagosState {
   usuarios: any | null;
   usuarioId: number | null;
-  usuariosLista?: any[];                 // si tienes un listado para elegir
+  usuariosLista?: any[];                 
   usuarioSeleccionadoId?: number | null;
   usuarioSeleccionado?: any | null;
 

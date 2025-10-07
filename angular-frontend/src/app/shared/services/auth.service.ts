@@ -14,7 +14,6 @@ export class AuthService {
 
   constructor(private http: HttpClient, private router: Router) { }
 
-  // -------- Helpers de roles ----------
   setRoles(roles: string[] | string) {
     const arr = Array.isArray(roles) ? roles : [roles];
     this.roles = arr.map(r => r.toUpperCase());
@@ -37,30 +36,20 @@ export class AuthService {
     return this.hasAnyRole(['ROLE_TEACHER']);
   }
 
-  // -------- API ----------
-
   login(data: any): Observable<any> {
   return this.http.post<{ token: string }>(AUTH_ROUTES.login(), data).pipe(
     tap(res => {
-      console.log('🔑 Token recibido del backend:', res.token);
       localStorage.setItem('token', res.token);
       
       this.getUser().subscribe(user => {
-        console.log('👤 Usuario cargado justo tras login:', user);
         this.setRoles(user?.roles || []);
       });
     })
   );
 }
-/*
-  getUser(): Observable<any> {
-    return this.http.get(AUTH_ROUTES.me(), {
-      headers: authHeaders()
-    });
-  }*/
+
  getUser(): Observable<any> {
   const headers = authHeaders();
-  console.log('📡 Llamando a /me con headers:', headers);
   return this.http.get(AUTH_ROUTES.me(), { headers });
 }
 }

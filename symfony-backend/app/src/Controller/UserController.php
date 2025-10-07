@@ -45,6 +45,7 @@ public function index(UserRepository $repo): JsonResponse
         if (!$user) {
             return $this->json(['error' => 'No autenticado'], 401);
         }
+/** @var \App\Entity\User $user */
 
         return $this->json([
             'id'     => $user->getId(),
@@ -72,12 +73,11 @@ public function show(User $user): JsonResponse
     ): JsonResponse {
         $data = json_decode($request->getContent(), true) ?? [];
 
-        // Validaciones básicas
+       
         if (empty($data['email']) || empty($data['password'])) {
             return $this->json(['error' => 'email y password son obligatorios'], 400);
         }
 
-        // Evitar duplicados de email
         $existing = $em->getRepository(User::class)->findOneBy(['email' => $data['email']]);
         if ($existing) {
             return $this->json(['error' => 'El email ya está en uso'], 409);
@@ -95,7 +95,7 @@ public function show(User $user): JsonResponse
         return $this->json([
             'message' => 'Usuario registrado correctamente',
             'id'      => $user->getId(),
-            'nombre'  => $user->getNombre(), // <-- añadir para verificar
+            'nombre'  => $user->getNombre(), 
             'token'   => $jwtManager->create($user)
         ], 201);
     }

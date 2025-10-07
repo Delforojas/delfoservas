@@ -46,8 +46,7 @@ export class ClasesReservaComponent implements OnInit, ReservarClaseContext {
 
   ngOnInit(): void {
     const token = localStorage.getItem('token');
-    console.log('🔑 Token encontrado en localStorage:', token);
-
+   
     if (!token) {
       console.warn('⚠️ No hay token, no se carga el usuario ni las clases');
       return;

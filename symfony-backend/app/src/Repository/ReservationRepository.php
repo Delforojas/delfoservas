@@ -1,6 +1,5 @@
 <?php
 
-// src/Repository/ReservationRepository.php
 namespace App\Repository;
 
 use App\Entity\Bonos;
@@ -79,7 +78,7 @@ class ReservationRepository extends ServiceEntityRepository
 
     public function getBonoActivoDeUsuario(int $usuarioId, int $tipoId): ?array
     {
-        $conn = $this->getEntityManager()->getConnection(); // <- usar EM, no $this->conn
+        $conn = $this->getEntityManager()->getConnection(); 
         $sql = "
             SELECT *
             FROM vista_usuarios_bonos_activos

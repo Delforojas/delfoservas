@@ -21,7 +21,6 @@ class TipoClase
     #[ORM\Column(type: 'float')]
     private ?float $clases_totales = null;
 
-    // Getters y setters
     public function getId(): ?int
     {
         return $this->id;
