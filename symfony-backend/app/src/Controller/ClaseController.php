@@ -1,0 +1,82 @@
+<?php
+
+namespace App\Controller;
+
+use App\Entity\Clase;
+use App\Entity\TipoClase;
+use App\Repository\ClaseRepository;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\Security;
+
+
+use Doctrine\DBAL\Connection;
+
+#[Route('/api/clases')]
+class ClaseController extends AbstractController
+{
+    #[Route('', name: 'clase_index', methods: ['GET'])]
+    public function index(ClaseRepository $repo): JsonResponse
+    {
+        return $this->json($repo->listarIndex());
+    }
+
+
+    #[Security("is_granted('ROLE_TEACHER') or is_granted('ROLE_ADMIN')")]
+    #[Route('', name: 'clase_create', methods: ['POST'])]
+    public function create(Request $request, ClaseRepository $repo): JsonResponse
+    {
+        $data = json_decode($request->getContent(), true) ?? [];
+
+        $clase = $repo->crearDesdeArray($data);
+        if (!$clase) {
+            return $this->json(['error' => 'Datos de relación no válidos'], 400);
+        }
+
+        return $this->json(
+            ['message' => 'Clase creada con éxito', 'id' => $clase->getId()],
+            201
+        );
+    }
+
+
+    #[Security("is_granted('ROLE_TEACHER') or is_granted('ROLE_ADMIN')")]
+    #[Route('/{id}', name: 'clase_delete', methods: ['DELETE'])]
+    public function delete(Clase $clase, EntityManagerInterface $em): JsonResponse
+    {
+        $em->remove($clase);
+        $em->flush();
+
+        return $this->json(['message' => 'Clase eliminada con éxito']);
+    }
+    
+    #[Route('/vista', name: 'clases_vista', methods: ['GET'])]
+    public function vistaClases(ClaseRepository $repo): JsonResponse
+    {
+        return $this->json($repo->listarVista()); 
+    }
+    
+
+    
+     #[Route('/mias', name: 'clases_mias', methods: ['GET'])]
+    public function misClases(ClaseRepository $repo): JsonResponse
+    {
+        $user = $this->getUser();
+        if (!$user || !method_exists($user, 'getId')) {
+            return $this->json(['error' => 'No autenticado'], 401);
+        }
+
+        $rows = $repo->listarDeProfesor($user->getId());
+        return $this->json($rows);
+    }
+
+
+     #[Route('/alumnos/{id}/', name: 'clase_alumnos', methods: ['GET'], requirements: ['id' => '\d+'])]
+    public function alumnosDeClase(int $id, ClaseRepository $repo): JsonResponse
+    {
+        return $this->json($repo->porClase($id));
+    }
+}

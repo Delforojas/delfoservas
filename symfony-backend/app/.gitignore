@@ -1,0 +1,37 @@
+###> symfony/framework-bundle ###
+/.env.local
+/.env.local.php
+/.env.*.local
+/.env.dev
+/.env.test
+/.env.prod
+/config/secrets/prod/prod.decrypt.private.php
+/public/bundles/
+/var/
+/vendor/
+###< symfony/framework-bundle ###
+
+###> lexik/jwt-authentication-bundle ###
+/config/jwt/*.pem
+###< lexik/jwt-authentication-bundle ###
+
+# Logs
+*.log
+
+# Composer
+composer.lock
+symfony.lock
+
+# Docker / runtime
+docker/*.log
+*.pid
+
+# IDE / editor
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# System files
+.DS_Store
+Thumbs.db

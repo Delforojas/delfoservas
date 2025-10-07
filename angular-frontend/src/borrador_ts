@@ -1,0 +1,90 @@
+
+   <input type="text"
+       placeholder="Escribe algo"
+       (focus)="onFocus($event)"
+       (blur)="onBlur($event)"
+       >
+   <input type="text"
+       placeholder="Escribe y luego haz clic fuera"
+       (change)="onChange($event)"
+       style="padding: 8px; border: 10px solid red; border-radius: 20px; outline: none; transition: border-color 0.3s ease;">
+
+    <input type="text"
+       placeholder="Escribe y mira la consola"
+       (input)="onInput($event)"
+       style="padding: 8px; border: 2px solid green; border-radius: 4px; outline: none;">
+<!-- Input para focus, blur, change, input -->
+<input type="text"
+       placeholder="Escribe algo"
+       (focus)="mostrarEvento('focus', $event)"
+       (blur)="mostrarEvento('blur', $event)"
+       (change)="mostrarEvento('change', $event)"
+       (input)="mostrarEvento('input', $event)"
+       style="padding: 8px; border: 2px solid gray; border-radius: 4px; outline: none; margin-bottom: 10px; display: block;">
+
+<!-- Formulario SOLO para submit -->
+<form (submit)="mostrarEvento('submit', $event); $event.preventDefault()"
+      style="margin-top: 10px;">
+  <input type="text" placeholder="Nombre" style="margin-bottom: 5px; display: block;">
+  <button type="submit">Enviar</button>
+</form>
+
+<!-- Resultado -->
+<div style="margin-top: 10px; font-family: monospace; background: #f5f5f5; padding: 8px; border-radius: 4px;">
+  <strong>Último evento:</strong> {{ ultimoEvento }} <br>
+  <strong>Valor:</strong> {{ valorEvento }}
+</div>
+
+<form (submit)="onSubmit($event)" style="border: 2px solid #ccc; padding: 10px; width: 250px;">
+  <label>Nombre:</label>
+  <input type="text" name="nombre" placeholder="Escribe tu nombre" style="display:block; margin: 5px 0;">
+
+  <button type="submit" style="background: green; color: white; padding: 5px 10px; border: none;">
+    Enviar
+  </button>
+</form>
+
+//////////////
+
+onFocus(event: FocusEvent) {
+  const input = event.target as HTMLInputElement;
+  input.style.borderColor = 'blue';
+  input.style.backgroundColor = 'green';
+}
+
+onBlur(event: FocusEvent) {
+  const input = event.target as HTMLInputElement;
+  input.style.borderColor = 'red';
+  input.style.backgroundColor = 'yellow';
+}
+onChange(event: Event) {
+  const input = event.target as HTMLInputElement;
+  console.log('Valor cambiado y confirmado:', input.value);
+
+  // Cambiamos borde a verde para indicar que se registró el cambio
+  input.style.borderColor = 'green';
+
+  // Después de 1 segundo, volvemos al borde gris
+  setTimeout(() => {
+    input.style.borderColor = 'gray';
+  }, 1000000);
+}
+onInput(event: Event) {
+  const input = event.target as HTMLInputElement;
+  console.log('Valor actual:', input.value);
+}
+ultimoEvento = '';
+valorEvento = '';
+
+mostrarEvento(tipo: string, event?: Event) {
+  this.ultimoEvento = tipo;
+  if (event) {
+    const target = event.target as HTMLInputElement;
+    this.valorEvento = target?.value ?? '';
+  }
+}
+onSubmit(event: Event) {
+  event.preventDefault(); // evita que recargue la página
+  console.log('Formulario enviado');
+  alert('Formulario enviado correctamente');
+}

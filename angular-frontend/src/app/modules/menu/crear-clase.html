@@ -1,0 +1,32 @@
+<!-- Crear clase -->
+      <section  class="p-4 sm:p-6 bg-green-300 rounded-xl ">
+        <div class="flex flex-col mb-3 sm:mb-4">
+          <h2 class="text-xl sm:text-2xl">Crear Clase</h2>
+          <h3 class="font-semibold">Nueva Clase</h3>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+          <input [(ngModel)]="state.nuevaClase.nombre" placeholder="Nombre" class="border p-2 rounded" required name="nombre"/>
+          <select [(ngModel)]="state.nuevaClase.tipoclase" name="tipoclase" class="border p-2 rounded w-full" required>
+            <option [ngValue]="0" disabled>-- Selecciona tipo de clase --</option>
+            <option *ngFor="let t of state.tiposClase" [value]="t.id">{{ t.nombre }}</option>
+          </select>
+          <select id="teacher" [(ngModel)]="state.nuevaClase.teacher" name="teacher" class="border p-2 rounded w-full" required>
+            <option [ngValue]="0" disabled>-- Selecciona profesor --</option>
+            <option *ngFor="let p of state.profesores" [ngValue]="p.id">{{ p.nombre }} ({{ p.email }})</option>
+          </select>
+          <input type="date" [(ngModel)]="state.nuevaClase.fecha" class="border p-2 rounded" required name="fecha"/>
+          <input type="time" [(ngModel)]="state.nuevaClase.hora" class="border p-2 rounded" required name="hora"/>
+          <input type="number" [ngModel]="state.nuevaClase.aforo_clase"
+                 (ngModelChange)="state.nuevaClase.aforo_clase = $event === '' ? 0 : +$event"
+                 placeholder="Aforo" class="border p-2 rounded" min="1" step="1" required name="aforo"/>
+          <select [(ngModel)]="state.nuevaClase.room" name="room" class="border p-2 rounded w-full" required>
+            <option [ngValue]="0" disabled>-- Selecciona sala --</option>
+            <option *ngFor="let r of state.rooms" [ngValue]="r.id">{{ r.descripcion }} (aforo: {{ r.aforo_sala }})</option>
+          </select>
+        </div>
+
+        <div class="flex justify-center mt-4">
+          <button (click)="crearClase()" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-black">Crear Clase</button>
+        </div>
+      </section>

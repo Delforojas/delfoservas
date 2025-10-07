@@ -1,0 +1,24 @@
+.toast-anim {
+  opacity: 0;
+  transform: translateY(-6px);
+  animation: toastFade 4s ease forwards; 
+}
+
+@keyframes toastFade {
+  0% {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  10% {
+    opacity: 1;                 
+    transform: translateY(0);
+  }
+  85% {
+    opacity: 1;                
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;                 
+    transform: translateY(-6px);
+  }
+}

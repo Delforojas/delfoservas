@@ -1,0 +1,116 @@
+<section class="h-[40%] p-4 sm:p-6 backdrop-blur shadow bg-gradient-to-r from-emerald-500 to-blue-60  rounded-xl shadow-lg">
+  <h2 class="text-xl sm:text-2xl font-bold text-center mb-4">Reservar Clases</h2>
+
+  <!-- Botones de días -->
+  <div class="flex flex-wrap justify-center gap-3 mb-6">
+    <button class="w-14 h-14 sm:w-16 sm:h-16 bg-green-400 rounded shadow hover:bg-green-300" (click)="toggleTabla('L')">L</button>
+    <button class="w-14 h-14 sm:w-16 sm:h-16 bg-green-400 rounded shadow hover:bg-green-300" (click)="toggleTabla('M')">M</button>
+    <button class="w-14 h-14 sm:w-16 sm:h-16 bg-green-400 rounded shadow hover:bg-green-300" (click)="toggleTabla('X')">X</button>
+    <button class="w-14 h-14 sm:w-16 sm:h-16 bg-green-400 rounded shadow hover:bg-green-300" (click)="toggleTabla('J')">J</button>
+    <button class="w-14 h-14 sm:w-16 sm:h-16 bg-green-400 rounded shadow hover:bg-green-300" (click)="toggleTabla('V')">V</button>
+  </div>
+
+  <!-- Tabla -->
+  <div class="w-full h-full bg-yellow  sm:p-4">
+    <table *ngIf="clasesDelDia.length > 0"
+           class="w-full h-full table-fixed text-xs sm:text-sm bg-white  overflow-hidden">
+      <thead class="backdrop-blur shadow bg-gradient-to-r from-emerald-500 to-blue-60 ">
+        <tr class="text-left">
+          <th class="px-2 py-2 sm:px-4">Nombre</th>
+          <th class="px-2 py-2 sm:px-4">Fecha</th>
+          <th class="px-2 py-2 sm:px-4">Hora</th>
+          <th class="px-2 py-2 sm:px-4 hidden md:table-cell">Profesor</th>
+          <th class="px-2 py-2 sm:px-4 hidden md:table-cell">Sala</th>
+          <th class="px-2 py-2 sm:px-4 text-center">Plazas</th>
+          <th class="px-2 py-2 sm:px-4 text-center">Acción</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <ng-container *ngFor="let c of clasesDelDia; trackBy: trackByClase">
+          <!-- Fila principal -->
+          <tr class="bg-yellow-200 hover:bg-green-200 hover:text-black cursor-pointer"
+              (click)="toggleTablaAlumnos(c.id)">
+            <td class="pl-4 whitespace-nowrap ">{{ c.nombre }}</td>
+            <td class="pl-4 whitespace-nowrap">{{ c.fecha  | date:'dd/MM/yy' }}</td>
+            <td class="px-2 py-2 sm:px-4 ">{{ c.hora }}</td>
+
+            <!-- Ocultas en móvil -->
+            <td class="px-2 py-2 sm:px-4 whitespace-normal break-words hidden md:table-cell">
+              {{ c.profesor ?? c['teacher'] ?? '-' }}
+            </td>
+            <td class="px-2 py-2 sm:px-4 whitespace-normal break-words hidden md:table-cell">
+              {{ c.sala ?? c['room'] ?? '-' }}
+            </td>
+
+            <td class="px-2 py-2 sm:px-4 text-center">
+             {{ c.plazas }} / {{ c.aforo_clase }}
+              <span *ngIf="c.completa" class="text-red-600 font-semibold ml-1">Completa</span>
+            </td>
+
+            <td class="px-2 py-2 sm:px-4">
+              <div class="flex justify-center">
+                <button
+  class="px-2 py-1 sm:px-3 sm:py-1 rounded text-white text-[11px] sm:text-xs transition
+        disabled:opacity-60 disabled:cursor-not-allowed"
+  [ngClass]="{
+    'bg-green-600 hover:bg-green-700': !c.reservation_id && state.reservandoId !== c.id,
+    'bg-red-600': !!c.reservation_id,
+    'bg-yellow-500 hover:bg-yellow-600': state.reservandoId === c.id
+  }"
+  [disabled]="c.reservation_id || state.reservandoId === c.id"
+  (click)="!c.reservation_id ? reservar(c.id) : null; $event.stopPropagation()">
+  {{ state.reservandoId === c.id ? 'Reservando…' : (c.reservation_id ? 'Reservada' : 'Reservar') }}
+</button>
+                <!--
+                <button
+                  class="px-2 py-1 sm:px-3 sm:py-1 rounded text-white text-[11px] sm:text-xs transition
+                        disabled:opacity-60 disabled:cursor-not-allowed"
+                  [ngClass]="{
+                    'bg-green-600 hover:bg-green-700': !c.completa && !c.reservation_id,
+                    'bg-yellow-500 hover:bg-yellow-600': !!c.reservation_id,
+                    'bg-blue-600 hover:bg-blue-700': c.completa && !c.reservation_id
+                  }"
+                  [disabled]="(c.completa && !c.reservation_id) || reservandoId === c.id"
+                  (click)="c.reservation_id ? null : reservar(c.id); $event.stopPropagation()">
+                  {{ reservandoId === c.id 
+                      ? 'Reservando…' 
+                      : (c.reservation_id ? 'Reservada' : (c.completa ? 'Completa' : 'Reservar')) }}
+                </button>-->
+              </div>
+            </td>
+          </tr>
+
+          <!-- Fila expandible (alumnos) -->
+          <tr *ngIf="state.claseSeleccionadaId === c.id && state.mostrarTablaAlumnos">
+          <td colspan="5" class="p-0">
+            <div *ngIf="state.cargandoAlumnos" class="text-blue-600 p-2">Cargando alumnos…</div>
+            <div *ngIf="state.errorAlumnos" class="text-red-600 p-2">{{ state.errorAlumnos }}</div>
+
+            <ng-container *ngIf="!state.cargandoAlumnos && !state.errorAlumnos">
+              <table class="w-full text-xs bg-yellow-200">
+                <tbody>
+                  <tr *ngFor="let a of state.alumnos" class="odd:bg-white even:bg-gray-50">
+                    <td class="p-0">
+                      <div class="flex justify-between items-center bg-yellow-100 p-2 hover:bg-green-200 hover:text-black">
+                        <span class="whitespace-nowrap">{{ a.alumno_nombre }}</span>
+                        <button
+                         >
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </ng-container>
+          </td>
+        </tr>
+        </ng-container>
+      </tbody>
+    </table>
+
+    <div *ngIf="clasesDelDia.length === 0" class="text-gray-500 text-sm text-center py-6">
+      No hay clases para este día.
+    </div>
+  </div>
+</section>
