@@ -1,0 +1,28 @@
+# Symfony
+/vendor/
+var/
+.env
+.env.local
+.env.*.local
+/public/bundles/
+/node_modules/
+
+# Logs y cachés
+*.log
+*.cache
+/var/cache/*
+/var/log/*
+
+# IDEs y sistema
+.DS_Store
+.idea/
+.vscode/
+Thumbs.db
+
+# Docker y runtime
+*.pid
+docker/*.log
+
+# Tests / coverage
+/coverage/
+/phpunit.xml

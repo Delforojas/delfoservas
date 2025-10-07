@@ -21,7 +21,7 @@ Este proyecto refleja mis conocimientos adquiridos tanto en el **Ciclo DAW** com
 👉 [Ver documentación del backend](./docs/backend.md)
 
 ## 🧩 Instalación y Configuración
-👉 [Guía paso a paso de instalación](./docs/instalacion.md)
+👉 [Guía paso a paso de instalación](./docs/install.md)
 
 ## 📈 Estado del Proyecto
 🚧 En desarrollo activo  
