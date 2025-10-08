@@ -14,7 +14,7 @@ import { UsersService } from '@shared/services/user.service';
 
 
 export interface ReservarClaseContext {
-
+ 
   state: ClasesReservaState;
 
   reservasService: ReservationService;
@@ -31,6 +31,8 @@ export interface ReservarClaseContext {
 
   claseSeleccionadaId?: number | null;
   reservandoId?: number | null;
+
+  cancelandoId?: number | null;
 }
 
 export interface UsuarioBonosContext {

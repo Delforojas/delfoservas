@@ -50,17 +50,21 @@
 
             <td class="px-2 py-2 sm:px-4">
               <div class="flex justify-center">
-                <button
+               <button
   class="px-2 py-1 sm:px-3 sm:py-1 rounded text-white text-[11px] sm:text-xs transition
         disabled:opacity-60 disabled:cursor-not-allowed"
   [ngClass]="{
-    'bg-green-600 hover:bg-green-700': !c.reservation_id && state.reservandoId !== c.id,
-    'bg-red-600': !!c.reservation_id,
-    'bg-yellow-500 hover:bg-yellow-600': state.reservandoId === c.id
+    'bg-green-600 hover:bg-green-700': !c.reservation_id,
+    'bg-red-600 hover:bg-red-700': !!c.reservation_id
   }"
-  [disabled]="c.reservation_id || state.reservandoId === c.id"
-  (click)="!c.reservation_id ? reservar(c.id) : null; $event.stopPropagation()">
-  {{ state.reservandoId === c.id ? 'Reservando…' : (c.reservation_id ? 'Reservada' : 'Reservar') }}
+  (click)="
+    !c.reservation_id
+      ? reservar(c.id)
+      : delete(c.reservation_id, c.id);
+    $event.stopPropagation();
+  "
+>
+  {{ c.reservation_id ? 'Cancelar' : 'Reservar' }}
 </button>
                 <!--
                 <button

@@ -1,5 +1,7 @@
 import { handleHttpError } from "../http-error";
 import { ReservarClaseContext } from "../context-types"
+import { finalize, take } from 'rxjs/operators';
+import { showToast } from "../test-messages";
 
 
 
@@ -65,29 +67,91 @@ export function loadAlumnosDeClase(ctx: ReservarClaseContext, id: number): void 
   });
 }
 
-export function reservarClase(ctx: ReservarClaseContext , id: number): void {
-    const claseId = Number(id);
-    if (!Number.isFinite(claseId) || claseId <= 0) {
-        handleHttpError({ status: 400 } as any , ctx.toast, undefined, 'reservarError');
-        return;
+export function reservarClase(ctx: ReservarClaseContext, id: number): void {
+  const claseId = Number(id);
+  if (!Number.isFinite(claseId) || claseId <= 0) {
+    handleHttpError({ status: 400 } as any, ctx.toast, undefined, 'reservarError');
+    return;
+  }
+
+  // 1) Optimista: pinta rojo ya
+  const dia = ctx.state.tablaAbierta;
+  let idx = -1;
+  let prevReservationId: number | null = null;
+
+  if (dia) {
+    const arr = ctx.state.clasesPorDia[dia];
+    idx = arr.findIndex(c => c.id === claseId);
+    if (idx > -1) {
+      prevReservationId = (arr[idx] as any).reservation_id ?? null;
+      arr[idx] = { ...arr[idx], reservation_id: -1 }; // -1 = reservada temporal
     }
+  }
 
-    ctx.reservandoId = claseId;
+  ctx.reservandoId = claseId;
 
-    ctx.reservasService.reservarClase(claseId).subscribe({
-        next: () => {
-            handleHttpError({ status: 200 } as any , ctx.toast, undefined, 'reservarSuccess');
+  ctx.reservasService.reservarClase(claseId).pipe(
+    take(1),
+    finalize(() => { ctx.reservandoId = null; })
+  ).subscribe({
+    next: (resp: any) => {
+      // 2) Confirmar con el id real del backend (si lo devuelve)
+      const rid = Number(resp?.reservation_id ?? -1);
+      if (dia && idx > -1) {
+        const arr = ctx.state.clasesPorDia[dia];
+        arr[idx] = { ...arr[idx], reservation_id: rid > 0 ? rid : -1 };
+      }
 
-            if (ctx.mostrarTablaL) loadClassMonday(ctx);
-            if (ctx.mostrarTablaM) loadClassTuesday(ctx);
-            if (ctx.mostrarTablaX) loadClassWednesday(ctx);
-            if (ctx.mostrarTablaJ) loadClassThursday(ctx);
-            if (ctx.mostrarTablaV) loadClassFriday(ctx);
+      // (Opcional) refrescar listados visibles
+      if (ctx.mostrarTablaL) loadClassMonday(ctx);
+      if (ctx.mostrarTablaM) loadClassTuesday(ctx);
+      if (ctx.mostrarTablaX) loadClassWednesday(ctx);
+      if (ctx.mostrarTablaJ) loadClassThursday(ctx);
+      if (ctx.mostrarTablaV) loadClassFriday(ctx);
+      if (ctx.mostrarTablaAlumnos && ctx.claseSeleccionadaId === claseId) {
+        loadAlumnosDeClase(ctx, claseId);
+      }
 
-            if (ctx.mostrarTablaAlumnos && ctx.claseSeleccionadaId === claseId) {
-                loadAlumnosDeClase(ctx, claseId);
-            }
-        },
-        error: (e: any ) => handleHttpError(e, ctx.toast, undefined, 'reservarError'),
-    });
+      showToast(ctx.toast ,'ReservaSuccess');
+    },
+    error: (e: any) => {
+      // 3) Revertir si falla
+      if (dia && idx > -1) {
+        const arr = ctx.state.clasesPorDia[dia];
+        arr[idx] = { ...arr[idx], reservation_id: prevReservationId };
+      }
+      handleHttpError(e, ctx.toast, undefined, 'reservarError');
+    },
+  });
+}
+
+export function deleteReserva(ctx: ReservarClaseContext, reservaId: number, claseId: number): void {
+  const rid = Number(reservaId);
+  const cid = Number(claseId);
+  if (!Number.isFinite(rid) || rid <= 0 || !Number.isFinite(cid) || cid <= 0) {
+    handleHttpError({ status: 400 } as any, ctx.toast, undefined, 'reservarError');
+    return;
+  }
+
+  ctx.cancelandoId = rid;
+
+  ctx.reservasService.eliminarReservation(rid).subscribe({
+    next: () => {
+      // ✅ pintar en verde: quitar la reserva de la clase actual
+      const dia = ctx.state.tablaAbierta;
+      if (dia) {
+        const arr = ctx.state.clasesPorDia[dia];
+        const i = arr.findIndex(c => c.id === cid);
+        if (i > -1) {
+          arr[i] = { ...arr[i], reservation_id: null, completa: false }; // opcional completa=false
+        }
+      }
+       showToast(ctx.toast, 'ReservaCanceladaSuccess');
+      ctx.cancelandoId = null;
+    },
+    error: (e) => {
+      ctx.cancelandoId = null;
+      handleHttpError(e, ctx.toast, undefined, 'reservarError');
+    },
+  });
 }

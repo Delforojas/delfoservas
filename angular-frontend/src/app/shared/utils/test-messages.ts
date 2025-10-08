@@ -1,6 +1,8 @@
 import { ToastService } from '@shared/services/toast.service';
 
 export type ToastKey =
+  | 'ReservaCanceladaSuccess'
+  | 'ReservaSuccess'
   | 'loginSuccess'
   | 'loginError'
   | 'registerSuccess'
@@ -38,7 +40,11 @@ export function showToast(
   arg?: string
 ) {
   switch (key) {
-    case 'loginSuccess':
+    case 'ReservaCanceladaSuccess':
+      toast.showToast(`Reserva cancelada correctamente :)`, 'error'); break;
+    case 'ReservaSuccess':
+      toast.showToast(`Clase Reservada :)`, 'success'); break;
+    case 'loginSuccess':      
       toast.showToast(`¡Bienvenido, ${arg || 'Usuario'}!`, 'success'); break;
     case 'loginError':
       toast.showToast('Credenciales incorrectas. Intenta de nuevo.', 'error'); break;

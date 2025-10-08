@@ -18,6 +18,7 @@ import {
   loadClassFriday,
   loadAlumnosDeClase,
   reservarClase,
+  deleteReserva
 } from '../../shared/utils/loads/reservar-clase.load';
 
 import {
@@ -82,6 +83,9 @@ export class ClasesReservaComponent implements OnInit{
     reservarClase(this, id);
   }
 
+  delete(reservaId: number, claseId: number): void {
+  deleteReserva(this, reservaId, claseId);
+}
   toggleTabla(dia: Dia) {
     this.state.tablaAbierta =
       this.state.tablaAbierta === dia ? null : dia;
