@@ -205,17 +205,24 @@ public function reservar(int $claseId, Connection $conn): JsonResponse
             $conn->rollBack();
             return $this->json(['error' => 'Clase completa'], 409);
         }
+        // 4) Buscar bono activo del usuario para el tipo de clase (case-insensitive + con saldo)
+        $sql = <<<SQL
+        SELECT b.id AS bono_id
+        FROM wallet w
+        JOIN bonos  b ON w.id = b.wallet_id
+        WHERE w.usuario_id = :uid
+        AND LOWER(b.estado) = 'activo'
+        AND b.clases_restantes > 0
+        AND b.tipoclase = :tipo
+        ORDER BY b.id
+        LIMIT 1
+        SQL;
 
-        // 4) Buscar bono activo del usuario para el tipo de clase
-        $bonoRow = $conn->fetchAssociative(
-            'SELECT bono_id
-               FROM vista_usuarios_bonos_activos
-              WHERE usuario_id = :uid
-                AND tipoclase = :tipo
-           ORDER BY bono_id
-              LIMIT 1',
-            ['uid' => $uid, 'tipo' => $tipoId]
-        );
+        $bonoRow = $conn->fetchAssociative($sql, [
+            'uid'  => $uid,
+            'tipo' => $tipoId,
+        ]);
+
         if (!$bonoRow || !isset($bonoRow['bono_id'])) {
             $conn->rollBack();
             return $this->json(['error' => 'No tienes un bono activo para este tipo de clase'], 409);
@@ -247,10 +254,13 @@ public function reservar(int $claseId, Connection $conn): JsonResponse
         if ($conn->isTransactionActive()) {
             $conn->rollBack();
         }
-        return $this->json(['error' => 'Error al reservar'], 500);
-    }
+       return $this->json([
+        'error' => 'Error al reservar',
+        'debug' => $e->getMessage(),      // <- añade esto
+        //'trace' => $e->getTraceAsString() // opcional si necesitas más
+    ], 500);
 }
-
+}
     #[Route('/usuarios/{userId}/reservas/{dia}', methods: ['GET'])]
     public function reservasPorDia(int $userId, string $dia, Connection $conn): JsonResponse
     {
