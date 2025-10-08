@@ -9,9 +9,9 @@ import { RoomService } from '../../shared/services/room.service';
 import { UsersService } from '../../shared/services/user.service';
 import { ToastService } from '../../shared/services/toast.service';
 
-import { loadClases, loadTiposClase, loadRooms, loadProfesores, crearClase } from '../../shared/utils/load';
+import { loadClases, loadTiposClase, loadRooms, loadProfesores, crearClase } from '../../shared/utils/loads/crear-clase.load';
 import { ClasesState, createInitialClasesState } from '../../shared/models/clases.models';
-import { CrearClaseContext } from '../../shared/utils/interfaces';
+
 
 @Component({
   selector: 'app-crear-clase',
@@ -19,7 +19,7 @@ import { CrearClaseContext } from '../../shared/utils/interfaces';
   imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './crear-clase.html',
 })
-export class CrearClaseComponent implements OnInit, CrearClaseContext {
+export class CrearClaseComponent implements OnInit {
   state: ClasesState = createInitialClasesState();
 
   constructor(

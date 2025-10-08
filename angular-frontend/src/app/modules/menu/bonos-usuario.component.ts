@@ -1,21 +1,20 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { handleHttpError } from '../../shared/utils/http-error';
 
 import { AuthService } from '../../shared/services/auth.service';
 import { VistasService } from '../../shared/services/vistas.service';
 import { ToastService } from '../../shared/services/toast.service';
 
-import { loadBonosPorUsuario } from '../../shared/utils/load';
-
-import { handleHttpError } from '../../shared/utils/http-error';
+import { loadBonosPorUsuario} from '../../shared/utils/loads/bonos-usuario.load';
 
 
 import {
   UsuarioBonosState,
   createInitialUsuarioBonosState,
 } from '../../shared/models/bonos.models';
-import { UsuarioBonosContext } from '../../shared/utils/interfaces';
+import { UsuarioBonosContext } from '../../shared/utils/context-types';
 
 
 @Component({
@@ -36,14 +35,14 @@ export class UsuarioBonosComponent implements OnInit, UsuarioBonosContext {
 
     ngOnInit(): void {
   const token = localStorage.getItem('token');
-  if (!token) return; 
+  if (!token) return; // sin token no pidas /me ni bonos
 
   this.auth.getUser().subscribe({
     next: (u) => {
       this.state.usuarios = u;
       this.state.usuarioId = Number(u?.id) || null;
       if (this.state.usuarioId) {
-        loadBonosPorUsuario(this); 
+        loadBonosPorUsuario(this); // <- esta versión debe usar ctx.state.*
       }
     },
     error: (e) => handleHttpError(e, this.toast),

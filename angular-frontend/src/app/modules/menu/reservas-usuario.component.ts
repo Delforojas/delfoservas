@@ -8,14 +8,14 @@ import { ReservationService } from '../../shared/services/reservation.service';
 import { ToastService } from '../../shared/services/toast.service';
 import { handleHttpError } from '../../shared/utils/http-error';
 
-import { loadReservasUsuario, deleteReservaUsuario } from '../../shared/utils/load';
+import { loadReservasUsuario, deleteReservaUsuario } from '../../shared/utils/loads/reservas-usuario.load';
 
 import {
   UsuarioReservasState,
   createInitialUsuarioReservasState,
 } from '../../shared/models/reservas-usuario.models';
-import { UsuarioReservasContext } from '../../shared/utils/interfaces';
-import { ReservaUsuarioDto } from '../../shared/interfaces/reservaUsuarioDto.interface';
+import { ReservaUsuarioDto } from '@shared/interfaces/reservaUsuarioDto.interface';
+
 
 @Component({
   selector: 'app-reservas-usuario',
@@ -23,7 +23,7 @@ import { ReservaUsuarioDto } from '../../shared/interfaces/reservaUsuarioDto.int
   imports: [CommonModule, RouterModule],
   templateUrl: 'reservas-usuario.html',
 })
-export class UsuarioReservasComponent implements OnInit, UsuarioReservasContext {
+export class UsuarioReservasComponent implements OnInit {
   state: UsuarioReservasState = createInitialUsuarioReservasState();
 
   constructor(

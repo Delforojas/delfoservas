@@ -2,12 +2,12 @@
 import { handleHttpError } from '../utils/http-error';
 import { finalize } from 'rxjs';
 import { showToast } from '../utils/test-messages';
-import { ReservarClaseContext } from './interfaces';
-import { UsuarioBonosContext } from './interfaces';
-import { UsuarioReservasContext } from './interfaces';
-import { UsuarioPagosContext } from './interfaces';
-import { CrearClaseContext } from './interfaces';
-import { ClasesProfesorContext } from '../utils/interfaces';
+import { ReservarClaseContext } from './context-types';
+import { UsuarioBonosContext } from './context-types';
+import { UsuarioReservasContext } from './context-types';
+import { UsuarioPagosContext } from './context-types';
+import { CrearClaseContext } from './context-types';
+import { ClasesProfesorContext } from './context-types';
 
 
 export function loadBonosPorUsuario(ctx: UsuarioBonosContext): void {

@@ -9,8 +9,6 @@ import { VistaClase } from '../../shared/interfaces/vistaClase.interface';
 import { ToastService } from '../../shared/services/toast.service';
 import { handleHttpError } from '../../shared/utils/http-error';
 
-import { ReservarClaseContext } from '../../shared/utils/interfaces';
-
 import {
   
   loadClassMonday,
@@ -20,7 +18,7 @@ import {
   loadClassFriday,
   loadAlumnosDeClase,
   reservarClase,
-} from '../../shared/utils/load';
+} from '../../shared/utils/loads/reservar-clase.load';
 
 import {
   ClasesReservaState,
@@ -34,7 +32,7 @@ import {
   imports: [CommonModule],
   templateUrl: './reservar-clases.html',
 })
-export class ClasesReservaComponent implements OnInit, ReservarClaseContext {
+export class ClasesReservaComponent implements OnInit{
   state: ClasesReservaState = createInitialClasesReservaState();
 
   constructor(

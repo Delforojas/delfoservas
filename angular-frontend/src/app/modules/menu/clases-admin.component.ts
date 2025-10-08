@@ -10,12 +10,11 @@ import { ToastService } from '../../shared/services/toast.service';
 import { Alumno } from '../../shared/interfaces/alumno.interface';
 
 import {
-  loadClases,
   loadClasesVista,
   loadAlumnos,
   deleteClase,
   deleteAlumnoDeClase,
-} from '../../shared/utils/load';
+} from '../../shared/utils/loads/clases-admin.load';
 
 import {
   ClasesState,
@@ -29,6 +28,7 @@ import {
   templateUrl: './clases-admin.html',
 })
 export class ClasesAdminComponent implements OnInit {
+  // 🔹 Estado único
   state: ClasesState = createInitialClasesState();
 
   constructor(
@@ -44,6 +44,7 @@ export class ClasesAdminComponent implements OnInit {
    
   }
 
+  // Acciones
   cargarAlumnos(id: number): void {
     loadAlumnos(this, id);
   }
@@ -56,6 +57,7 @@ export class ClasesAdminComponent implements OnInit {
     deleteAlumnoDeClase(this, a);
   }
 
+  // Toggles UI
   toggleTabla(): void {
     this.state.mostrarTabla = !this.state.mostrarTabla;
     if (this.state.mostrarTabla) this.state.mostrarTablaProfesores = false;

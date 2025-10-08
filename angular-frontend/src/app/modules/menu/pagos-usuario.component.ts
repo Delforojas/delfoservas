@@ -7,12 +7,11 @@ import { VistasService } from '../../shared/services/vistas.service';
 import { ToastService } from '../../shared/services/toast.service';
 import { handleHttpError } from '../../shared/utils/http-error';
 
-import { loadWalletUsuario } from '../../shared/utils/load';
+import { loadWalletUsuario } from '../../shared/utils/loads/pagos-usuario.component';
 import {
   UsuarioPagosState,
   createInitialUsuarioPagosState,
 } from '../../shared/models/pagos-usuario.models';
-import { UsuarioPagosContext } from '../../shared/utils/interfaces';
 
 @Component({
   selector: 'app-pagos-usuario',
@@ -20,7 +19,7 @@ import { UsuarioPagosContext } from '../../shared/utils/interfaces';
   imports: [CommonModule, RouterModule],
   templateUrl: 'pagos-usuario.html',
 })
-export class UsuarioPagosComponent implements OnInit, UsuarioPagosContext {
+export class UsuarioPagosComponent implements OnInit{
   state: UsuarioPagosState = createInitialUsuarioPagosState();
 
   constructor(

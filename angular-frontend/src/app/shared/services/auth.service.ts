@@ -2,8 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable, tap } from 'rxjs';
-import { AUTH_ROUTES } from '../routes/auth-routes';
-import { authHeaders } from '../utils/auth-headers';
+import { AUTH_ROUTES } from '@shared/routes/auth-routes';
+import { authHeaders } from '@shared/utils/auth-headers';
 
 @Injectable({
   providedIn: 'root'

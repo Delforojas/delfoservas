@@ -8,8 +8,6 @@ import { AuthService } from '../../shared/services/auth.service';
 import { ToastService } from '../../shared/services/toast.service';
 
 import { VistaClase } from '../../shared/interfaces/vistaClase.interface';
-import { Clase } from '../../shared/interfaces/clase.interface';
-import { ClaseProfe } from '../../shared/interfaces/claseProfe.interface';
 import { Alumno } from '../../shared/interfaces/alumno.interface';
 
 import {
@@ -19,14 +17,14 @@ import {
   loadAlumnos,
   deleteClase,
   deleteAlumnoDeClase,
-} from '../../shared/utils/load';
+} from '../../shared/utils/loads/clase-profesor.load';
 
 import {
   ClasesState,
   createInitialClasesState,
 } from '../../shared/models/clases.models';
 
-import { ClasesProfesorContext } from '../../shared/utils/interfaces';
+import { ClasesProfesorContext } from '../../shared/utils/context-types';
 
 @Component({
   selector: 'app-clases-profesor',

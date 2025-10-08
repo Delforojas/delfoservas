@@ -72,13 +72,10 @@ export interface CrearClaseContext {
 }
 
 
+// @shared/utils/context-types.ts
 export interface ClasesProfesorContext {
   state: ClasesState;
-
-  reservationService: ReservationService;
   claseService: ClaseService;
-  tipoClaseService: TipoClaseService;
-  roomService: RoomService;
-  usersService: UsersService;
+  reservationService: ReservationService;
   toast: ToastService;
 }
