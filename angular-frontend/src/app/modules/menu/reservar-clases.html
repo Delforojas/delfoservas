@@ -92,21 +92,20 @@
             <div *ngIf="state.errorAlumnos" class="text-red-600 p-2">{{ state.errorAlumnos }}</div>
 
             <ng-container *ngIf="!state.cargandoAlumnos && !state.errorAlumnos">
-              <table class="w-full text-xs bg-yellow-200">
-                <tbody>
-                  <tr *ngFor="let a of state.alumnos" class="odd:bg-white even:bg-gray-50">
-                    <td class="p-0">
-                      <div class="flex justify-between items-center bg-yellow-100 p-2 hover:bg-green-200 hover:text-black">
-                        <span class="whitespace-nowrap">{{ a.alumno_nombre }}</span>
-                        <button
-                         >
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </ng-container>
+  <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-3 p-4 bg-yellow-200 rounded-lg shadow-inner">
+    <ng-container *ngFor="let slot of [].constructor(c.aforo_clase); let i = index">
+      <div
+        class="relative flex items-center justify-center text-center h-16 sm:h-20 rounded-lg font-semibold transition-all duration-200"
+        [ngClass]="{
+          'bg-green-500 text-white shadow-lg': state.alumnos[i],
+          'bg-white text-gray-700 border border-gray-300 shadow-sm hover:bg-green-100': !state.alumnos[i]
+        }"
+      >
+        {{ state.alumnos[i]?.alumno_nombre || 'Libre' }}
+      </div>
+    </ng-container>
+  </div>
+</ng-container>
           </td>
         </tr>
         </ng-container>

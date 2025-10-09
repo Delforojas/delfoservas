@@ -32,6 +32,7 @@ import {
   standalone: true,
   imports: [CommonModule],
   templateUrl: './reservar-clases.html',
+  styleUrl: './reservar-clases.css'
 })
 export class ClasesReservaComponent implements OnInit{
   state: ClasesReservaState = createInitialClasesReservaState();
