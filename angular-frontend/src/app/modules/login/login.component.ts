@@ -7,13 +7,14 @@ import { ToastService } from '../../shared/services/toast.service';
 import { handleHttpError } from '../../shared/utils/http-error';
 import { showToast } from '../../shared/utils/test-messages';
 import { NavigationService } from '../../shared/services/navigation.service';
+import { FooterComponent } from '@shared/components/footer.compomonent';
 import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
  selector: 'app-login',
  standalone: true,
  templateUrl: './login.html',
- imports:[FormsModule, ReactiveFormsModule, RouterModule ],
+ imports:[FormsModule, ReactiveFormsModule, RouterModule ,FooterComponent],
 
 
 })

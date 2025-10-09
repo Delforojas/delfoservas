@@ -70,8 +70,8 @@ export class ClasesReservaComponent implements OnInit{
   }
 
   get clasesDelDia() {
-    const d = this.state.tablaAbierta;
-    const result = d ? this.state.clasesPorDia[d] : [];
+    const dia = this.state.tablaAbierta;
+    const result = dia ? this.state.clasesPorDia[dia] : [];
     return result;
   }
 
@@ -81,7 +81,7 @@ export class ClasesReservaComponent implements OnInit{
 
   reservar(id: number): void {
     reservarClase(this, id);
-  }
+  } 
 
   delete(reservaId: number, claseId: number): void {
   deleteReserva(this, reservaId, claseId);
