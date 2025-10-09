@@ -1,0 +1,151 @@
+/* El host del componente: ocupa ancho completo y asegura que nothing tape el footer */
+:host {
+  display: block;
+  width: 100%;
+  z-index: 50;
+}
+
+/* ===== Fondo + glass + gradiente animado sobre TU <footer> actual ===== */
+footer {
+  position: fixed; /* ya lo tienes por clase, esto es por si acaso */
+  left: 0; right: 0; bottom: 0;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-top: 1px solid rgba(255,255,255,0.15);
+  box-shadow: 0 -8px 32px rgba(0,0,0,0.25);
+  isolation: isolate;               /* para que el ::before no afecte fuera */
+  overflow: hidden;
+}
+
+/* Capa de brillo animado sobre el gradiente tailwind */
+footer::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(1200px 1200px at -10% 120%, rgba(255,255,255,0.15), transparent 60%),
+              radial-gradient(1200px 1200px at 110% -20%, rgba(255,255,255,0.10), transparent 60%);
+  mix-blend-mode: screen;
+  animation: footerGlow 12s ease-in-out infinite alternate;
+  pointer-events: none;
+  z-index: 0;
+}
+@keyframes footerGlow {
+  0%   { transform: translateX(-3%) translateY(2%); filter: saturate(1); }
+  100% { transform: translateX(3%)  translateY(-2%); filter: saturate(1.2); }
+}
+
+/* Contenido encima de la capa animada */
+footer > .max-w-screen-lg {
+  position: relative;
+  z-index: 1;
+}
+
+/* ===== Lista de iconos ===== */
+footer ul {
+  gap: 1.25rem; /* refuerza el gap tailwind */
+}
+
+footer li a {
+  position: relative;
+  border-radius: 9999px; /* por si cambias la clase */
+  transition: transform .18s ease, box-shadow .18s ease, background-color .18s ease;
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,0.18),
+    0 6px 18px rgba(0,0,0,0.25);
+}
+
+/* Halo animado sutil alrededor del botón */
+footer li a::after {
+  content: "";
+  position: absolute;
+  inset: -6px;
+  border-radius: inherit;
+  background: radial-gradient(circle at 50% 50%, rgba(255,255,255,0.22), transparent 60%);
+  filter: blur(8px);
+  opacity: 0;
+  transition: opacity .2s ease;
+  z-index: -1;
+}
+
+/* Hover de los botones sociales */
+footer li a:hover {
+  transform: translateY(-2px) scale(1.04);
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,0.28),
+    0 10px 26px rgba(0,0,0,0.35);
+  background-color: rgba(255,255,255,0.22); /* sobreescribe bg-white/20 */
+}
+footer li a:hover::after { opacity: 1; }
+
+/* Pulso muy suave para dar vida */
+@keyframes softPulse {
+  0%, 100% { transform: scale(1);    }
+  50%      { transform: scale(1.035); }
+}
+footer li a {
+  animation: softPulse 5.5s ease-in-out infinite;
+}
+footer li:nth-child(2) a { animation-delay: .6s; }
+footer li:nth-child(3) a { animation-delay: 1.2s; }
+
+/* Si usas <img> dentro del botón, mejora su presencia */
+footer li a img {
+  width: 1.9rem;
+  height: 1.9rem;
+  filter: drop-shadow(0 2px 6px rgba(0,0,0,0.35));
+  transition: filter .2s ease;
+}
+footer li a:hover img {
+  filter: drop-shadow(0 4px 10px rgba(0,0,0,0.5)) brightness(1.05);
+}
+
+/* Si usas iconos FontAwesome stacked, asegúrate de que no choquen con el <img> */
+footer li a .fa-stack {
+  display: none; /* ❗️Como has puesto <img>, oculto el stack para evitar doble icono. Borra esta regla si quieres usar fa-stack */
+}
+
+/* ===== Texto copyright ===== */
+footer p {
+  margin-top: .5rem; /* refuerza el mt-4 del HTML global */
+  font-weight: 600;
+  letter-spacing: .3px;
+  text-shadow: 0 1px 10px rgba(0,0,0,0.35);
+  opacity: .95;
+}
+
+/* Brillito que cruza el texto de copyright */
+footer p {
+  position: relative;
+  display: inline-block;
+}
+footer p::after {
+  content: "";
+  position: absolute;
+  top: 50%; left: -30%;
+  width: 60%;
+  height: 2px;
+  transform: translateY(-50%);
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.8), transparent);
+  filter: blur(1px);
+  opacity: 0;
+  transition: opacity .25s ease, left .6s ease;
+}
+footer p:hover::after {
+  left: 110%;
+  opacity: 1;
+}
+
+/* ===== Responsive tweaks ===== */
+@media (max-width: 640px) {
+  footer { height: auto; }
+  footer ul { gap: .9rem; }
+  footer li a { transform: none; } /* menos “bailoteo” en móvil */
+  footer li a:hover { transform: translateY(-1px) scale(1.02); }
+  footer li a img { width: 1.6rem; height: 1.6rem; }
+  footer p { font-size: .875rem; }
+}
+
+footer::before,
+footer::after {
+  pointer-events: none;
+}

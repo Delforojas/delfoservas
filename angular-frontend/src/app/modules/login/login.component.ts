@@ -14,6 +14,7 @@ import { HttpErrorResponse } from '@angular/common/http';
  selector: 'app-login',
  standalone: true,
  templateUrl: './login.html',
+ styleUrls: ['./login.component.css'],
  imports:[FormsModule, ReactiveFormsModule, RouterModule ,FooterComponent],
 
 
