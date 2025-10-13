@@ -15,6 +15,12 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\HttpFoundation\Response; 
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 
+use Symfony\Component\Security\Http\Attribute\CurrentUser;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
+
+
+
 
 
 
@@ -32,28 +38,33 @@ public function index(UserRepository $repo): JsonResponse
             'id'     => $user->getId(),
             'nombre' => $user->getNombre(),
             'email'  => $user->getEmail(),
+            'avatar' => $user->getProfileImage(),
         ];
     }
 
    
     return $this->json($data);
 }
-  #[Route('/me', name: 'users_me', methods: ['GET'])]
-    public function me(): JsonResponse
-    {
-        $user = $this->getUser();
-        if (!$user) {
-            return $this->json(['error' => 'No autenticado'], 401);
-        }
-/** @var \App\Entity\User $user */
-
-        return $this->json([
-            'id'     => $user->getId(),
-            'nombre' => $user->getNombre(),
-            'email'  => $user->getEmail(),
-            'roles'  => $user->getRoles(),
-        ]);
+ #[Route('/me', name: 'users_me', methods: ['GET'])]
+public function me(): JsonResponse
+{
+    $user = $this->getUser();
+    if (!$user) {
+        return $this->json(['error' => 'No autenticado'], 401);
     }
+
+    /** @var \App\Entity\User $user */
+
+    return $this->json([
+        'id'     => $user->getId(),
+        'nombre' => $user->getNombre(),
+        'email'  => $user->getEmail(),
+        'roles'  => $user->getRoles(),
+        'avatar' => $user->getProfileImage()
+            ? '/uploads/avatars/' . $user->getProfileImage()
+            : null,
+    ]);
+}
 
    #[Route('/{id}', name: 'users_show', methods: ['GET'], requirements: ['id' => '\d+'])]
 public function show(User $user): JsonResponse
@@ -62,55 +73,131 @@ public function show(User $user): JsonResponse
         'id'     => $user->getId(),
         'nombre' => $user->getNombre(),
         'email'  => $user->getEmail(),
+        'avatar' => $user->getProfileImage(),
+
     ]);
 }
 #[Route('/register', name: 'register', methods: ['POST'])]
-    public function register(
-        Request $request,
-        UserPasswordHasherInterface $passwordHasher,
-        EntityManagerInterface $em,
-        JWTTokenManagerInterface $jwtManager
-    ): JsonResponse {
-        $data = json_decode($request->getContent(), true) ?? [];
+public function register(
+    Request $request,
+    UserPasswordHasherInterface $passwordHasher,
+    EntityManagerInterface $em,
+    JWTTokenManagerInterface $jwtManager
+): JsonResponse {
+    $nombre   = $request->request->get('nombre');
+    $email    = $request->request->get('email');
+    $password = $request->request->get('password');
+    $imageFile = $request->files->get('avatar'); // 👈 corregido
 
-       
-        if (empty($data['email']) || empty($data['password'])) {
-            return $this->json(['error' => 'email y password son obligatorios'], 400);
-        }
-
-        $existing = $em->getRepository(User::class)->findOneBy(['email' => $data['email']]);
-        if ($existing) {
-            return $this->json(['error' => 'El email ya está en uso'], 409);
-        }
-
-        $user = new User();
-        $user->setNombre(isset($data['nombre']) ? trim((string)$data['nombre']) : '');
-        $user->setEmail($data['email']);
-        $user->setPassword($passwordHasher->hashPassword($user, $data['password']));
-        $user->setRole(RoleEnum::USER);
-
-        $em->persist($user);
-        $em->flush();
-
-        return $this->json([
-            'message' => 'Usuario registrado correctamente',
-            'id'      => $user->getId(),
-            'nombre'  => $user->getNombre(), 
-            'token'   => $jwtManager->create($user)
-        ], 201);
+    if (empty($email) || empty($password)) {
+        return $this->json(['error' => 'email y password son obligatorios'], 400);
     }
+
+    if ($em->getRepository(User::class)->findOneBy(['email' => $email])) {
+        return $this->json(['error' => 'El email ya está en uso'], 409);
+    }
+
+    $user = new User();
+    $user->setNombre($nombre);
+    $user->setEmail($email);
+    $user->setPassword($passwordHasher->hashPassword($user, $password));
+    $user->setRole(RoleEnum::USER);
+
+    if ($imageFile) {
+        $fileName = uniqid('pf_', true) . '.' . $imageFile->guessExtension();
+        $imageFile->move(
+            $this->getParameter('uploads_directory') . '/avatars',
+            $fileName
+        );
+        $user->setProfileImage($fileName);
+    }
+
+    $em->persist($user);
+    $em->flush();
+
+    $token = $jwtManager->create($user);
+
+    return $this->json([
+        'message' => 'Usuario creado correctamente',
+        'token'   => $token,
+        'user'    => [
+            'id'      => $user->getId(),
+            'nombre'  => $user->getNombre(),
+            'email'   => $user->getEmail(),
+            'roles'   => $user->getRoles(),
+            'avatar'  => $user->getProfileImage()
+                ? '/uploads/avatars/' . $user->getProfileImage()
+                : null,
+        ],
+    ], 201);
+}
 
 
 #[Route('/{id}', name: 'users_update', methods: ['PUT'], requirements: ['id' => '\d+'])]
-public function update(Request $request, User $user, EntityManagerInterface $em): JsonResponse
-{
-    $data = json_decode($request->getContent(), true);
-    $user->setNombre($data['nombre'] ?? $user->getNombre());
-    $user->setEmail($data['email'] ?? $user->getEmail());
-    $user->setPassword($data['password'] ?? $user->getPassword());
-    $em->flush();
+public function update(
+    Request $request,
+    User $user,
+    EntityManagerInterface $em,
+    UserPasswordHasherInterface $passwordHasher
+): JsonResponse {
+    // 1) Decodificar JSON con control de errores
+    $raw = $request->getContent();
+    $data = json_decode($raw, true);
+    if (!is_array($data)) {
+        return $this->json(['error' => 'JSON inválido'], Response::HTTP_BAD_REQUEST);
+    }
 
-    return $this->json(['message' => 'Usuario actualizado']);
+    // 2) Saneado y updates parciales
+    if (array_key_exists('nombre', $data)) {
+        $user->setNombre(isset($data['nombre']) ? trim((string)$data['nombre']) : null);
+    }
+
+    if (array_key_exists('email', $data)) {
+        $newEmail = mb_strtolower(trim((string)$data['email']));
+        if (!filter_var($newEmail, FILTER_VALIDATE_EMAIL)) {
+            return $this->json(['error' => 'email no válido'], 400);
+        }
+        // Comprobar unicidad si cambia
+        if ($newEmail !== $user->getEmail()) {
+            $exists = $em->getRepository(User::class)->findOneBy(['email' => $newEmail]);
+            if ($exists) {
+                return $this->json(['error' => 'El email ya está en uso'], 409);
+            }
+            $user->setEmail($newEmail);
+        }
+    }
+
+    if (!empty($data['password'])) {
+        $hashed = $passwordHasher->hashPassword($user, (string)$data['password']);
+        $user->setPassword($hashed);
+    }
+
+    if (array_key_exists('profile_image', $data)) {
+        $pi = $data['profile_image'];
+        $user->setProfileImage($pi !== null ? (string)$pi : null);
+    }
+
+    try {
+        $em->flush();
+    } catch (UniqueConstraintViolationException $e) {
+        return $this->json(['error' => 'Conflicto de unicidad'], 409);
+    }
+
+    // construir salida (usa tu helper si lo tienes)
+    $avatar = method_exists($user, 'getProfileImageUrl')
+    ? $user->getProfileImageUrl()
+    : $user->getProfileImage();
+
+return $this->json([
+    'message' => 'Usuario actualizado',
+    'user' => [
+        'id'      => $user->getId(),
+        'nombre'  => $user->getNombre(),
+        'email'   => $user->getEmail(),
+        'roles'   => $user->getRoles(),
+        'avatar'  => $avatar, // 👈 unificado con el registro
+    ],
+]);
 }
 
 #[Route('/{id}', name: 'users_delete', methods: ['DELETE'], requirements: ['id' => '\d+'])]

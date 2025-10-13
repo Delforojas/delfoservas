@@ -1,0 +1,1170 @@
+{
+	"knownSymbols": {
+		"bootstrapApplication": [
+			{
+				"name": "bootstrapApplication",
+				"module": "@angular/platform-browser",
+				"isDefault": false
+			}
+		],
+		"TestBed": [
+			{
+				"name": "TestBed",
+				"module": "@angular/core/testing",
+				"isDefault": false
+			}
+		],
+		"canMatchRoles": [
+			{
+				"name": "canMatchRoles",
+				"path": "/Users/delfinrojas/Desktop/iphonedelfo/angular-frontend/src/app/role.guard.ts",
+				"type": "const",
+				"isDefault": false
+			}
+		],
+		"CanMatchFn": [
+			{
+				"name": "CanMatchFn",
+				"module": "@angular/router",
+				"isDefault": false
+			}
+		],
+		"Route": [
+			{
+				"name": "Route",
+				"module": "@angular/router",
+				"isDefault": false
+			}
+		],
+		"UrlSegment": [
+			{
+				"name": "UrlSegment",
+				"module": "@angular/router",
+				"isDefault": false
+			}
+		],
+		"jwtDecode": [
+			{
+				"name": "jwtDecode",
+				"module": "jwt-decode",
+				"isDefault": false
+			}
+		],
+		"appConfig": [
+			{
+				"name": "appConfig",
+				"path": "/Users/delfinrojas/Desktop/iphonedelfo/angular-frontend/src/app/app.config.ts",
+				"type": "const",
+				"isDefault": false
+			}
+		],
+		"ApplicationConfig": [
+			{
+				"name": "ApplicationConfig",
+				"module": "@angular/core",
+				"isDefault": false
+			}
+		],
+		"provideZoneChangeDetection": [
+			{
+				"name": "provideZoneChangeDetection",
+				"module": "@angular/core",
+				"isDefault": false
+			}
+		],
+		"provideRouter": [
+			{
+				"name": "provideRouter",
+				"module": "@angular/router",
+				"isDefault": false
+			}
+		],
+		"provideHttpClient": [
+			{
+				"name": "provideHttpClient",
+				"module": "@angular/common/http",
+				"isDefault": false
+			}
+		],
+		"Component": [
+			{
+				"name": "Component",
+				"module": "@angular/core",
+				"isDefault": false
+			}
+		],
+		"CommonModule": [
+			{
+				"name": "CommonModule",
+				"module": "@angular/common",
+				"isDefault": false
+			}
+		],
+		"RouterModule": [
+			{
+				"name": "RouterModule",
+				"module": "@angular/router",
+				"isDefault": false
+			}
+		],
+		"AuthGuard": [
+			{
+				"name": "AuthGuard",
+				"path": "/Users/delfinrojas/Desktop/iphonedelfo/angular-frontend/src/app/auth.guard.ts",
+				"type": "class",
+				"isDefault": false
+			}
+		],
+		"Injectable": [
+			{
+				"name": "Injectable",
+				"module": "@angular/core",
+				"isDefault": false
+			}
+		],
+		"CanActivate": [
+			{
+				"name": "CanActivate",
+				"module": "@angular/router",
+				"isDefault": false
+			}
+		],
+		"Router": [
+			{
+				"name": "Router",
+				"module": "@angular/router",
+				"isDefault": false
+			}
+		],
+		"UrlTree": [
+			{
+				"name": "UrlTree",
+				"module": "@angular/router",
+				"isDefault": false
+			}
+		],
+		"Observable": [
+			{
+				"name": "Observable",
+				"module": "rxjs",
+				"isDefault": false
+			}
+		],
+		"of": [
+			{
+				"name": "of",
+				"module": "rxjs",
+				"isDefault": false
+			}
+		],
+		"catchError": [
+			{
+				"name": "catchError",
+				"module": "rxjs/operators",
+				"isDefault": false
+			}
+		],
+		"map": [
+			{
+				"name": "map",
+				"module": "rxjs/operators",
+				"isDefault": false
+			}
+		],
+		"BonoActivoUsuario": [
+			{
+				"name": "BonoActivoUsuario",
+				"path": "/Users/delfinrojas/Desktop/iphonedelfo/angular-frontend/src/app/shared/interfaces/bonoActivoUsuario.interface.ts",
+				"type": "interface",
+				"isDefault": false
+			}
+		],
+		"VistaClase": [
+			{
+				"name": "VistaClase",
+				"path": "/Users/delfinrojas/Desktop/iphonedelfo/angular-frontend/src/app/shared/interfaces/vistaClase.interface.ts",
+				"type": "interface",
+				"isDefault": false
+			}
+		],
+		"ClaseDto": [
+			{
+				"name": "ClaseDto",
+				"path": "/Users/delfinrojas/Desktop/iphonedelfo/angular-frontend/src/app/shared/interfaces/ClaseDto.interface.ts",
+				"type": "interface",
+				"isDefault": false
+			}
+		],
+		"HeaderComponent": [
+			{
+				"name": "HeaderComponent",
+				"module": "@shared/components/header.component",
+				"isDefault": false
+			},
+			{
+				"name": "HeaderComponent",
+				"path": "/Users/delfinrojas/Desktop/iphonedelfo/angular-frontend/src/app/shared/components/header.component.ts",
+				"type": "class",
+				"isDefault": false
+			}
+		],
+		"OnInit": [
+			{
+				"name": "OnInit",
+				"module": "@angular/core",
+				"isDefault": false
+			}
+		],
+		"WalletMes": [
+			{
+				"name": "WalletMes",
+				"path": "/Users/delfinrojas/Desktop/iphonedelfo/angular-frontend/src/app/shared/interfaces/walletMes.interface.ts",
+				"type": "interface",
+				"isDefault": false
+			}
+		],
+		"Bono": [
+			{
+				"name": "Bono",
+				"path": "/Users/delfinrojas/Desktop/iphonedelfo/angular-frontend/src/app/shared/interfaces/bono.interface.ts",
+				"type": "interface",
+				"isDefault": false
+			}
+		],
+		"TipoClase": [
+			{
+				"name": "TipoClase",
+				"path": "/Users/delfinrojas/Desktop/iphonedelfo/angular-frontend/src/app/shared/interfaces/tipoClase.interface.ts",
+				"type": "interface",
+				"isDefault": false
+			}
+		],
+		"Wallet": [
+			{
+				"name": "Wallet",
+				"path": "/Users/delfinrojas/Desktop/iphonedelfo/angular-frontend/src/app/shared/interfaces/wallet.interface.ts",
+				"type": "interface",
+				"isDefault": false
+			}
+		],
+		"Room": [
+			{
+				"name": "Room",
+				"path": "/Users/delfinrojas/Desktop/iphonedelfo/angular-frontend/src/app/shared/interfaces/room.interface.ts",
+				"type": "interface",
+				"isDefault": false
+			}
+		],
+		"Reservation": [
+			{
+				"name": "Reservation",
+				"path": "/Users/delfinrojas/Desktop/iphonedelfo/angular-frontend/src/app/shared/interfaces/reservation.interface.ts",
+				"type": "interface",
+				"isDefault": false
+			}
+		],
+		"Clase": [
+			{
+				"name": "Clase",
+				"path": "/Users/delfinrojas/Desktop/iphonedelfo/angular-frontend/src/app/shared/interfaces/clase.interface.ts",
+				"type": "interface",
+				"isDefault": false
+			}
+		],
+		"ClaseProfe": [
+			{
+				"name": "ClaseProfe",
+				"path": "/Users/delfinrojas/Desktop/iphonedelfo/angular-frontend/src/app/shared/interfaces/claseProfe.interface.ts",
+				"type": "interface",
+				"isDefault": false
+			}
+		],
+		"ToastComponent": [
+			{
+				"name": "ToastComponent",
+				"path": "/Users/delfinrojas/Desktop/iphonedelfo/angular-frontend/src/app/shared/components/toast/toast.component.ts",
+				"type": "class",
+				"isDefault": false
+			}
+		],
+		"TipoClaseService": [
+			{
+				"name": "TipoClaseService",
+				"module": "@shared/services/tipoclase.service",
+				"isDefault": false
+			},
+			{
+				"name": "TipoClaseService",
+				"path": "/Users/delfinrojas/Desktop/iphonedelfo/angular-frontend/src/app/shared/services/tipoclase.service.ts",
+				"type": "class",
+				"isDefault": false
+			}
+		],
+		"HttpClient": [
+			{
+				"name": "HttpClient",
+				"module": "@angular/common/http",
+				"isDefault": false
+			}
+		],
+		"HttpHeaders": [
+			{
+				"name": "HttpHeaders",
+				"module": "@angular/common/http",
+				"isDefault": false
+			}
+		],
+		"VistasService": [
+			{
+				"name": "VistasService",
+				"module": "@shared/services/vistas.service",
+				"isDefault": false
+			},
+			{
+				"name": "VistasService",
+				"path": "/Users/delfinrojas/Desktop/iphonedelfo/angular-frontend/src/app/shared/services/vistas.service.ts",
+				"type": "class",
+				"isDefault": false
+			}
+		],
+		"HttpParams": [
+			{
+				"name": "HttpParams",
+				"module": "@angular/common/http",
+				"isDefault": false
+			}
+		],
+		"DiaSemana": [
+			{
+				"name": "DiaSemana",
+				"path": "/Users/delfinrojas/Desktop/iphonedelfo/angular-frontend/src/app/shared/services/reservation.service.ts",
+				"type": "type",
+				"isDefault": false
+			}
+		],
+		"ReservationService": [
+			{
+				"name": "ReservationService",
+				"module": "@shared/services/reservation.service",
+				"isDefault": false
+			},
+			{
+				"name": "ReservationService",
+				"path": "/Users/delfinrojas/Desktop/iphonedelfo/angular-frontend/src/app/shared/services/reservation.service.ts",
+				"type": "class",
+				"isDefault": false
+			}
+		],
+		"RoomService": [
+			{
+				"name": "RoomService",
+				"module": "@shared/services/room.service",
+				"isDefault": false
+			},
+			{
+				"name": "RoomService",
+				"path": "/Users/delfinrojas/Desktop/iphonedelfo/angular-frontend/src/app/shared/services/room.service.ts",
+				"type": "class",
+				"isDefault": false
+			}
+		],
+		"UsersService": [
+			{
+				"name": "UsersService",
+				"module": "@shared/services/user.service",
+				"isDefault": false
+			},
+			{
+				"name": "UsersService",
+				"path": "/Users/delfinrojas/Desktop/iphonedelfo/angular-frontend/src/app/shared/services/user.service.ts",
+				"type": "class",
+				"isDefault": false
+			}
+		],
+		"tap": [
+			{
+				"name": "tap",
+				"module": "rxjs",
+				"isDefault": false
+			}
+		],
+		"ClaseService": [
+			{
+				"name": "ClaseService",
+				"module": "@shared/services/clases.service",
+				"isDefault": false
+			},
+			{
+				"name": "ClaseService",
+				"path": "/Users/delfinrojas/Desktop/iphonedelfo/angular-frontend/src/app/shared/services/clases.service.ts",
+				"type": "class",
+				"isDefault": false
+			}
+		],
+		"NavigationService": [
+			{
+				"name": "NavigationService",
+				"path": "/Users/delfinrojas/Desktop/iphonedelfo/angular-frontend/src/app/shared/services/navigation.service.ts",
+				"type": "class",
+				"isDefault": false
+			}
+		],
+		"FormBuilder": [
+			{
+				"name": "FormBuilder",
+				"module": "@angular/forms",
+				"isDefault": false
+			}
+		],
+		"FormGroup": [
+			{
+				"name": "FormGroup",
+				"module": "@angular/forms",
+				"isDefault": false
+			}
+		],
+		"FormsModule": [
+			{
+				"name": "FormsModule",
+				"module": "@angular/forms",
+				"isDefault": false
+			}
+		],
+		"ReactiveFormsModule": [
+			{
+				"name": "ReactiveFormsModule",
+				"module": "@angular/forms",
+				"isDefault": false
+			}
+		],
+		"Validators": [
+			{
+				"name": "Validators",
+				"module": "@angular/forms",
+				"isDefault": false
+			}
+		],
+		"HttpErrorResponse": [
+			{
+				"name": "HttpErrorResponse",
+				"module": "@angular/common/http",
+				"isDefault": false
+			}
+		],
+		"ComponentFixture": [
+			{
+				"name": "ComponentFixture",
+				"module": "@angular/core/testing",
+				"isDefault": false
+			}
+		],
+		"UsuarioPagosState": [
+			{
+				"name": "UsuarioPagosState",
+				"module": "@shared/models/pagos-usuario.models",
+				"isDefault": false
+			},
+			{
+				"name": "UsuarioPagosState",
+				"path": "/Users/delfinrojas/Desktop/iphonedelfo/angular-frontend/src/app/shared/models/pagos-usuario.models.ts",
+				"type": "interface",
+				"isDefault": false
+			}
+		],
+		"createInitialUsuarioPagosState": [
+			{
+				"name": "createInitialUsuarioPagosState",
+				"path": "/Users/delfinrojas/Desktop/iphonedelfo/angular-frontend/src/app/shared/models/pagos-usuario.models.ts",
+				"type": "function",
+				"isDefault": false
+			}
+		],
+		"UsuarioBonosState": [
+			{
+				"name": "UsuarioBonosState",
+				"module": "@shared/models/bonos.models",
+				"isDefault": false
+			},
+			{
+				"name": "UsuarioBonosState",
+				"path": "/Users/delfinrojas/Desktop/iphonedelfo/angular-frontend/src/app/shared/models/bonos.models.ts",
+				"type": "interface",
+				"isDefault": false
+			}
+		],
+		"createInitialUsuarioBonosState": [
+			{
+				"name": "createInitialUsuarioBonosState",
+				"path": "/Users/delfinrojas/Desktop/iphonedelfo/angular-frontend/src/app/shared/models/bonos.models.ts",
+				"type": "function",
+				"isDefault": false
+			}
+		],
+		"UsuarioReservasState": [
+			{
+				"name": "UsuarioReservasState",
+				"module": "@shared/models/reservas-usuario.models",
+				"isDefault": false
+			},
+			{
+				"name": "UsuarioReservasState",
+				"path": "/Users/delfinrojas/Desktop/iphonedelfo/angular-frontend/src/app/shared/models/reservas-usuario.models.ts",
+				"type": "interface",
+				"isDefault": false
+			}
+		],
+		"createInitialUsuarioReservasState": [
+			{
+				"name": "createInitialUsuarioReservasState",
+				"path": "/Users/delfinrojas/Desktop/iphonedelfo/angular-frontend/src/app/shared/models/reservas-usuario.models.ts",
+				"type": "function",
+				"isDefault": false
+			}
+		],
+		"Dia": [
+			{
+				"name": "Dia",
+				"path": "/Users/delfinrojas/Desktop/iphonedelfo/angular-frontend/src/app/shared/models/reservas.models.ts",
+				"type": "type",
+				"isDefault": false
+			}
+		],
+		"DayOfWeekByDia": [
+			{
+				"name": "DayOfWeekByDia",
+				"path": "/Users/delfinrojas/Desktop/iphonedelfo/angular-frontend/src/app/shared/models/reservas.models.ts",
+				"type": "const",
+				"isDefault": false
+			}
+		],
+		"ClasesReservaState": [
+			{
+				"name": "ClasesReservaState",
+				"module": "@shared/models/reservas.models",
+				"isDefault": false
+			},
+			{
+				"name": "ClasesReservaState",
+				"path": "/Users/delfinrojas/Desktop/iphonedelfo/angular-frontend/src/app/shared/models/reservas.models.ts",
+				"type": "interface",
+				"isDefault": false
+			}
+		],
+		"createInitialClasesReservaState": [
+			{
+				"name": "createInitialClasesReservaState",
+				"path": "/Users/delfinrojas/Desktop/iphonedelfo/angular-frontend/src/app/shared/models/reservas.models.ts",
+				"type": "function",
+				"isDefault": false
+			}
+		],
+		"ROOM_ROUTES": [
+			{
+				"name": "ROOM_ROUTES",
+				"path": "/Users/delfinrojas/Desktop/iphonedelfo/angular-frontend/src/app/shared/routes/room-routes.ts",
+				"type": "const",
+				"isDefault": false
+			}
+		],
+		"CLASES_ROUTES": [
+			{
+				"name": "CLASES_ROUTES",
+				"path": "/Users/delfinrojas/Desktop/iphonedelfo/angular-frontend/src/app/shared/routes/clases-routes.ts",
+				"type": "const",
+				"isDefault": false
+			}
+		],
+		"USERS_ROUTES": [
+			{
+				"name": "USERS_ROUTES",
+				"path": "/Users/delfinrojas/Desktop/iphonedelfo/angular-frontend/src/app/shared/routes/user-routes.ts",
+				"type": "const",
+				"isDefault": false
+			}
+		],
+		"VISTAS_ROUTES": [
+			{
+				"name": "VISTAS_ROUTES",
+				"path": "/Users/delfinrojas/Desktop/iphonedelfo/angular-frontend/src/app/shared/routes/vistas-routes.ts",
+				"type": "const",
+				"isDefault": false
+			}
+		],
+		"AUTH_ROUTES": [
+			{
+				"name": "AUTH_ROUTES",
+				"module": "@shared/routes/auth-routes",
+				"isDefault": false
+			},
+			{
+				"name": "AUTH_ROUTES",
+				"path": "/Users/delfinrojas/Desktop/iphonedelfo/angular-frontend/src/app/shared/routes/auth-routes.ts",
+				"type": "const",
+				"isDefault": false
+			}
+		],
+		"TIPO_CLASE_ROUTES": [
+			{
+				"name": "TIPO_CLASE_ROUTES",
+				"path": "/Users/delfinrojas/Desktop/iphonedelfo/angular-frontend/src/app/shared/routes/tipo-clase-routes.ts",
+				"type": "const",
+				"isDefault": false
+			}
+		],
+		"RESERVATION_ROUTES": [
+			{
+				"name": "RESERVATION_ROUTES",
+				"path": "/Users/delfinrojas/Desktop/iphonedelfo/angular-frontend/src/app/shared/routes/reservation-routes.ts",
+				"type": "const",
+				"isDefault": false
+			}
+		],
+		"handleHttpError": [
+			{
+				"name": "handleHttpError",
+				"module": "@shared/utils/http-error",
+				"isDefault": false
+			},
+			{
+				"name": "handleHttpError",
+				"path": "/Users/delfinrojas/Desktop/iphonedelfo/angular-frontend/src/app/shared/utils/http-error.ts",
+				"type": "function",
+				"isDefault": false
+			}
+		],
+		"authHeaders": [
+			{
+				"name": "authHeaders",
+				"module": "@shared/utils/auth-headers",
+				"isDefault": false
+			},
+			{
+				"name": "authHeaders",
+				"path": "/Users/delfinrojas/Desktop/iphonedelfo/angular-frontend/src/app/shared/utils/auth-headers.ts",
+				"type": "function",
+				"isDefault": false
+			}
+		],
+		"finalize": [
+			{
+				"name": "finalize",
+				"module": "rxjs/operators",
+				"isDefault": false
+			},
+			{
+				"name": "finalize",
+				"module": "rxjs",
+				"isDefault": false
+			}
+		],
+		"UsuarioPagosComponent": [
+			{
+				"name": "UsuarioPagosComponent",
+				"path": "/Users/delfinrojas/Desktop/iphonedelfo/angular-frontend/src/app/modules/menu/pagos-usuario.component.ts",
+				"type": "class",
+				"isDefault": false
+			}
+		],
+		"Routes": [
+			{
+				"name": "Routes",
+				"module": "@angular/router",
+				"isDefault": false
+			}
+		],
+		"CanActivateFn": [
+			{
+				"name": "CanActivateFn",
+				"module": "@angular/router",
+				"isDefault": false
+			}
+		],
+		"environment": [
+			{
+				"name": "environment",
+				"path": "/Users/delfinrojas/Desktop/iphonedelfo/angular-frontend/src/app/environments/environments.ts",
+				"type": "const",
+				"isDefault": false
+			}
+		],
+		"API": [
+			{
+				"name": "API",
+				"path": "/Users/delfinrojas/Desktop/iphonedelfo/angular-frontend/src/app/environments/environments.ts",
+				"type": "const",
+				"isDefault": false
+			}
+		],
+		"ClasesState": [
+			{
+				"name": "ClasesState",
+				"module": "@shared/models/clases.models",
+				"isDefault": false
+			},
+			{
+				"name": "ClasesState",
+				"path": "/Users/delfinrojas/Desktop/iphonedelfo/angular-frontend/src/app/shared/models/clases.models.ts",
+				"type": "interface",
+				"isDefault": false
+			}
+		],
+		"createInitialClasesState": [
+			{
+				"name": "createInitialClasesState",
+				"path": "/Users/delfinrojas/Desktop/iphonedelfo/angular-frontend/src/app/shared/models/clases.models.ts",
+				"type": "function",
+				"isDefault": false
+			}
+		],
+		"AppComponent": [
+			{
+				"name": "AppComponent",
+				"path": "/Users/delfinrojas/Desktop/iphonedelfo/angular-frontend/src/app/app.component.ts",
+				"type": "class",
+				"isDefault": false
+			}
+		],
+		"ReservaUsuarioDto": [
+			{
+				"name": "ReservaUsuarioDto",
+				"path": "/Users/delfinrojas/Desktop/iphonedelfo/angular-frontend/src/app/shared/interfaces/reservaUsuarioDto.interface.ts",
+				"type": "interface",
+				"isDefault": false
+			},
+			{
+				"name": "ReservaUsuarioDto",
+				"module": "@shared/interfaces/reservaUsuarioDto.interface",
+				"isDefault": false
+			}
+		],
+		"Alumno": [
+			{
+				"name": "Alumno",
+				"path": "/Users/delfinrojas/Desktop/iphonedelfo/angular-frontend/src/app/shared/interfaces/alumno.interface.ts",
+				"type": "interface",
+				"isDefault": false
+			}
+		],
+		"ToastService": [
+			{
+				"name": "ToastService",
+				"module": "@shared/services/toast.service",
+				"isDefault": false
+			},
+			{
+				"name": "ToastService",
+				"path": "/Users/delfinrojas/Desktop/iphonedelfo/angular-frontend/src/app/shared/services/toast.service.ts",
+				"type": "class",
+				"isDefault": false
+			}
+		],
+		"AuthService": [
+			{
+				"name": "AuthService",
+				"path": "/Users/delfinrojas/Desktop/iphonedelfo/angular-frontend/src/app/shared/services/auth.service.ts",
+				"type": "class",
+				"isDefault": false
+			}
+		],
+		"ToastKey": [
+			{
+				"name": "ToastKey",
+				"path": "/Users/delfinrojas/Desktop/iphonedelfo/angular-frontend/src/app/shared/utils/test-messages.ts",
+				"type": "type",
+				"isDefault": false
+			}
+		],
+		"showToast": [
+			{
+				"name": "showToast",
+				"path": "/Users/delfinrojas/Desktop/iphonedelfo/angular-frontend/src/app/shared/utils/test-messages.ts",
+				"type": "function",
+				"isDefault": false
+			}
+		],
+		"ReservarClaseContext": [
+			{
+				"name": "ReservarClaseContext",
+				"path": "/Users/delfinrojas/Desktop/iphonedelfo/angular-frontend/src/app/shared/utils/context-types.ts",
+				"type": "interface",
+				"isDefault": false
+			}
+		],
+		"UsuarioBonosContext": [
+			{
+				"name": "UsuarioBonosContext",
+				"module": "@shared/utils/context-types",
+				"isDefault": false
+			},
+			{
+				"name": "UsuarioBonosContext",
+				"path": "/Users/delfinrojas/Desktop/iphonedelfo/angular-frontend/src/app/shared/utils/context-types.ts",
+				"type": "interface",
+				"isDefault": false
+			}
+		],
+		"UsuarioReservasContext": [
+			{
+				"name": "UsuarioReservasContext",
+				"path": "/Users/delfinrojas/Desktop/iphonedelfo/angular-frontend/src/app/shared/utils/context-types.ts",
+				"type": "interface",
+				"isDefault": false
+			}
+		],
+		"UsuarioPagosContext": [
+			{
+				"name": "UsuarioPagosContext",
+				"path": "/Users/delfinrojas/Desktop/iphonedelfo/angular-frontend/src/app/shared/utils/context-types.ts",
+				"type": "interface",
+				"isDefault": false
+			}
+		],
+		"CrearClaseContext": [
+			{
+				"name": "CrearClaseContext",
+				"module": "@shared/utils/context-types",
+				"isDefault": false
+			},
+			{
+				"name": "CrearClaseContext",
+				"path": "/Users/delfinrojas/Desktop/iphonedelfo/angular-frontend/src/app/shared/utils/context-types.ts",
+				"type": "interface",
+				"isDefault": false
+			}
+		],
+		"ClasesProfesorContext": [
+			{
+				"name": "ClasesProfesorContext",
+				"module": "@shared/utils/context-types",
+				"isDefault": false
+			},
+			{
+				"name": "ClasesProfesorContext",
+				"path": "/Users/delfinrojas/Desktop/iphonedelfo/angular-frontend/src/app/shared/utils/context-types.ts",
+				"type": "interface",
+				"isDefault": false
+			}
+		],
+		"loadBonosPorUsuario": [
+			{
+				"name": "loadBonosPorUsuario",
+				"path": "/Users/delfinrojas/Desktop/iphonedelfo/angular-frontend/src/app/shared/utils/loads/bonos-usuario.load.ts",
+				"type": "function",
+				"isDefault": false
+			}
+		],
+		"loadClases": [
+			{
+				"name": "loadClases",
+				"path": "/Users/delfinrojas/Desktop/iphonedelfo/angular-frontend/src/app/shared/utils/loads/clase-profesor.load.ts",
+				"type": "function",
+				"isDefault": false
+			}
+		],
+		"loadClasesVista": [
+			{
+				"name": "loadClasesVista",
+				"path": "/Users/delfinrojas/Desktop/iphonedelfo/angular-frontend/src/app/shared/utils/loads/clase-profesor.load.ts",
+				"type": "function",
+				"isDefault": false
+			}
+		],
+		"loadClasesProfesores": [
+			{
+				"name": "loadClasesProfesores",
+				"path": "/Users/delfinrojas/Desktop/iphonedelfo/angular-frontend/src/app/shared/utils/loads/clase-profesor.load.ts",
+				"type": "function",
+				"isDefault": false
+			}
+		],
+		"loadAlumnos": [
+			{
+				"name": "loadAlumnos",
+				"path": "/Users/delfinrojas/Desktop/iphonedelfo/angular-frontend/src/app/shared/utils/loads/clase-profesor.load.ts",
+				"type": "function",
+				"isDefault": false
+			}
+		],
+		"loadProfesores": [
+			{
+				"name": "loadProfesores",
+				"path": "/Users/delfinrojas/Desktop/iphonedelfo/angular-frontend/src/app/shared/utils/loads/crear-clase.load.ts",
+				"type": "function",
+				"isDefault": false
+			}
+		],
+		"deleteClase": [
+			{
+				"name": "deleteClase",
+				"path": "/Users/delfinrojas/Desktop/iphonedelfo/angular-frontend/src/app/shared/utils/loads/clase-profesor.load.ts",
+				"type": "function",
+				"isDefault": false
+			}
+		],
+		"deleteAlumnoDeClase": [
+			{
+				"name": "deleteAlumnoDeClase",
+				"path": "/Users/delfinrojas/Desktop/iphonedelfo/angular-frontend/src/app/shared/utils/loads/clase-profesor.load.ts",
+				"type": "function",
+				"isDefault": false
+			}
+		],
+		"loadTiposClase": [
+			{
+				"name": "loadTiposClase",
+				"path": "/Users/delfinrojas/Desktop/iphonedelfo/angular-frontend/src/app/shared/utils/loads/crear-clase.load.ts",
+				"type": "function",
+				"isDefault": false
+			}
+		],
+		"loadRooms": [
+			{
+				"name": "loadRooms",
+				"path": "/Users/delfinrojas/Desktop/iphonedelfo/angular-frontend/src/app/shared/utils/loads/crear-clase.load.ts",
+				"type": "function",
+				"isDefault": false
+			}
+		],
+		"crearClase": [
+			{
+				"name": "crearClase",
+				"path": "/Users/delfinrojas/Desktop/iphonedelfo/angular-frontend/src/app/shared/utils/loads/crear-clase.load.ts",
+				"type": "function",
+				"isDefault": false
+			}
+		],
+		"loadWalletUsuario": [
+			{
+				"name": "loadWalletUsuario",
+				"path": "/Users/delfinrojas/Desktop/iphonedelfo/angular-frontend/src/app/shared/utils/loads/gestion-pagos.load.ts",
+				"type": "function",
+				"isDefault": false
+			}
+		],
+		"onUsuarioSeleccionado": [
+			{
+				"name": "onUsuarioSeleccionado",
+				"path": "/Users/delfinrojas/Desktop/iphonedelfo/angular-frontend/src/app/shared/utils/load.ts",
+				"type": "function",
+				"isDefault": false
+			}
+		],
+		"loadClassMonday": [
+			{
+				"name": "loadClassMonday",
+				"path": "/Users/delfinrojas/Desktop/iphonedelfo/angular-frontend/src/app/shared/utils/loads/reservar-clase.load.ts",
+				"type": "function",
+				"isDefault": false
+			}
+		],
+		"loadClassTuesday": [
+			{
+				"name": "loadClassTuesday",
+				"path": "/Users/delfinrojas/Desktop/iphonedelfo/angular-frontend/src/app/shared/utils/loads/reservar-clase.load.ts",
+				"type": "function",
+				"isDefault": false
+			}
+		],
+		"loadClassWednesday": [
+			{
+				"name": "loadClassWednesday",
+				"path": "/Users/delfinrojas/Desktop/iphonedelfo/angular-frontend/src/app/shared/utils/loads/reservar-clase.load.ts",
+				"type": "function",
+				"isDefault": false
+			}
+		],
+		"loadClassThursday": [
+			{
+				"name": "loadClassThursday",
+				"path": "/Users/delfinrojas/Desktop/iphonedelfo/angular-frontend/src/app/shared/utils/loads/reservar-clase.load.ts",
+				"type": "function",
+				"isDefault": false
+			}
+		],
+		"loadClassFriday": [
+			{
+				"name": "loadClassFriday",
+				"path": "/Users/delfinrojas/Desktop/iphonedelfo/angular-frontend/src/app/shared/utils/loads/reservar-clase.load.ts",
+				"type": "function",
+				"isDefault": false
+			}
+		],
+		"loadAlumnosDeClase": [
+			{
+				"name": "loadAlumnosDeClase",
+				"path": "/Users/delfinrojas/Desktop/iphonedelfo/angular-frontend/src/app/shared/utils/loads/reservar-clase.load.ts",
+				"type": "function",
+				"isDefault": false
+			}
+		],
+		"reservarClase": [
+			{
+				"name": "reservarClase",
+				"path": "/Users/delfinrojas/Desktop/iphonedelfo/angular-frontend/src/app/shared/utils/loads/reservar-clase.load.ts",
+				"type": "function",
+				"isDefault": false
+			}
+		],
+		"loadReservasUsuario": [
+			{
+				"name": "loadReservasUsuario",
+				"path": "/Users/delfinrojas/Desktop/iphonedelfo/angular-frontend/src/app/shared/utils/loads/reservas-usuario.load.ts",
+				"type": "function",
+				"isDefault": false
+			}
+		],
+		"deleteReservaUsuario": [
+			{
+				"name": "deleteReservaUsuario",
+				"path": "/Users/delfinrojas/Desktop/iphonedelfo/angular-frontend/src/app/shared/utils/loads/reservas-usuario.load.ts",
+				"type": "function",
+				"isDefault": false
+			}
+		],
+		"ClasesAdminComponent": [
+			{
+				"name": "ClasesAdminComponent",
+				"path": "/Users/delfinrojas/Desktop/iphonedelfo/angular-frontend/src/app/modules/menu/clases-admin.component.ts",
+				"type": "class",
+				"isDefault": false
+			}
+		],
+		"ClasesProfesorComponent": [
+			{
+				"name": "ClasesProfesorComponent",
+				"path": "/Users/delfinrojas/Desktop/iphonedelfo/angular-frontend/src/app/modules/menu/clases-profesor.component.ts",
+				"type": "class",
+				"isDefault": false
+			}
+		],
+		"UsuarioBonosComponent": [
+			{
+				"name": "UsuarioBonosComponent",
+				"path": "/Users/delfinrojas/Desktop/iphonedelfo/angular-frontend/src/app/modules/menu/bonos-usuario.component.ts",
+				"type": "class",
+				"isDefault": false
+			}
+		],
+		"UsuarioReservasComponent": [
+			{
+				"name": "UsuarioReservasComponent",
+				"path": "/Users/delfinrojas/Desktop/iphonedelfo/angular-frontend/src/app/modules/menu/reservas-usuario.component.ts",
+				"type": "class",
+				"isDefault": false
+			}
+		],
+		"CrearClaseComponent": [
+			{
+				"name": "CrearClaseComponent",
+				"path": "/Users/delfinrojas/Desktop/iphonedelfo/angular-frontend/src/app/modules/menu/crear-clase.component.ts",
+				"type": "class",
+				"isDefault": false
+			}
+		],
+		"ClasesReservaComponent": [
+			{
+				"name": "ClasesReservaComponent",
+				"path": "/Users/delfinrojas/Desktop/iphonedelfo/angular-frontend/src/app/modules/menu/reservar-clase.component.ts",
+				"type": "class",
+				"isDefault": false
+			}
+		],
+		"FooterComponent": [
+			{
+				"name": "FooterComponent",
+				"module": "@shared/components/footer.compomonent",
+				"isDefault": false
+			},
+			{
+				"name": "FooterComponent",
+				"path": "/Users/delfinrojas/Desktop/iphonedelfo/angular-frontend/src/app/shared/components/footer.compomonent.ts",
+				"type": "class",
+				"isDefault": false
+			}
+		],
+		"AsideUsuarioComponent": [
+			{
+				"name": "AsideUsuarioComponent",
+				"path": "/Users/delfinrojas/Desktop/iphonedelfo/angular-frontend/src/app/shared/components/aside-usuario.component.ts",
+				"type": "class",
+				"isDefault": false
+			}
+		],
+		"AsideProfesorComponent": [
+			{
+				"name": "AsideProfesorComponent",
+				"module": "@shared/components/aside-profesor.component",
+				"isDefault": false
+			},
+			{
+				"name": "AsideProfesorComponent",
+				"path": "/Users/delfinrojas/Desktop/iphonedelfo/angular-frontend/src/app/shared/components/aside-profesor.component.ts",
+				"type": "class",
+				"isDefault": false
+			}
+		],
+		"LandingComponent": [
+			{
+				"name": "LandingComponent",
+				"path": "/Users/delfinrojas/Desktop/iphonedelfo/angular-frontend/src/app/modules/landing/landing.component.ts",
+				"type": "class",
+				"isDefault": false
+			}
+		],
+		"deleteReserva": [
+			{
+				"name": "deleteReserva",
+				"path": "/Users/delfinrojas/Desktop/iphonedelfo/angular-frontend/src/app/shared/utils/loads/reservar-clase.load.ts",
+				"type": "function",
+				"isDefault": false
+			}
+		],
+		"take": [
+			{
+				"name": "take",
+				"module": "rxjs/operators",
+				"isDefault": false
+			}
+		],
+		"Usuario": [
+			{
+				"name": "Usuario",
+				"path": "/Users/delfinrojas/Desktop/iphonedelfo/angular-frontend/src/app/shared/interfaces/usuario.interface.ts",
+				"type": "interface",
+				"isDefault": false
+			}
+		],
+		"Profesor": [
+			{
+				"name": "Profesor",
+				"path": "/Users/delfinrojas/Desktop/iphonedelfo/angular-frontend/src/app/shared/interfaces/profesor.interface.ts",
+				"type": "interface",
+				"isDefault": false
+			}
+		],
+		"LoginComponent": [
+			{
+				"name": "LoginComponent",
+				"path": "/Users/delfinrojas/Desktop/iphonedelfo/angular-frontend/src/app/modules/login/login.component.ts",
+				"type": "class",
+				"isDefault": false
+			}
+		],
+		"RegisterComponent": [
+			{
+				"name": "RegisterComponent",
+				"path": "/Users/delfinrojas/Desktop/iphonedelfo/angular-frontend/src/app/modules/register/register.component.ts",
+				"type": "class",
+				"isDefault": false
+			}
+		],
+		"routes": [
+			{
+				"name": "routes",
+				"path": "/Users/delfinrojas/Desktop/iphonedelfo/angular-frontend/src/app/app.routes.ts",
+				"type": "const",
+				"isDefault": false
+			}
+		]
+	}
+}

@@ -4,4 +4,5 @@ export interface Usuario {
   email: string;
   roles?: string[];
   password?: string;
+  profile_image: string | null;
 }

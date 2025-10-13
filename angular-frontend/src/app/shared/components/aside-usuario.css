@@ -1,0 +1,163 @@
+/* ===== ASIDE GENERAL ===== */
+aside {
+  position: relative;
+  background: rgba(17, 24, 39, 0.9); /* gris oscuro translúcido */
+  backdrop-filter: blur(10px);
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 0 25px rgba(0, 0, 0, 0.4);
+  transition: all 0.3s ease-in-out;
+}
+
+/* Suave efecto de iluminación lateral */
+aside::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: linear-gradient(to bottom, #10b981, #3b82f6);
+  border-radius: 0 2px 2px 0;
+  opacity: 0.7;
+}
+
+/* Hover general: más claro */
+aside:hover {
+  background: rgba(31, 41, 55, 0.95);
+  box-shadow: 2px 0 20px rgba(37, 99, 235, 0.25);
+}
+
+/* ===== BOTONES PRINCIPALES ===== */
+aside button {
+  width: 100%;
+  position: relative;
+  border-radius: 8px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  background: linear-gradient(90deg, #1f2937, #374151);
+  color: #f9fafb;
+  padding: 0.6rem 1rem;
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+
+/* Efecto de brillo animado */
+aside button::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -120%;
+  width: 120%;
+  height: 100%;
+  background: linear-gradient(120deg, transparent, rgba(255,255,255,0.4), transparent);
+  transition: all 0.7s ease;
+}
+aside button:hover::after {
+  left: 100%;
+}
+aside button:hover {
+  background: linear-gradient(90deg, #10b981, #3b82f6);
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(37,99,235,0.3);
+}
+
+/* ===== UL (MENÚ DESPLEGABLE) ===== */
+aside ul {
+  margin-top: 0.5rem;
+  list-style: none;
+  padding-left: 0.5rem;
+  border-left: 2px solid rgba(255,255,255,0.1);
+  overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+  transition: max-height 0.4s ease, opacity 0.4s ease;
+}
+
+/* Activo (cuando se muestra el menú) */
+aside ul.ng-trigger, 
+aside ul.ng-animating,
+aside ul[ng-reflect-ng-if="true"] {
+  max-height: 1000px; /* animación tipo acordeón */
+  opacity: 1;
+}
+
+/* ===== LINKS ===== */
+aside a {
+  display: block;
+  padding: 0.4rem 0.75rem;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.9);
+  text-decoration: none;
+  position: relative;
+  transition: all 0.25s ease;
+}
+
+/* Hover */
+aside a:hover {
+  color: #facc15; /* amarillo bonito */
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateX(4px);
+}
+
+/* Indicador lateral activo */
+aside a.text-yellow-400 {
+  color: #facc15;
+  font-weight: 600;
+  background: rgba(255, 255, 255, 0.1);
+  border-left: 3px solid #facc15;
+  padding-left: 0.9rem;
+}
+
+/* Pequeño destello al hacer hover */
+aside a::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: -10px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #facc15;
+  opacity: 0;
+  transform: translateY(-50%) scale(0);
+  transition: all 0.25s ease;
+}
+aside a:hover::after {
+  opacity: 1;
+  transform: translateY(-50%) scale(1);
+}
+
+/* ===== ANIMACIÓN DE ENTRADA ===== */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(-5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+aside ul li {
+  animation: fadeInUp 0.3s ease forwards;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  aside {
+    width: 100%;
+    min-height: auto;
+    border-right: none;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    padding: 0.5rem;
+  }
+  aside button {
+    font-size: 1rem;
+    padding: 0.5rem;
+  }
+  aside ul {
+    border-left: none;
+    text-align: center;
+  }
+  aside a {
+    padding: 0.4rem;
+    font-size: 0.9rem;
+  }
+}

@@ -1,0 +1,122 @@
+/* === CONTENEDOR GENERAL === */
+aside {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border-right: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 2px 0 20px rgba(0, 0, 0, 0.2);
+  padding: 1rem 0.5rem;
+  color: #fff;
+  transition: all 0.4s ease;
+}
+
+/* Suave efecto al hacer hover sobre todo el aside */
+aside:hover {
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: 4px 0 30px rgba(0, 0, 0, 0.3);
+}
+
+/* === BOTONES PRINCIPALES (Mi perfil / Menú profesor) === */
+aside button {
+  position: relative;
+  width: 100%;
+  font-weight: 700;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  letter-spacing: 0.5px;
+  background: linear-gradient(90deg, #10b981, #2563eb);
+  transition: transform 0.2s ease, box-shadow 0.3s ease;
+  color: white;
+}
+
+/* Efecto de brillo que cruza el botón */
+aside button::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -120%;
+  width: 120%;
+  height: 100%;
+  background: linear-gradient(120deg, transparent, rgba(255,255,255,0.4), transparent);
+  transition: all 0.6s ease;
+}
+aside button:hover::after {
+  left: 100%;
+}
+aside button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 20px rgba(37,99,235,0.4);
+}
+
+/* === LISTAS INTERNAS === */
+aside ul {
+  padding-left: 0.5rem;
+  margin-top: 0.5rem;
+  list-style: none;
+  border-left: 2px solid rgba(255,255,255,0.1);
+  transition: all 0.3s ease;
+  animation: fadeIn 0.3s ease forwards;
+  transform-origin: top;
+  opacity: 0;
+  transform: scaleY(0.9);
+}
+
+aside ul.ng-trigger, aside ul.ng-animating {
+  opacity: 1 !important;
+  transform: scaleY(1) !important;
+}
+
+/* Aparición con animación */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* === ENLACES === */
+aside a {
+  display: block;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.3rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+  text-decoration: none;
+  color: rgba(255,255,255,0.9);
+  transition: all 0.25s ease;
+}
+
+/* Hover general */
+aside a:hover {
+  background: rgba(255,255,255,0.1);
+  color: #fde047; /* amarillo Tailwind */
+  transform: translateX(4px);
+}
+
+/* Activo (routerLinkActive) */
+aside a.text-yellow-400 {
+  color: #facc15;
+  font-weight: 600;
+  border-left: 3px solid #facc15;
+  background: rgba(255,255,255,0.08);
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 768px) {
+  aside {
+    padding: 0.5rem;
+    box-shadow: none;
+    border-right: none;
+    border-bottom: 1px solid rgba(255,255,255,0.15);
+  }
+  aside button {
+    font-size: 1rem;
+    padding: 0.5rem;
+  }
+  aside ul {
+    border-left: none;
+    text-align: center;
+  }
+  aside a {
+    padding: 0.4rem;
+    font-size: 0.9rem;
+  }
+}

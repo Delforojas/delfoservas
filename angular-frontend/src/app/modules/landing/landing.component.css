@@ -1,0 +1,30 @@
+/* Fondo negro para el main general */
+:host main {
+  background-color: #000 !important;
+  color: #f5f5f5; /* texto claro para contraste */
+  min-height: 100vh; /* asegura que cubra toda la pantalla */
+}
+
+/* Opcional: suaviza la transición de color cuando cambias de vista */
+:host main {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Si tus secciones internas tienen fondos claros, puedes añadir padding */
+:host main > section {
+  border-radius: 12px;
+  margin: 1.5rem;
+}
+
+app-aside-profesor {
+  background-color: #000 !important;
+  color: #f5f5f5 !important; /* texto claro */
+  min-height: 100vh;         /* que ocupe toda la altura */
+  border-right: 1px solid rgba(255,255,255,0.1);
+}
+
+/* Opcional: efecto sutil con degradado */
+app-aside-profesor {
+  background: linear-gradient(180deg, #000 0%, #111 100%);
+  box-shadow: 4px 0 20px rgba(0, 0, 0, 0.6);
+}

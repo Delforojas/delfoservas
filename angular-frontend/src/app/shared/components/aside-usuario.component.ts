@@ -17,6 +17,7 @@ import { Alumno } from '../interfaces/alumno.interface'
   standalone: true,
   imports: [CommonModule,  RouterModule],
   templateUrl: 'aside-usuario.html' ,
+  styleUrls : ['../../shared/components/aside-profesor.css']
 })
 export class AsideUsuarioComponent implements OnInit {
   usuarios: any = null;
