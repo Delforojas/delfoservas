@@ -30,6 +30,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'string', enumType: RoleEnum::class)]
     private RoleEnum $role = RoleEnum::USER;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $profileImage = null;
 
      public function getId(): ?int { return $this->id; }
    
@@ -52,7 +54,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setRole(RoleEnum $role): static{$this->role = $role;                 return $this;}
 
     public function getRoles(): array{return [$this->role->value];}
-   
+    
+    public function getProfileImage(): ?string {return $this->profileImage;}
 
+    public function setProfileImage(?string $profileImage): self { $this->profileImage = $profileImage;  return $this; }
     
 }

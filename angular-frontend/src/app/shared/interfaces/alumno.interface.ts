@@ -3,4 +3,5 @@
   alumno_id: number;
   alumno_nombre: string;
   alumno_email: string;
+  avatar?: string | null;
 }
