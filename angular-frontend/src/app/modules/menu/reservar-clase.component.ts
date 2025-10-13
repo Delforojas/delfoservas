@@ -101,6 +101,21 @@ export class ClasesReservaComponent implements OnInit{
     this.state.claseSeleccionadaId = id;
     this.cargarAlumnos(id);
   }
+getAvatarUrl(alumno: any): string {
+  const avatar = alumno?.avatar;
+
+  if (avatar) {
+    // Si el backend ya devuelve la ruta /uploads/avatars/... añadimos el host
+    if (!avatar.startsWith('http')) {
+      return `http://localhost:8000${avatar}`;
+    }
+    // Si ya es una URL completa (poco común pero posible)
+    return avatar;
+  }
+
+  // Imagen por defecto si no hay avatar
+  return 'assets/default-avatar.png';
+}
 
   trackByClase = (_: number, c: VistaClase) => {
     return c.id;
