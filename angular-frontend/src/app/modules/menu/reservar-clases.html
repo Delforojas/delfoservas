@@ -107,7 +107,7 @@
           >
            <ng-container *ngIf="state.alumnos[i]; else libreSlot">
           <img
-            [src]="getAvatarUrl(state.alumnos[i])"
+            [src]="state.alumnos[i].avatar || 'assets/default-avatar.png'"
             alt="Avatar"
             class="w-12 h-12 rounded-full object-cover mb-1"
           />

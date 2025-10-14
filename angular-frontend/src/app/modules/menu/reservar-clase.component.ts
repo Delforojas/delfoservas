@@ -105,17 +105,6 @@ export class ClasesReservaComponent implements OnInit{
     this.cargarAlumnos(id);
   }
 
-getAvatarUrl(alumno: any): string {
-  if (!alumno?.avatar) return 'assets/default-avatar.png';
-
-  // Si ya viene con http (por ejemplo, devuelta desde el backend completa)
-  if (alumno.avatar.startsWith('http')) {
-    return alumno.avatar;
-  }
-
-  // Si no, la completamos con la base del backend (que ya tienes en environment)
-  return `${environment.base}/${alumno.avatar}`;
-}
   trackByClase = (_: number, c: VistaClase) => {
     return c.id;
   };

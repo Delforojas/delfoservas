@@ -21,11 +21,12 @@
             ],
             "tsConfig": "tsconfig.app.json",
             "assets": [
+              
               "src/assets",
               {
                 "glob": "**/*",
-                "input": "../symfony-backend/public",
-                "output": "/"
+                "input": "../symfony-backend/app/public/uploads",
+                "output": "/uploads"
               }
             ],
             "styles": [
