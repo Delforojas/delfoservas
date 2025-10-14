@@ -45,27 +45,35 @@ public function index(UserRepository $repo): JsonResponse
    
     return $this->json($data);
 }
- #[Route('/me', name: 'users_me', methods: ['GET'])]
-public function me(): JsonResponse
+#[Route('/me', name: 'user_me', methods: ['GET'])]
+public function me(Request $request): JsonResponse
 {
     $user = $this->getUser();
+
     if (!$user) {
         return $this->json(['error' => 'No autenticado'], 401);
     }
 
-    /** @var \App\Entity\User $user */
+    $imagePath = $user->getProfileImage();
+
+    if ($imagePath) {
+        // Si no contiene "avatars/", lo añadimos
+        if (!str_contains($imagePath, 'avatars/')) {
+            $imagePath = 'avatars/' . $imagePath;
+        }
+        $avatarUrl = $request->getSchemeAndHttpHost() . '/uploads/' . $imagePath;
+    } else {
+        $avatarUrl = $request->getSchemeAndHttpHost() . '/assets/default-avatar.png';
+    }
 
     return $this->json([
         'id'     => $user->getId(),
         'nombre' => $user->getNombre(),
         'email'  => $user->getEmail(),
         'roles'  => $user->getRoles(),
-        'avatar' => $user->getProfileImage()
-            ? '/uploads/avatars/' . $user->getProfileImage()
-            : null,
+        'avatar' => $avatarUrl,
     ]);
 }
-
    #[Route('/{id}', name: 'users_show', methods: ['GET'], requirements: ['id' => '\d+'])]
 public function show(User $user): JsonResponse
 {
@@ -77,7 +85,7 @@ public function show(User $user): JsonResponse
 
     ]);
 }
-#[Route('/register', name: 'register', methods: ['POST'])]
+#[Route('/register', name: 'user_register', methods: ['POST'])]
 public function register(
     Request $request,
     UserPasswordHasherInterface $passwordHasher,
@@ -87,10 +95,11 @@ public function register(
     $nombre   = $request->request->get('nombre');
     $email    = $request->request->get('email');
     $password = $request->request->get('password');
-    $imageFile = $request->files->get('avatar'); // 👈 corregido
+    /** @var UploadedFile|null $imageFile */
+    $imageFile = $request->files->get('avatar');
 
     if (empty($email) || empty($password)) {
-        return $this->json(['error' => 'email y password son obligatorios'], 400);
+        return $this->json(['error' => 'Email y contraseña son obligatorios'], 400);
     }
 
     if ($em->getRepository(User::class)->findOneBy(['email' => $email])) {
@@ -109,7 +118,7 @@ public function register(
             $this->getParameter('uploads_directory') . '/avatars',
             $fileName
         );
-        $user->setProfileImage($fileName);
+        $user->setProfileImage('avatars/' . $fileName);
     }
 
     $em->persist($user);
@@ -121,17 +130,16 @@ public function register(
         'message' => 'Usuario creado correctamente',
         'token'   => $token,
         'user'    => [
-            'id'      => $user->getId(),
-            'nombre'  => $user->getNombre(),
-            'email'   => $user->getEmail(),
-            'roles'   => $user->getRoles(),
-            'avatar'  => $user->getProfileImage()
-                ? '/uploads/avatars/' . $user->getProfileImage()
+            'id'     => $user->getId(),
+            'nombre' => $user->getNombre(),
+            'email'  => $user->getEmail(),
+            'roles'  => $user->getRoles(),
+            'avatar' => $user->getProfileImage()
+                ? 'uploads/avatars/' . $user->getProfileImage()
                 : null,
         ],
     ], 201);
 }
-
 
 #[Route('/{id}', name: 'users_update', methods: ['PUT'], requirements: ['id' => '\d+'])]
 public function update(

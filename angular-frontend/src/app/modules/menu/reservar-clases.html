@@ -105,16 +105,16 @@
               'bg-white text-gray-700 border border-gray-300 shadow-sm hover:bg-green-100': !state.alumnos[i]
             }"
           >
-            <ng-container *ngIf="state.alumnos[i]; else libreSlot">
-              <img
-  [src]="getAvatarUrl(state.alumnos[i])"
-  alt="Avatar"
-  class="w-12 h-12 rounded-full object-cover mb-1"
-/>
-              <span class="text-xs text-white truncate">
-                {{ state.alumnos[i].alumno_nombre }}
-              </span>
-            </ng-container>
+           <ng-container *ngIf="state.alumnos[i]; else libreSlot">
+          <img
+            [src]="getAvatarUrl(state.alumnos[i])"
+            alt="Avatar"
+            class="w-12 h-12 rounded-full object-cover mb-1"
+          />
+          <span class="text-xs text-white truncate">
+            {{ state.alumnos[i].alumno_nombre }}
+          </span>
+          </ng-container>
 
             <ng-template #libreSlot>
               <span class="text-gray-400 text-sm">Libre</span>

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { environment } from 'app/environments/environments';
 
 import { ClaseService } from '../../shared/services/clases.service';
 import { ReservationService } from '../../shared/services/reservation.service';
@@ -26,6 +27,7 @@ import {
   Dia,
   createInitialClasesReservaState,
 } from '../../shared/models/reservas.models';
+import { Alumno } from '@shared/interfaces/alumno.interface';
 
 @Component({
   selector: 'app-reservar-clases',
@@ -78,6 +80,7 @@ export class ClasesReservaComponent implements OnInit{
 
   cargarAlumnos(id: number): void {
     loadAlumnosDeClase(this, id);
+    
   }
 
   reservar(id: number): void {
@@ -101,22 +104,18 @@ export class ClasesReservaComponent implements OnInit{
     this.state.claseSeleccionadaId = id;
     this.cargarAlumnos(id);
   }
-getAvatarUrl(alumno: any): string {
-  const avatar = alumno?.avatar;
 
-  if (avatar) {
-    // Si el backend ya devuelve la ruta /uploads/avatars/... añadimos el host
-    if (!avatar.startsWith('http')) {
-      return `http://localhost:8000${avatar}`;
-    }
-    // Si ya es una URL completa (poco común pero posible)
-    return avatar;
+getAvatarUrl(alumno: any): string {
+  if (!alumno?.avatar) return 'assets/default-avatar.png';
+
+  // Si ya viene con http (por ejemplo, devuelta desde el backend completa)
+  if (alumno.avatar.startsWith('http')) {
+    return alumno.avatar;
   }
 
-  // Imagen por defecto si no hay avatar
-  return 'assets/default-avatar.png';
+  // Si no, la completamos con la base del backend (que ya tienes en environment)
+  return `${environment.base}/${alumno.avatar}`;
 }
-
   trackByClase = (_: number, c: VistaClase) => {
     return c.id;
   };
