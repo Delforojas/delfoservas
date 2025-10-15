@@ -57,14 +57,15 @@ public function me(Request $request): JsonResponse
     $imagePath = $user->getProfileImage();
 
     if ($imagePath) {
-        // Si no contiene "avatars/", lo añadimos
-        if (!str_contains($imagePath, 'avatars/')) {
-            $imagePath = 'avatars/' . $imagePath;
-        }
-        $avatarUrl = $request->getSchemeAndHttpHost() . '/uploads/' . $imagePath;
-    } else {
-        $avatarUrl = $request->getSchemeAndHttpHost() . '/assets/default-avatar.png';
+    // Si no contiene "avatars/", lo añadimos
+    if (!str_contains($imagePath, 'avatars/')) {
+        $imagePath = 'avatars/' . $imagePath;
     }
+    $avatarUrl = $request->getSchemeAndHttpHost() . '/uploads/' . $imagePath;
+} else {
+    // ⚡ No devolvemos URL de backend, devolvemos null
+    $avatarUrl = null;
+}
 
     return $this->json([
         'id'     => $user->getId(),
