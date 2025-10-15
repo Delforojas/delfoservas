@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -15,11 +15,12 @@ import { showToast } from '../../shared/utils/test-messages';
   selector: 'app-register',
   templateUrl: './register.html',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, RouterModule,]
+  imports: [ReactiveFormsModule, CommonModule, RouterModule]
 })
 export class RegisterComponent {
   form: FormGroup;
   selectedFile?: File;
+  previewUrl?: string; // 👈 Nueva variable para mostrar la imagen
 
   constructor(
     private fb: FormBuilder,
@@ -33,22 +34,34 @@ export class RegisterComponent {
       nombre: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required],
+      confirmPassword: ['', Validators.required],
       avatar: [null],
-    });
+    },
+  { validators: this.passwordMatchValidator });
   }
 
-  // 🔹 Captura la imagen del input file
   onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
+
     if (input.files && input.files.length > 0) {
-      this.selectedFile = input.files[0];
+      const file = input.files[0];
+      this.selectedFile = file;
+
+      // ⚡ Generamos la previsualización
+      const reader = new FileReader();
+      reader.onload = e => this.previewUrl = e.target?.result as string;
+      reader.readAsDataURL(file);
+
+      console.log('📸 Archivo seleccionado:', file.name);
+    } else {
+      this.selectedFile = undefined;
+      this.previewUrl = undefined;
+      console.log('⚠️ No se seleccionó ningún archivo');
     }
   }
 
   submit(): void {
-    if (this.form.invalid) {
-      return;
-    }
+    if (this.form.invalid) return;
 
     const formData = new FormData();
     formData.append('nombre', this.form.get('nombre')?.value);
@@ -69,4 +82,16 @@ export class RegisterComponent {
       },
     });
   }
+
+clearImage(): void {
+  this.selectedFile = undefined;
+  this.previewUrl = undefined;
+  console.log('🗑️ Imagen eliminada');
+}
+passwordMatchValidator(control: AbstractControl): { [key: string]: boolean } | null {
+          const password = control.get('password');
+          const confirmPassword = control.get('confirmPassword');
+          if (!password || !confirmPassword) return null;
+          return password.value === confirmPassword.value ? null : { mismatch: true };
+        } 
 }

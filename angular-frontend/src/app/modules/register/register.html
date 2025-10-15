@@ -1,15 +1,16 @@
 <div class="flex items-center justify-center min-h-screen bg-gray-600">
-  <div class="bg-white shadow-lg rounded-lg p-8 w-full max-w-md">
-    <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">Registro</h2>
+  <div class="bg-white shadow-2xl rounded-2xl p-8 w-full max-w-md">
+    <h2 class="text-3xl font-bold text-gray-800 mb-8 text-center">Registro</h2>
 
-    <form [formGroup]="form" (ngSubmit)="submit()" class="space-y-4">
+    <form [formGroup]="form" (ngSubmit)="submit()" class="space-y-6">
+
       <!-- Nombre -->
       <div>
         <input 
           formControlName="nombre" 
           placeholder="Nombre"
           type="text"
-          class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+          class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
         >
       </div>
 
@@ -19,24 +20,104 @@
           formControlName="email" 
           placeholder="Email" 
           type="email"
-          class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+          class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
         >
       </div>
 
-      <!-- Contraseña -->
-      <div>
-        <input 
-          formControlName="password" 
-          type="password" 
-          placeholder="Contraseña"
-          class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+      <!-- Avatar -->
+      <div class="flex flex-col items-center mt-4">
+        <label for="avatar" class="text-gray-700 text-sm font-medium mb-2">
+          Foto de perfil
+        </label>
+
+        <!-- Círculo de avatar -->
+        <div class="relative w-16 h-16">
+          <label for="avatar" class="cursor-pointer group block">
+            <img 
+              *ngIf="previewUrl; else defaultAvatar"
+              [src]="previewUrl"
+              alt="Vista previa"
+              class="w-16 h-16 rounded-full object-cover border-2 border-gray-300 shadow-sm transition-transform duration-200 group-hover:scale-105"
+            />
+            <!-- Placeholder si no hay imagen -->
+            <ng-template #defaultAvatar>
+              <div class="w-16 h-16 flex items-center justify-center rounded-full bg-gray-200 border-2 border-gray-300 shadow-sm group-hover:bg-gray-300 transition">
+                <span class="text-gray-500 text-2xl font-bold group-hover:text-gray-700">+</span>
+              </div>
+            </ng-template>
+          </label>
+        </div>
+
+        <!-- Input oculto -->
+        <input
+          id="avatar"
+          type="file"
+          (change)="onFileSelected($event)"
+          accept="image/*"
+          class="hidden"
+        />
+
+        <!-- Botón eliminar -->
+        <button 
+          *ngIf="previewUrl"
+          type="button"
+          (click)="clearImage()"
+          class="mt-2 text-xs text-red-500 hover:text-red-700 hover:underline transition"
         >
+          Eliminar foto
+        </button>
       </div>
+
+      <!-- Contraseña -->
+<div>
+  <input 
+    formControlName="password" 
+    type="password" 
+    placeholder="Contraseña"
+    class="w-full px-4 py-2 border rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none transition"
+    [ngClass]="{
+      'border-gray-300': !form.get('password')?.touched,
+      'border-green-400': form.get('password')?.valid && form.get('password')?.touched,
+      'border-red-400': form.get('password')?.invalid && form.get('password')?.touched
+    }"
+  />
+  <p *ngIf="form.get('password')?.hasError('minlength') && form.get('password')?.touched"
+     class="text-red-500 text-xs mt-1">
+    La contraseña debe tener al menos 6 caracteres
+  </p>
+</div>
+
+<!-- Confirmar contraseña -->
+<div class="relative">
+  <input 
+    formControlName="confirmPassword"
+    type="password"
+    placeholder="Confirmar contraseña"
+    class="w-full px-4 py-2 border rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none pr-10 transition"
+    [ngClass]="{
+      'border-gray-300': !form.get('confirmPassword')?.touched,
+      'border-green-400': !form.hasError('mismatch') && form.get('confirmPassword')?.value,
+      'border-red-400': form.hasError('mismatch') && form.get('confirmPassword')?.touched
+    }"
+  />
+
+  <!-- Iconos de validación visual -->
+  <span *ngIf="!form.hasError('mismatch') && form.get('confirmPassword')?.value"
+        class="absolute right-3 top-2.5 text-green-500 text-lg transition-transform duration-200">✅</span>
+
+  <span *ngIf="form.hasError('mismatch') && form.get('confirmPassword')?.touched"
+        class="absolute right-3 top-2.5 text-red-500 text-lg transition-transform duration-200">❌</span>
+
+  <p *ngIf="form.hasError('mismatch') && form.get('confirmPassword')?.touched"
+     class="text-red-500 text-xs mt-1">
+    Las contraseñas no coinciden
+  </p>
+</div>
 
       <!-- Botón de registro -->
       <button 
         type="submit" 
-        class="w-full bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-lg transition duration-200"
+        class="w-full bg-green-500 hover:bg-green-600 text-white font-semibold py-2.5 px-4 rounded-lg shadow transition duration-200"
       >
         Registrarse
       </button>
@@ -45,10 +126,11 @@
       <button 
         type="button" 
         routerLink="/login"
-        class="w-full bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded-lg transition duration-200"
+        class="w-full bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2.5 px-4 rounded-lg shadow transition duration-200"
       >
-        Volver a Login
+        Volver al Login
       </button>
+
     </form>
   </div>
 </div>
