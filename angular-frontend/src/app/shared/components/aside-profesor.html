@@ -1,9 +1,9 @@
-<aside >
+<aside class= h-screen>
 
   <!-- Bloque Usuario -->
-  <div>
+  <div >
     <button (click)="toggleMenu()"
-            class="w-full block text-left text-lg sm:text-xl font-bold mb-2 backdrop-blur shadow bg-gradient-to-r from-emerald-500 to-blue-60 py-2 hover:bg-gray-700">
+            class="w-full block text-left text-lg sm:text-xl font-bold mb-2 backdrop-blur shadow hover:bg-black ">
       👤 Mi Perfil
     </button>
 
@@ -17,23 +17,17 @@
         </a>
       </li>
       <li>
-        <a routerLink="reservas"
-           routerLinkActive="text-yellow-400"
-           class="block px-2 py-1 hover:text-yellow-300 hover:text-yellow-300">
+        <a routerLink="reservas">
           📅 Mis Reservas
         </a>
       </li>
       <li>
-        <a routerLink="pagosusuario"
-           routerLinkActive="text-yellow-400"
-           class="block px-2 py-1 hover:text-yellow-300 hover:text-yellow-300">
+        <a routerLink="pagosusuario">
           🧾 Mis Pagos
         </a>
       </li>
        <li>
-        <a routerLink="reservasclase"
-           routerLinkActive="text-yellow-400"
-           class="block px-2 py-1 hover:text-yellow-300 hover:text-yellow-300">
+        <a routerLink="reservasclase">
           Reservar Clases
         </a>
       </li>
@@ -43,7 +37,7 @@
   <!-- Bloque Profesor -->
   <div *ngIf="auth.isAdmin() || auth.isTeacher()">
     <button (click)="toggleMenuAdmin()"
-            class="w-full block text-left text-lg sm:text-xl font-bold mb-2 backdrop-blur shadow bg-gradient-to-r from-emerald-500 to-blue-60 py-2 hover:bg-gray-700">
+            class="w-full block text-left text-lg sm:text-xl font-bold mb-2 backdrop-blur shadow hover:bg-black">
       🎓 Menú Profesor
     </button>
 

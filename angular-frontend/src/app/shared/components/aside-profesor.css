@@ -1,59 +1,43 @@
-/* === CONTENEDOR GENERAL === */
 aside {
+  height: 100%;
   width: 100%;
-  background: rgba(255, 255, 255, 0.05);
+  background: rgb(2, 2, 2);
   backdrop-filter: blur(10px);
-  border-right: 1px solid rgba(255, 255, 255, 0.15);
   box-shadow: 2px 0 20px rgba(0, 0, 0, 0.2);
-  padding: 1rem 0.5rem;
-  color: #fff;
   transition: all 0.4s ease;
 }
 
-/* Suave efecto al hacer hover sobre todo el aside */
+/* 🔥 Cambia el fondo y sombra del aside en hover */
 aside:hover {
-  background: rgba(255, 255, 255, 0.08);
+  background: #4a4a49;
   box-shadow: 4px 0 30px rgba(0, 0, 0, 0.3);
 }
 
-/* === BOTONES PRINCIPALES (Mi perfil / Menú profesor) === */
+/* === BOTONES PRINCIPALES === */
 aside button {
+  padding: 0.75rem;
   position: relative;
   width: 100%;
-  font-weight: 700;
-  border-radius: 0.5rem;
-  overflow: hidden;
-  letter-spacing: 0.5px;
-  background: linear-gradient(90deg, #10b981, #2563eb);
-  transition: transform 0.2s ease, box-shadow 0.3s ease;
-  color: white;
+  font-weight: 500;
+  border-radius: 0.3rem;
+  letter-spacing: 1px;
+  color: rgb(7, 3, 248); /* 👈 Siempre negro */
+  background: rgb(0, 0, 0); /* opcional, si los quieres con fondo claro */
+  pointer-events: auto;
 }
 
-/* Efecto de brillo que cruza el botón */
-aside button::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: -120%;
-  width: 120%;
-  height: 100%;
-  background: linear-gradient(120deg, transparent, rgba(255,255,255,0.4), transparent);
-  transition: all 0.6s ease;
-}
-aside button:hover::after {
-  left: 100%;
-}
-aside button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 5px 20px rgba(37,99,235,0.4);
+/* 💡 Esto asegura que aunque el aside cambie de color,
+   los botones mantengan el suyo */
+aside:hover button {
+  color: rgb(0, 29, 250); /* fuerza el color negro */
+  background: rgb(9, 8, 8); /* o el que uses */
 }
 
 /* === LISTAS INTERNAS === */
 aside ul {
-  padding-left: 0.5rem;
+  
   margin-top: 0.5rem;
   list-style: none;
-  border-left: 2px solid rgba(255,255,255,0.1);
   transition: all 0.3s ease;
   animation: fadeIn 0.3s ease forwards;
   transform-origin: top;
@@ -75,27 +59,27 @@ aside ul.ng-trigger, aside ul.ng-animating {
 /* === ENLACES === */
 aside a {
   display: block;
-  padding: 0.5rem 0.75rem;
-  border-radius: 0.3rem;
+  padding:  0.75rem;
+  border-radius: 0.2rem;
   font-size: 0.95rem;
   font-weight: 500;
   text-decoration: none;
-  color: rgba(255,255,255,0.9);
+  color: rgb(96, 222, 234);
   transition: all 0.25s ease;
 }
 
 /* Hover general */
 aside a:hover {
-  background: rgba(255,255,255,0.1);
-  color: #fde047; /* amarillo Tailwind */
+  background: black;
+  color: rgb(96, 222, 234); /* amarillo Tailwind */
   transform: translateX(4px);
 }
 
 /* Activo (routerLinkActive) */
 aside a.text-yellow-400 {
-  color: #facc15;
+  color: #060707;
   font-weight: 600;
-  border-left: 3px solid #facc15;
+  border-left: 3px solid #1076bf;
   background: rgba(255,255,255,0.08);
 }
 
