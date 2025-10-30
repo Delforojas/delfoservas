@@ -10,12 +10,13 @@ import { ToastService } from '../../shared/services/toast.service';
 import { NavigationService } from '../../shared/services/navigation.service';
 import { handleHttpError } from '../../shared/utils/http-error';
 import { showToast } from '../../shared/utils/test-messages';
+import { HeaderComponent } from '@shared/components/header.component';
 
 @Component({
   selector: 'app-register',
   templateUrl: './register.html',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, RouterModule],
+  imports: [ReactiveFormsModule, CommonModule, RouterModule ,HeaderComponent],
   styleUrl: './register.component.css'
 })
 export class RegisterComponent {

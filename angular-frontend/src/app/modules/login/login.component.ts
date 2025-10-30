@@ -9,6 +9,8 @@ import { NavigationService } from '../../shared/services/navigation.service';
 //import { FooterComponent } from '@shared/components/footer.compomonent';
 import { handleHttpError } from '../../shared/utils/http-error';
 import { showToast } from '../../shared/utils/test-messages';
+import { FooterComponent } from '@shared/components/footer.compomonent';
+import { HeaderComponent } from '@shared/components/header.component';
 
 @Component({
   selector: 'app-login',
@@ -18,8 +20,8 @@ import { showToast } from '../../shared/utils/test-messages';
   imports: [
     FormsModule,
     ReactiveFormsModule,
-    RouterModule,     // ✅ necesario para que routerLink funcione
-      // ✅ tu footer reutilizable
+    RouterModule, 
+    HeaderComponent,
   ],
 })
 export class LoginComponent {

@@ -23,6 +23,7 @@
 
       <!-- Botón logout -->
       <button
+        *ngIf="!isAuthRoute()"
         (click)="logout()"
         class="bg-red-500 hover:bg-red-600 text-white font-semibold py-1.5 px-3 rounded-lg transition shadow"
       >
