@@ -108,4 +108,16 @@ export class ClasesReservaComponent implements OnInit{
   trackByClase = (_: number, c: VistaClase) => {
     return c.id;
   };
+  getAvatar(alumno: any): string {
+  const avatar = alumno?.avatar;
+
+  // 🧱 Caso 1: no tiene avatar → usamos el de assets
+  if (!avatar) return 'assets/default-avatar.png';
+
+  // 🧱 Caso 2: ya viene con http:// o https:// → se usa tal cual
+  if (avatar.startsWith('http')) return avatar;
+
+  // 🧱 Caso 3: viene relativo (por ejemplo "/uploads/avatars/...") → lo completamos
+  return `${environment.base}/${avatar.replace(/^\/+/, '')}`;
+}
 }

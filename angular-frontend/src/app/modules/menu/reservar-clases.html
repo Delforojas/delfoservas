@@ -1,4 +1,4 @@
-<section class="h-[40%] p-4 sm:p-6 backdrop-blur shadow bg-gradient-to-r from-emerald-500 to-blue-60  rounded-xl shadow-lg">
+<section class="h-[40%] p-4 sm:p-6 backdrop-blur shadow ">
   <h2 class="text-xl sm:text-2xl font-bold text-center mb-4">Reservar Clases</h2>
 
   <!-- Botones de días -->
@@ -11,59 +11,59 @@
   </div>
 
   <!-- Tabla -->
-  <div class="w-full h-full bg-yellow  sm:p-4">
+  <div class="w-full h-full ">
     <table *ngIf="clasesDelDia.length > 0"
-           class="w-full h-full table-fixed text-xs sm:text-sm bg-white  overflow-hidden">
-      <thead class="backdrop-blur shadow bg-gradient-to-r from-emerald-500 to-blue-60 ">
-        <tr class="text-left">
-          <th class="px-2 py-2 sm:px-4">Nombre</th>
-          <th class="px-2 py-2 sm:px-4">Fecha</th>
-          <th class="px-2 py-2 sm:px-4">Hora</th>
-          <th class="px-2 py-2 sm:px-4 hidden md:table-cell">Profesor</th>
-          <th class="px-2 py-2 sm:px-4 hidden md:table-cell">Sala</th>
-          <th class="px-2 py-2 sm:px-4 text-center">Plazas</th>
-          <th class="px-2 py-2 sm:px-4 text-center">Acción</th>
+           class="w-full table-fixed  overflow-hidden">
+      <thead class="shadow bg-black  ">
+        <tr class="text-left ">
+          <th >Nombre</th>
+          <th >Fecha</th>
+          <th >Hora</th>
+          <th >Profesor</th>
+          <th >Sala</th>
+          <th >Plazas</th>
+          <th ></th>
         </tr>
       </thead>
 
       <tbody>
         <ng-container *ngFor="let c of clasesDelDia; trackBy: trackByClase">
           <!-- Fila principal -->
-          <tr class="bg-yellow-200 hover:bg-green-200 hover:text-black cursor-pointer"
+          <tr 
               (click)="toggleTablaAlumnos(c.id)">
-            <td class="pl-4 whitespace-nowrap ">{{ c.nombre }}</td>
-            <td class="pl-4 whitespace-nowrap">{{ c.fecha  | date:'dd/MM/yy' }}</td>
-            <td class="px-2 py-2 sm:px-4 ">{{ c.hora }}</td>
+            <td class="">{{ c.nombre }}</td>
+            <td class=>{{ c.fecha  | date:'dd/MM/yy' }}</td>
+            <td class=>{{ c.hora }}</td>
 
             <!-- Ocultas en móvil -->
-            <td class="px-2 py-2 sm:px-4 whitespace-normal break-words hidden md:table-cell">
+            <td class="">
               {{ c.profesor ?? c['teacher'] ?? '-' }}
             </td>
-            <td class="px-2 py-2 sm:px-4 whitespace-normal break-words hidden md:table-cell">
+            <td class="">
               {{ c.sala ?? c['room'] ?? '-' }}
             </td>
 
-            <td class="px-2 py-2 sm:px-4 text-center">
+            <td class="">
              {{ c.plazas }} / {{ c.aforo_clase }}
               <span *ngIf="c.completa" class="text-red-600 font-semibold ml-1">Completa</span>
             </td>
 
-            <td class="px-2 py-2 sm:px-4">
+            <td class="">
               <div class="flex justify-center">
                <button
-  class="px-2 py-1 sm:px-3 sm:py-1 rounded text-white text-[11px] sm:text-xs transition
-        disabled:opacity-60 disabled:cursor-not-allowed"
-  [ngClass]="{
-    'bg-green-600 hover:bg-green-700': !c.reservation_id,
-    'bg-red-600 hover:bg-red-700': !!c.reservation_id
-  }"
-  (click)="
-    !c.reservation_id
-      ? reservar(c.id)
-      : delete(c.reservation_id, c.id);
-    $event.stopPropagation();
-  "
->
+                class="rounded text-white text-[11px] sm:text-xs transition
+                      disabled:opacity-60 disabled:cursor-not-allowed"
+                [ngClass]="{
+                  'bg-green-600 hover:bg-green-700': !c.reservation_id,
+                  'bg-red-600 hover:bg-red-700': !!c.reservation_id
+                }"
+                (click)="
+                  !c.reservation_id
+                    ? reservar(c.id)
+                    : delete(c.reservation_id, c.id);
+                  $event.stopPropagation();
+                "
+              >
   {{ c.reservation_id ? 'Cancelar' : 'Reservar' }}
 </button>
                 <!--
@@ -87,16 +87,20 @@
 
           <!-- Fila expandible (alumnos) -->
           <tr *ngIf="state.claseSeleccionadaId === c.id && state.mostrarTablaAlumnos">
-  <td colspan="5" class="p-0">
-    <div *ngIf="state.cargandoAlumnos" class="text-blue-600 p-2">
-      Cargando alumnos…
-    </div>
-    <div *ngIf="state.errorAlumnos" class="text-red-600 p-2">
-      {{ state.errorAlumnos }}
-    </div>
+<td colspan="7" class=" align-top">
+  <div *ngIf="state.cargandoAlumnos" class="text-blue-600 p-2 text-center">
+    Cargando alumnos…
+  </div>
+  <div *ngIf="state.errorAlumnos" class="text-red-600 p-2 text-center">
+    {{ state.errorAlumnos }}
+  </div>
 
-    <ng-container *ngIf="!state.cargandoAlumnos && !state.errorAlumnos">
-      <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-3 p-4 bg-yellow-200 rounded-lg shadow-inner">
+  <ng-container *ngIf="!state.cargandoAlumnos && !state.errorAlumnos">
+    <!-- 🔹 este div ocupa el 100% del ancho del td -->
+    <div class="flex justify-center items-center w-full h-full">
+  <div
+     class="w-full h-full grid grid-cols-5 sm:grid-cols-4 md:grid-cols-5 gap-3 p-2 bg-black hover:[background-color:rgba(77,76,76,0.47)] rounded-lg shadow-inner transition-all duration-300"
+  >
         <ng-container *ngFor="let slot of [].constructor(c.aforo_clase); let i = index">
           <div
             class="relative flex flex-col items-center justify-center text-center h-16 sm:h-20 rounded-lg font-semibold transition-all duration-200 overflow-hidden"
@@ -105,16 +109,16 @@
               'bg-white text-gray-700 border border-gray-300 shadow-sm hover:bg-green-100': !state.alumnos[i]
             }"
           >
-           <ng-container *ngIf="state.alumnos[i]; else libreSlot">
-          <img
-            [src]="state.alumnos[i].avatar || 'assets/default-avatar.png'"
-            alt="Avatar"
-            class="w-12 h-12 rounded-full object-cover mb-1"
-          />
-          <span class="text-xs text-white truncate">
-            {{ state.alumnos[i].alumno_nombre }}
-          </span>
-          </ng-container>
+            <ng-container *ngIf="state.alumnos[i]; else libreSlot">
+              <img
+                [src]="getAvatar(state.alumnos[i])"
+                alt="Avatar"
+                class="w-12 h-12 rounded-full object-cover mb-1"
+              />
+              <span class="text-xs text-white truncate">
+                {{ state.alumnos[i].alumno_nombre }}
+              </span>
+            </ng-container>
 
             <ng-template #libreSlot>
               <span class="text-gray-400 text-sm">Libre</span>
@@ -122,9 +126,9 @@
           </div>
         </ng-container>
       </div>
-    </ng-container> <!-- ✅ AHORA SÍ está cerrado correctamente -->
- 
-          </td>
+    </div>
+  </ng-container>
+</td>
         </tr>
         </ng-container>
       </tbody>

@@ -1,93 +1,51 @@
 /* ====== LAYOUT & FONDO DEL SECTION ====== */
 :host section{
   position: relative;
-
-  /* 🔧 FIX: no recortar el contenido */
   overflow: visible !important;
-
-  /* 🔧 FIX: no limites la altura al 40% que viene del html; deja crecer */
-  height: auto !important;
-  min-height: 70vh;              /* da aire cuando no hay filas */
-
-  /* tu efecto de fondo */
+  height:100%;
+  min-height: 70vh;               
   background-size: 200% 200%;
-  animation: gradientShift 12s ease-in-out infinite;
 
-  border: 1px solid rgba(0,0,0,.06);
 }
 
-/* opcional: algo de separación para que no quede pegado */
-:host section{ margin-top: 1rem; margin-bottom: 2rem; }
 
-@keyframes gradientShift{
-  0%{background-position:0% 50%}
-  50%{background-position:100% 50%}
-  100%{background-position:0% 50%}
-}
 
 /* Halo suave en el borde superior del card */
-:host section::before{
-  content:"";
-  position:absolute; inset:-40% -40% auto -40%;
-  height:140px;
-  background:radial-gradient(600px 120px at 50% 100% ,rgba(255,255,255,.25),transparent 70%);
-  pointer-events:none;
-}
-@keyframes gradientShift{
-  0%{background-position:0% 50%}
-  50%{background-position:100% 50%}
-  100%{background-position:0% 50%}
-}
 
-/* Halo suave en el borde superior del card */
-:host section::before{
-  content:"";
-  position:absolute; inset:-40% -40% auto -40%;
-  height:140px;
-  background:radial-gradient(600px 120px at 50% 100% ,rgba(255,255,255,.25),transparent 70%);
-  pointer-events:none;
-}
+
 
 /* ====== TÍTULO ====== */
 :host h2{
-  background:linear-gradient(90deg,#065f46,#10b981,#2563eb);
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
+  color:#2563eb;
   letter-spacing:.4px;
-  text-shadow:0 2px 10px rgba(0,0,0,.18);
+  text-shadow:0 2px 10px rgba(240, 244, 11, 0.18);
 }
 
 /* ====== BOTONES DE DÍAS ====== */
 :host .flex.flex-wrap.justify-center.gap-3.mb-6 button{
+  color:#000;
+  background-color: rgb(96, 222, 234);
   position:relative;
-  border-radius:14px;
+  border-radius:0.3rem;
   font-weight:800;
   letter-spacing:.3px;
-  box-shadow:0 10px 18px rgba(16,185,129,.25);
+  box-shadow:0 10px 18px rgba(240, 244, 11, 0.18);
   transition:transform .15s ease, box-shadow .2s ease, filter .2s ease, background-color .2s ease;
   outline:0;
 }
-:host .flex.flex-wrap.justify-center.gap-3.mb-6 button:hover{
-  transform:translateY(-2px) scale(1.03);
-  box-shadow:0 14px 26px rgba(16,185,129,.32);
+:host .flex.flex-wrap.justify-center.gap-3.mb-6 button:hover {
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 8px 16px rgba(0,0,0,0.2);
 }
-:host .flex.flex-wrap.justify-center.gap-3.mb-6 button:active{ transform:none }
-:host .flex.flex-wrap.justify-center.gap-3.mb-6 button:focus-visible{
-  box-shadow:0 0 0 3px rgba(59,130,246,.5), 0 10px 18px rgba(16,185,129,.25);
-}
-
-/* Estado ACTIVO del día seleccionado (usa .dia-activo desde TS si quieres marcarlo) */
-:host .dia-activo{
-  background:#059669 !important;
-  color:#fff;
-  box-shadow:0 12px 24px rgba(5,150,105,.45) !important;
-}
-
 /* ====== TABLA ====== */
-:host table{
-  border-radius:12px;
-  border:1px solid rgba(0,0,0,.06);
-  overflow:hidden;
+:host table {
+  width: 100%;
+  overflow: visible;
+  border-collapse: separate; 
+  border-spacing: 0;          /* 👈 evita huecos entre celdas */
+  border: 1px solid rgba(72, 72, 72, 0.8); /* 👈 borde blanco elegante */
+  border-radius: 8px;
+  overflow: hidden; /* 🔹 evita doble borde */
 }
 
 /* Cabecera sticky + blur */
@@ -96,28 +54,36 @@
   backdrop-filter:blur(8px);
   -webkit-backdrop-filter:blur(8px);
   box-shadow:0 2px 10px rgba(0,0,0,.08);
+  
 }
 :host thead th{
   font-weight:800;
-  color:#0f172a;
+  color:rgb(96, 222, 234);
   letter-spacing:.2px;
   white-space:nowrap;
 }
-
-/* Filas zebra + hover elegante */
-:host tbody tr:nth-child(odd){ background:#fdfcf8; }
-:host tbody tr:nth-child(even){ background:#fafafa; }
+:host table td,
+:host table th {
+  padding-top: 1.2rem;     /* 4px */
+  padding-bottom: 1.2rem;  /* 4px */
+  line-height: 4.5;/* centra el contenido verticalmente */
+}
+/* Da espacio solo a la primera celda (y cabecera) de cada fila */
+:host table td:first-child,
+:host table th:first-child {
+  padding-left: 1rem; /* 🔹 puedes probar 0.75rem o 1.25rem */
+}
 :host tbody tr{
   transition:background-color .15s ease, transform .08s ease;
 }
 :host tbody tr:hover{
-  background:#bbf7d0; /* green-200 */
+  background:rgba(77, 76, 76, 0.473);; /* green-200 */
   transform:translateY(-1px);
 }
 
 /* Celdas y divisores suaves */
 :host td, :host th{
-  border-bottom:1px dashed rgba(0,0,0,.06);
+  border-bottom:1px solid rgba(91, 88, 88, 0.8);
 }
 
 /* ====== BADGES / ESTADOS ====== */
@@ -176,7 +142,7 @@
 }
 :host table .odd\:bg-white:hover,
 :host table .even\:bg-gray-50:hover{
-  background:#ecfccb; /* lime-100 */
+  background:#e30303; /* lime-100 */
 }
 
 /* ====== EMPTY STATE ====== */

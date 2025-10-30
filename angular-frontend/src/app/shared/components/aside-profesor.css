@@ -24,6 +24,7 @@ aside button {
   color: rgb(7, 3, 248); /* 👈 Siempre negro */
   background: rgb(0, 0, 0); /* opcional, si los quieres con fondo claro */
   pointer-events: auto;
+  text-shadow:0 2px 10px rgba(240, 244, 11, 0.18);
 }
 
 /* 💡 Esto asegura que aunque el aside cambie de color,
@@ -66,6 +67,7 @@ aside a {
   text-decoration: none;
   color: rgb(96, 222, 234);
   transition: all 0.25s ease;
+
 }
 
 /* Hover general */
