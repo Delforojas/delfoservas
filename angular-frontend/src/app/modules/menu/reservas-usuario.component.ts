@@ -22,6 +22,7 @@ import { ReservaUsuarioDto } from '@shared/interfaces/reservaUsuarioDto.interfac
   standalone: true,
   imports: [CommonModule, RouterModule],
   templateUrl: 'reservas-usuario.html',
+  styleUrl: './reservas-usuario.css'
 })
 export class UsuarioReservasComponent implements OnInit {
   state: UsuarioReservasState = createInitialUsuarioReservasState();

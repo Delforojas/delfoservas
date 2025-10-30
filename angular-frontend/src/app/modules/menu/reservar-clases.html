@@ -1,61 +1,50 @@
-<section class="h-[40%] p-4 sm:p-6 backdrop-blur shadow ">
-  <h2 class="text-xl sm:text-2xl font-bold text-center mb-4">Reservar Clases</h2>
+<section >
+
+  <h2>Reservar Clases</h2>
 
   <!-- Botones de días -->
-  <div class="flex flex-wrap justify-center gap-3 mb-6">
-    <button class="w-14 h-14 sm:w-16 sm:h-16 bg-green-400 rounded shadow hover:bg-green-300" (click)="toggleTabla('L')">L</button>
-    <button class="w-14 h-14 sm:w-16 sm:h-16 bg-green-400 rounded shadow hover:bg-green-300" (click)="toggleTabla('M')">M</button>
-    <button class="w-14 h-14 sm:w-16 sm:h-16 bg-green-400 rounded shadow hover:bg-green-300" (click)="toggleTabla('X')">X</button>
-    <button class="w-14 h-14 sm:w-16 sm:h-16 bg-green-400 rounded shadow hover:bg-green-300" (click)="toggleTabla('J')">J</button>
-    <button class="w-14 h-14 sm:w-16 sm:h-16 bg-green-400 rounded shadow hover:bg-green-300" (click)="toggleTabla('V')">V</button>
+  <div class="days">
+    <button (click)="toggleTabla('L')">L</button>
+    <button (click)="toggleTabla('M')">M</button>
+    <button (click)="toggleTabla('X')">X</button>
+    <button (click)="toggleTabla('J')">J</button>
+    <button (click)="toggleTabla('V')">V</button>
   </div>
 
-  <!-- Tabla -->
-  <div class="w-full h-full ">
-    <table *ngIf="clasesDelDia.length > 0"
-           class="w-full table-fixed  overflow-hidden">
-      <thead class="shadow bg-black  ">
-        <tr class="text-left ">
-          <th >Nombre</th>
-          <th >Fecha</th>
-          <th >Hora</th>
-          <th >Profesor</th>
-          <th >Sala</th>
-          <th >Plazas</th>
-          <th ></th>
+  <!-- Tabla principal -->
+  <div class="tabla-wrapper">
+    <table *ngIf="clasesDelDia.length > 0">
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>Fecha</th>
+          <th>Hora</th>
+          <th>Profesor</th>
+          <th>Sala</th>
+          <th>Plazas</th>
+          <th></th>
         </tr>
       </thead>
 
       <tbody>
         <ng-container *ngFor="let c of clasesDelDia; trackBy: trackByClase">
           <!-- Fila principal -->
-          <tr 
-              (click)="toggleTablaAlumnos(c.id)">
-            <td class="">{{ c.nombre }}</td>
-            <td class=>{{ c.fecha  | date:'dd/MM/yy' }}</td>
-            <td class=>{{ c.hora }}</td>
-
-            <!-- Ocultas en móvil -->
-            <td class="">
-              {{ c.profesor ?? c['teacher'] ?? '-' }}
+          <tr (click)="toggleTablaAlumnos(c.id)">
+            <td>{{ c.nombre }}</td>
+            <td>{{ c.fecha | date: 'dd/MM/yy' }}</td>
+            <td>{{ c.hora }}</td>
+            <td>{{ c.profesor ?? c['teacher'] ?? '-' }}</td>
+            <td>{{ c.sala ?? c['room'] ?? '-' }}</td>
+            <td>
+              {{ c.plazas }} / {{ c.aforo_clase }}
+              <span *ngIf="c.completa" class="badge-completa">Completa</span>
             </td>
-            <td class="">
-              {{ c.sala ?? c['room'] ?? '-' }}
-            </td>
-
-            <td class="">
-             {{ c.plazas }} / {{ c.aforo_clase }}
-              <span *ngIf="c.completa" class="text-red-600 font-semibold ml-1">Completa</span>
-            </td>
-
-            <td class="">
-              <div class="flex justify-center">
-               <button
-                class="rounded text-white text-[11px] sm:text-xs transition
-                      disabled:opacity-60 disabled:cursor-not-allowed"
+            <td>
+              <button
+                class="reserva"
                 [ngClass]="{
-                  'bg-green-600 hover:bg-green-700': !c.reservation_id,
-                  'bg-red-600 hover:bg-red-700': !!c.reservation_id
+                  'bg-green': !c.reservation_id,
+                  'bg-red': !!c.reservation_id
                 }"
                 (click)="
                   !c.reservation_id
@@ -64,77 +53,59 @@
                   $event.stopPropagation();
                 "
               >
-  {{ c.reservation_id ? 'Cancelar' : 'Reservar' }}
-</button>
-                <!--
-                <button
-                  class="px-2 py-1 sm:px-3 sm:py-1 rounded text-white text-[11px] sm:text-xs transition
-                        disabled:opacity-60 disabled:cursor-not-allowed"
-                  [ngClass]="{
-                    'bg-green-600 hover:bg-green-700': !c.completa && !c.reservation_id,
-                    'bg-yellow-500 hover:bg-yellow-600': !!c.reservation_id,
-                    'bg-blue-600 hover:bg-blue-700': c.completa && !c.reservation_id
-                  }"
-                  [disabled]="(c.completa && !c.reservation_id) || reservandoId === c.id"
-                  (click)="c.reservation_id ? null : reservar(c.id); $event.stopPropagation()">
-                  {{ reservandoId === c.id 
-                      ? 'Reservando…' 
-                      : (c.reservation_id ? 'Reservada' : (c.completa ? 'Completa' : 'Reservar')) }}
-                </button>-->
-              </div>
+                {{ c.reservation_id ? 'Cancelar' : 'Reservar' }}
+              </button>
             </td>
           </tr>
 
           <!-- Fila expandible (alumnos) -->
           <tr *ngIf="state.claseSeleccionadaId === c.id && state.mostrarTablaAlumnos">
-<td colspan="7" class=" align-top">
-  <div *ngIf="state.cargandoAlumnos" class="text-blue-600 p-2 text-center">
-    Cargando alumnos…
-  </div>
-  <div *ngIf="state.errorAlumnos" class="text-red-600 p-2 text-center">
-    {{ state.errorAlumnos }}
-  </div>
+            <td colspan="7" class="align-top">
+              <div *ngIf="state.cargandoAlumnos" class="loading">
+                Cargando alumnos…
+              </div>
 
-  <ng-container *ngIf="!state.cargandoAlumnos && !state.errorAlumnos">
-    <!-- 🔹 este div ocupa el 100% del ancho del td -->
-    <div class="flex justify-center items-center w-full h-full">
-  <div
-     class="w-full h-full grid grid-cols-5 sm:grid-cols-4 md:grid-cols-5 gap-3 p-2 bg-black hover:[background-color:rgba(77,76,76,0.47)] rounded-lg shadow-inner transition-all duration-300"
-  >
-        <ng-container *ngFor="let slot of [].constructor(c.aforo_clase); let i = index">
-          <div
-            class="relative flex flex-col items-center justify-center text-center h-16 sm:h-20 rounded-lg font-semibold transition-all duration-200 overflow-hidden"
-            [ngClass]="{
-              'bg-green-500 text-white shadow-lg': state.alumnos[i],
-              'bg-white text-gray-700 border border-gray-300 shadow-sm hover:bg-green-100': !state.alumnos[i]
-            }"
-          >
-            <ng-container *ngIf="state.alumnos[i]; else libreSlot">
-              <img
-                [src]="getAvatar(state.alumnos[i])"
-                alt="Avatar"
-                class="w-12 h-12 rounded-full object-cover mb-1"
-              />
-              <span class="text-xs text-white truncate">
-                {{ state.alumnos[i].alumno_nombre }}
-              </span>
-            </ng-container>
+              <div *ngIf="state.errorAlumnos" class="error">
+                {{ state.errorAlumnos }}
+              </div>
 
-            <ng-template #libreSlot>
-              <span class="text-gray-400 text-sm">Libre</span>
-            </ng-template>
-          </div>
-        </ng-container>
-      </div>
-    </div>
-  </ng-container>
-</td>
-        </tr>
+              <ng-container *ngIf="!state.cargandoAlumnos && !state.errorAlumnos">
+              <div class="alumnos-wrapper">
+                <div class="alumnos-grid">
+                  <ng-container *ngFor="let slot of [].constructor(c.aforo_clase); let i = index">
+                    <div
+                      class="alumno-slot"
+                      [ngClass]="{
+                        ocupado: state.alumnos[i],
+                        libre: !state.alumnos[i]
+                      }"
+                    >
+                      <ng-container *ngIf="state.alumnos[i]; else libreSlot">
+                        <img
+                          [src]="getAvatar(state.alumnos[i])"
+                          alt="Avatar"
+                          class="avatar"
+                        />
+                        <span class="nombre">{{ state.alumnos[i].alumno_nombre }}</span>
+                      </ng-container>
+
+                      <ng-template #libreSlot>
+                        <span class="libre">Libre</span>
+                      </ng-template>
+                    </div>
+                  </ng-container>
+                </div>
+              </div> <!-- 🔹 este div ocupa el 100% del ancho del td -->
+                              
+              </ng-container>
+            </td>
+          </tr>
         </ng-container>
       </tbody>
     </table>
 
-    <div *ngIf="clasesDelDia.length === 0" class="text-gray-500 text-sm text-center py-6">
+    <!-- Estado vacío -->
+    <div *ngIf="clasesDelDia.length === 0" class="empty">
       No hay clases para este día.
     </div>
   </div>

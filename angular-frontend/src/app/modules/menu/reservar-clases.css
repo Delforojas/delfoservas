@@ -1,253 +1,300 @@
-/* ====== LAYOUT & FONDO DEL SECTION ====== */
-:host section{
+/* ====== SECTION GENERAL ====== */
+:host section {
   position: relative;
-  overflow: visible !important;
-  height:100%;
-  min-height: 70vh;               
-  background-size: 200% 200%;
-
+  height: 100%;
+  min-height: 70vh;
+  padding: 1rem 1.5rem;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+  border-radius: 10px;
+  color: white;
+  overflow: hidden;
 }
 
-
-
-/* Halo suave en el borde superior del card */
-
-
-
 /* ====== TÍTULO ====== */
-:host h2{
-  color:#2563eb;
-  letter-spacing:.4px;
-  text-shadow:0 2px 10px rgba(240, 244, 11, 0.18);
+:host h2 {
+  margin-top: 2rem;
+  color: #2563eb;
+  letter-spacing: .4px;
+  text-shadow: 0 2px 10px rgba(240, 244, 11, 0.18);
+  text-align: center;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
 }
 
 /* ====== BOTONES DE DÍAS ====== */
-:host .flex.flex-wrap.justify-center.gap-3.mb-6 button{
-  color:#000;
+:host .days {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+:host .days button {
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 0.5rem;
   background-color: rgb(96, 222, 234);
-  position:relative;
-  border-radius:0.3rem;
-  font-weight:800;
-  letter-spacing:.3px;
-  box-shadow:0 10px 18px rgba(240, 244, 11, 0.18);
-  transition:transform .15s ease, box-shadow .2s ease, filter .2s ease, background-color .2s ease;
-  outline:0;
+  color: #000;
+  font-weight: 800;
+  font-size: 1.1rem;
+  letter-spacing: 0.3px;
+  box-shadow: 0 8px 16px rgba(240, 244, 11, 0.18);
+  transition: transform 0.15s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+  outline: 0;
+  border: none;
+  cursor: pointer;
 }
-:host .flex.flex-wrap.justify-center.gap-3.mb-6 button:hover {
-  transform: translateY(-2px) scale(1.03);
-  box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+
+:host .days button:hover {
+  background-color: rgb(162, 255, 246);
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
 }
-/* ====== TABLA ====== */
+
+/* ====== TABLA PRINCIPAL ====== */
 :host table {
   width: 100%;
-  overflow: visible;
-  border-collapse: separate; 
-  border-spacing: 0;          /* 👈 evita huecos entre celdas */
-  border: 1px solid rgba(72, 72, 72, 0.8); /* 👈 borde blanco elegante */
+  border-collapse: separate;
+  border-spacing: 0;
+  border: 1px solid rgba(72, 72, 72, 0.8);
   border-radius: 8px;
-  overflow: hidden; /* 🔹 evita doble borde */
-}
-
-/* Cabecera sticky + blur */
-:host thead{
-  position:sticky; top:0; z-index:2;
-  backdrop-filter:blur(8px);
-  -webkit-backdrop-filter:blur(8px);
-  box-shadow:0 2px 10px rgba(0,0,0,.08);
-  
-}
-:host thead th{
-  font-weight:800;
-  color:rgb(96, 222, 234);
-  letter-spacing:.2px;
-  white-space:nowrap;
-}
-:host table td,
-:host table th {
-  padding-top: 1.2rem;     /* 4px */
-  padding-bottom: 1.2rem;  /* 4px */
-  line-height: 4.5;/* centra el contenido verticalmente */
-}
-/* Da espacio solo a la primera celda (y cabecera) de cada fila */
-:host table td:first-child,
-:host table th:first-child {
-  padding-left: 1rem; /* 🔹 puedes probar 0.75rem o 1.25rem */
-}
-:host tbody tr{
-  transition:background-color .15s ease, transform .08s ease;
-}
-:host tbody tr:hover{
-  background:rgba(77, 76, 76, 0.473);; /* green-200 */
-  transform:translateY(-1px);
-}
-
-/* Celdas y divisores suaves */
-:host td, :host th{
-  border-bottom:1px solid rgba(91, 88, 88, 0.8);
-}
-
-/* ====== BADGES / ESTADOS ====== */
-:host .badge-completa{
-  display:inline-flex; align-items:center; gap:.3rem;
-  padding:.1rem .45rem; border-radius:999px;
-  background:#fee2e2; color:#b91c1c; font-weight:700; font-size:.75rem;
-}
-:host .badge-free{
-  display:inline-flex; align-items:center; gap:.3rem;
-  padding:.1rem .45rem; border-radius:999px;
-  background:#dcfce7; color:#065f46; font-weight:700; font-size:.75rem;
-}
-
-/* ====== BOTÓN RESERVAR/CANCELAR ====== */
-:host td .flex button{
-  font-weight:800; letter-spacing:.25px;
-  min-width:92px;
-  box-shadow:0 8px 16px rgba(0,0,0,.16);
-  transition:transform .1s ease, box-shadow .2s ease, filter .15s ease;
-}
-:host td .flex button:hover{
-  transform:translateY(-1px);
-  box-shadow:0 12px 22px rgba(0,0,0,.24);
-}
-:host td .flex button:active{ transform:none }
-
-/* Loading / deshabilitado */
-:host td .flex button[disabled]{
-  position:relative;
-  filter:grayscale(.1) brightness(.96);
-}
-:host td .flex button[disabled]::after{
-  content:"";
-  position:absolute; inset:0;
-  background-image:linear-gradient(120deg,transparent, rgba(255,255,255,.35), transparent);
-  animation:shine 1.2s linear infinite;
-}
-@keyframes shine{
-  0%{transform:translateX(-100%)}
-  100%{transform:translateX(100%)}
-}
-
-/* ====== PANEL ALUMNOS (fila expandible) ====== */
-:host tr[ng-reflect-ng-if="true"] + tr td > div,
-:host tr + tr:has(> td > div){
-  animation:slideIn .22s ease-out both;
-}
-@keyframes slideIn{
-  from{opacity:0; transform:translateY(-4px)}
-  to{opacity:1; transform:translateY(0)}
-}
-:host table .odd\:bg-white,
-:host table .even\:bg-gray-50{
-  transition:background-color .12s ease;
-}
-:host table .odd\:bg-white:hover,
-:host table .even\:bg-gray-50:hover{
-  background:#e30303; /* lime-100 */
-}
-
-/* ====== EMPTY STATE ====== */
-:host .text-gray-500.text-sm.text-center.py-6{
-  animation:fadeIn .25s ease;
-}
-@keyframes fadeIn{from{opacity:0}to{opacity:1}}
-
-/* ====== RESPONSIVE ====== */
-@media (max-width:640px){
-  :host section{ border-radius:14px; }
-  :host thead th{ font-size:.9rem; }
-  :host td, :host th{ padding-left:.5rem !important; padding-right:.5rem !important; }
-}
-
-/* ====== TABLA DE ALUMNOS ====== */
-:host table.w-full.text-xs.bg-yellow-200 {
-  width: 100%;
-  border-radius: 8px;
-  border-collapse: collapse;
   overflow: hidden;
-  background: linear-gradient(180deg, #fef9c3 0%, #fef08a 100%);
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
-  transition: all 0.3s ease;
+  background-color: #000;
 }
 
-/* Filas zebra + hover suave */
-:host tr.odd\:bg-white,
-:host tr.even\:bg-gray-50 {
-  transition: background-color 0.2s ease, transform 0.15s ease;
+/* Cabecera */
+:host thead {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: #000;
+  backdrop-filter: blur(6px);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
 }
-:host tr.odd\:bg-white:hover,
-:host tr.even\:bg-gray-50:hover {
-  background-color: #bbf7d0; /* verde claro */
-  transform: translateY(-1px);
+
+:host thead th {
+  font-weight: 800;
+  color: rgb(96, 222, 234);
+  padding: 1rem;
+  text-align: left;
+  white-space: nowrap;
 }
 
 /* Celdas */
-:host td.p-0 {
-  border-bottom: 1px dashed rgba(0, 0, 0, 0.05);
+:host td,
+:host th {
+  padding: 0.9rem 1rem;
+  border-bottom: 1px solid rgba(91, 88, 88, 0.8);
+  font-size: 0.95rem;
+  transition: background-color 0.15s ease, transform 0.1s ease;
 }
 
-/* ====== CONTENEDOR INTERIOR ====== */
-:host div.flex.justify-between.items-center {
-  background: rgba(255, 255, 255, 0.6);
-  border-radius: 6px;
-  padding: 0.5rem 0.75rem;
-  transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
-}
-:host div.flex.justify-between.items-center:hover {
-  background-color: #86efac; /* verde-300 */
-  color: #000;
+:host tbody tr:hover {
+  background: rgba(77, 76, 76, 0.47);
   transform: translateY(-1px);
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
 }
 
-/* Nombre del alumno */
-:host span.whitespace-nowrap {
-  font-weight: 600;
-  font-size: 0.85rem;
-  color: #374151;
-  letter-spacing: 0.2px;
-  transition: color 0.2s ease;
-}
-:host div.flex.justify-between.items-center:hover span.whitespace-nowrap {
-  color: #065f46; /* verde-800 */
-}
-
-/* ====== BOTÓN (derecha de cada fila) ====== */
-:host div.flex.justify-between.items-center button {
-  background: linear-gradient(90deg, #10b981, #059669);
-  color: #fff;
-  border: none;
-  border-radius: 6px;
-  padding: 0.25rem 0.6rem;
-  font-weight: 600;
+/* ====== BADGES ====== */
+:host .badge-completa {
+  background: #fee2e2;
+  color: #b91c1c;
+  font-weight: 700;
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
   font-size: 0.75rem;
-  letter-spacing: 0.3px;
+}
+
+/* ====== BOTONES RESERVAR / CANCELAR ====== */
+:host button.reserva {
+  min-width: 95px;
+  border-radius: 6px;
+  padding: 0.4rem 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.25px;
+  color: white;
   cursor: pointer;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-  transition: all 0.25s ease;
+  border: none;
+  transition: transform 0.1s ease, box-shadow 0.2s ease, background-color 0.2s ease;
 }
 
-:host div.flex.justify-between.items-center button:hover {
-  background: linear-gradient(90deg, #34d399, #10b981);
+:host button.reserva.bg-green {
+  background-color: #16a34a;
+}
+:host button.reserva.bg-green:hover {
+  background-color: #22c55e;
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.35);
 }
 
-:host div.flex.justify-between.items-center button:active {
-  transform: translateY(0);
-  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.25);
+:host button.reserva.bg-red {
+  background-color: #dc2626;
+}
+:host button.reserva.bg-red:hover {
+  background-color: #ef4444;
+  transform: translateY(-1px);
 }
 
-/* ====== ANIMACIÓN DE ENTRADA ====== */
-@keyframes fadeSlideIn {
+/* ====== PANEL ALUMNOS (expandible) ====== */
+:host .alumnos-panel {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+  gap: 0.75rem;
+  padding: 1rem;
+  background: #000;
+  border-radius: 8px;
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.4);
+  animation: fadeIn 0.3s ease-out;
+}
+
+:host .alumno-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 70px;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  text-align: center;
+  transition: all 0.2s ease;
+  overflow: hidden;
+}
+
+:host .alumno-card.ocupado {
+  background-color: #16a34a;
+  color: white;
+}
+
+:host .alumno-card.libre {
+  background-color: #fff;
+  color: #444;
+  border: 1px solid rgba(128, 128, 128, 0.3);
+}
+
+:host .alumno-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
+}
+
+:host .alumno-card img {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 0.25rem;
+}
+
+/* ====== ANIMACIONES ====== */
+@keyframes fadeIn {
   from {
     opacity: 0;
-    transform: translateY(-6px);
+    transform: translateY(-4px);
   }
   to {
     opacity: 1;
     transform: translateY(0);
   }
 }
-:host table.w-full.text-xs.bg-yellow-200 {
-  animation: fadeSlideIn 0.25s ease forwards;
+
+/* ====== ESTADO VACÍO ====== */
+:host .empty {
+  color: #9ca3af;
+  text-align: center;
+  padding: 1.5rem 0;
+  font-size: 0.95rem;
+}
+
+/* Contenedor exterior centrado */
+:host .alumnos-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+/* Cuadrícula principal */
+:host .alumnos-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0.75rem;
+  width: 100%;
+  height: 100%;
+  padding: 0.5rem;
+  background-color: #000;
+  border-radius: 0.5rem;
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.5);
+  transition: all 0.3s ease;
+}
+
+:host .alumnos-grid:hover {
+  background-color: rgba(77, 76, 76, 0.47);
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  :host .alumnos-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* Cada "slot" */
+:host .alumno-slot {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  height: 5rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  overflow: hidden;
+  border: 1px solid transparent;
+}
+
+/* Slot ocupado */
+:host .alumno-slot.ocupado {
+  background-color: #22c55e; /* bg-green-500 */
+  color: #fff;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+}
+
+/* Slot libre */
+:host .alumno-slot.libre {
+  background-color: #fff;
+  color: #374151; /* gray-700 */
+  border: 1px solid #d1d5db; /* gray-300 */
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+:host .alumno-slot.libre:hover {
+  background-color: #d1fae5; /* green-100 */
+}
+
+/* Avatar */
+:host .avatar {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 9999px;
+  object-fit: cover;
+  margin-bottom: 0.25rem;
+}
+
+/* Nombre */
+:host .nombre {
+  font-size: 0.75rem;
+  color: #fff;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+/* Texto de slot libre */
+:host .libre {
+  color: #9ca3af;
+  font-size: 0.875rem;
 }
