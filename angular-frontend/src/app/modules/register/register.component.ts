@@ -15,7 +15,8 @@ import { showToast } from '../../shared/utils/test-messages';
   selector: 'app-register',
   templateUrl: './register.html',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, RouterModule]
+  imports: [ReactiveFormsModule, CommonModule, RouterModule],
+  styleUrl: './register.component.css'
 })
 export class RegisterComponent {
   form: FormGroup;

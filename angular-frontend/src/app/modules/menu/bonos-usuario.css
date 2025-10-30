@@ -6,7 +6,7 @@
 
 /* 🔹 Título */
 :host h2 {
- margin-top: 2rem;
+  margin-top: 2rem;
   color: #2563eb;
   letter-spacing: .4px;
   text-shadow: 0 2px 10px rgba(240, 244, 11, 0.18);
