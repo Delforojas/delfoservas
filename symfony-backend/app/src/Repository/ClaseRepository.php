@@ -139,15 +139,22 @@ SQL;
     {
         $conn = $this->getEntityManager()->getConnection();
 
-        $sql = '
-                SELECT
-                r.clase_id,
-                u.id           AS alumno_id,
-                u.nombre       AS alumno_nombre,
-                u.email        AS alumno_email
-                FROM reservation r
-                JOIN "user" u ON u.id = r.usuario_id
-                WHERE r.clase_id = :claseId ;';
+        
+    $sql = '
+        SELECT
+            r.clase_id,
+            u.id           AS alumno_id,
+            u.nombre       AS alumno_nombre,
+            u.email        AS alumno_email,
+            CASE
+                WHEN u.profile_image IS NOT NULL
+                    THEN CONCAT(\'/uploads/\', u.profile_image)
+                ELSE NULL
+            END AS avatar
+        FROM reservation r
+        JOIN "user" u ON u.id = r.usuario_id
+        WHERE r.clase_id = :claseId;
+    ';
 
         return $conn->fetchAllAssociative($sql, ['claseId' => $claseId]);
     }

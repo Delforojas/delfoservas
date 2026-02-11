@@ -18,6 +18,7 @@ import {
   standalone: true,
   imports: [CommonModule, RouterModule],
   templateUrl: 'pagos-usuario.html',
+  styleUrl: './pagos-usuario.css'
 })
 export class UsuarioPagosComponent implements OnInit{
   state: UsuarioPagosState = createInitialUsuarioPagosState();

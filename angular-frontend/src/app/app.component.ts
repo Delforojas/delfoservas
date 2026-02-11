@@ -16,7 +16,8 @@ import { ToastComponent } from "./shared/components/toast/toast.component";
    imports: [
     CommonModule,
     RouterModule,
-    ToastComponent
+    ToastComponent,
+    FooterComponent
 ],
   templateUrl: './app.component.html',
 })

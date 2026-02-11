@@ -1,0 +1,300 @@
+/* ====== SECTION GENERAL ====== */
+:host section {
+  position: relative;
+  height: 100%;
+  min-height: 70vh;
+  padding: 1rem 1.5rem;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+  border-radius: 10px;
+  color: white;
+  overflow: hidden;
+}
+
+/* ====== TÍTULO ====== */
+:host h2 {
+  margin-top: 2rem;
+  color: #2563eb;
+  letter-spacing: .4px;
+  text-shadow: 0 2px 10px rgba(240, 244, 11, 0.18);
+  text-align: center;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+}
+
+/* ====== BOTONES DE DÍAS ====== */
+:host .days {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+:host .days button {
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 0.5rem;
+  background-color: rgb(96, 222, 234);
+  color: #000;
+  font-weight: 800;
+  font-size: 1.1rem;
+  letter-spacing: 0.3px;
+  box-shadow: 0 8px 16px rgba(240, 244, 11, 0.18);
+  transition: transform 0.15s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+  outline: 0;
+  border: none;
+  cursor: pointer;
+}
+
+:host .days button:hover {
+  background-color: rgb(162, 255, 246);
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+}
+
+/* ====== TABLA PRINCIPAL ====== */
+:host table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  border: 1px solid rgba(72, 72, 72, 0.8);
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: #000;
+}
+
+/* Cabecera */
+:host thead {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: #000;
+  backdrop-filter: blur(6px);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+}
+
+:host thead th {
+  font-weight: 800;
+  color: rgb(96, 222, 234);
+  padding: 1rem;
+  text-align: left;
+  white-space: nowrap;
+}
+
+/* Celdas */
+:host td,
+:host th {
+  padding: 0.9rem 1rem;
+  border-bottom: 1px solid rgba(91, 88, 88, 0.8);
+  font-size: 0.95rem;
+  transition: background-color 0.15s ease, transform 0.1s ease;
+}
+
+:host tbody tr:hover {
+  background: rgba(77, 76, 76, 0.47);
+  transform: translateY(-1px);
+}
+
+/* ====== BADGES ====== */
+:host .badge-completa {
+  background: #fee2e2;
+  color: #b91c1c;
+  font-weight: 700;
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+}
+
+/* ====== BOTONES RESERVAR / CANCELAR ====== */
+:host button.reserva {
+  min-width: 95px;
+  border-radius: 6px;
+  padding: 0.4rem 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.25px;
+  color: white;
+  cursor: pointer;
+  border: none;
+  transition: transform 0.1s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+:host button.reserva.bg-green {
+  background-color: #16a34a;
+}
+:host button.reserva.bg-green:hover {
+  background-color: #22c55e;
+  transform: translateY(-1px);
+}
+
+:host button.reserva.bg-red {
+  background-color: #dc2626;
+}
+:host button.reserva.bg-red:hover {
+  background-color: #ef4444;
+  transform: translateY(-1px);
+}
+
+/* ====== PANEL ALUMNOS (expandible) ====== */
+:host .alumnos-panel {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+  gap: 0.75rem;
+  padding: 1rem;
+  background: #000;
+  border-radius: 8px;
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.4);
+  animation: fadeIn 0.3s ease-out;
+}
+
+:host .alumno-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 70px;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  text-align: center;
+  transition: all 0.2s ease;
+  overflow: hidden;
+}
+
+:host .alumno-card.ocupado {
+  background-color: #16a34a;
+  color: white;
+}
+
+:host .alumno-card.libre {
+  background-color: #fff;
+  color: #444;
+  border: 1px solid rgba(128, 128, 128, 0.3);
+}
+
+:host .alumno-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
+}
+
+:host .alumno-card img {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 0.25rem;
+}
+
+/* ====== ANIMACIONES ====== */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ====== ESTADO VACÍO ====== */
+:host .empty {
+  color: #9ca3af;
+  text-align: center;
+  padding: 1.5rem 0;
+  font-size: 0.95rem;
+}
+
+/* Contenedor exterior centrado */
+:host .alumnos-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+/* Cuadrícula principal */
+:host .alumnos-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0.75rem;
+  width: 100%;
+  height: 100%;
+  padding: 0.5rem;
+  background-color: #000;
+  border-radius: 0.5rem;
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.5);
+  transition: all 0.3s ease;
+}
+
+:host .alumnos-grid:hover {
+  background-color: rgba(77, 76, 76, 0.47);
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  :host .alumnos-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* Cada "slot" */
+:host .alumno-slot {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  height: 5rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  overflow: hidden;
+  border: 1px solid transparent;
+}
+
+/* Slot ocupado */
+:host .alumno-slot.ocupado {
+  background-color: #22c55e; /* bg-green-500 */
+  color: #fff;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+}
+
+/* Slot libre */
+:host .alumno-slot.libre {
+  background-color: #fff;
+  color: #374151; /* gray-700 */
+  border: 1px solid #d1d5db; /* gray-300 */
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+:host .alumno-slot.libre:hover {
+  background-color: #d1fae5; /* green-100 */
+}
+
+/* Avatar */
+:host .avatar {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 9999px;
+  object-fit: cover;
+  margin-bottom: 0.25rem;
+}
+
+/* Nombre */
+:host .nombre {
+  font-size: 0.75rem;
+  color: #fff;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+/* Texto de slot libre */
+:host .libre {
+  color: #9ca3af;
+  font-size: 0.875rem;
+}

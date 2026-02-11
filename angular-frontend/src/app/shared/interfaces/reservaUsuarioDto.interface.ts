@@ -9,4 +9,5 @@ export interface ReservaUsuarioDto {
   hora: string; 
   tipoclase_nombre: string;
   bono_estado: 'activo' | 'consumido' | string; 
+  avatar?: string | null;
 }

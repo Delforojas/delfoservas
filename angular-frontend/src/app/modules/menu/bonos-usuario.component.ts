@@ -22,6 +22,7 @@ import { UsuarioBonosContext } from '../../shared/utils/context-types';
     standalone: true,
     templateUrl: './bonos-usuario.html',
     imports: [CommonModule, RouterModule],
+    styleUrl: './bonos-usuario.css'
 })
 export class UsuarioBonosComponent implements OnInit, UsuarioBonosContext {
   state: UsuarioBonosState = createInitialUsuarioBonosState();

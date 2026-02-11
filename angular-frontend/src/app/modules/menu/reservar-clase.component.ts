@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { environment } from 'app/environments/environments';
 
 import { ClaseService } from '../../shared/services/clases.service';
 import { ReservationService } from '../../shared/services/reservation.service';
@@ -26,12 +27,14 @@ import {
   Dia,
   createInitialClasesReservaState,
 } from '../../shared/models/reservas.models';
+import { Alumno } from '@shared/interfaces/alumno.interface';
 
 @Component({
   selector: 'app-reservar-clases',
   standalone: true,
   imports: [CommonModule],
   templateUrl: './reservar-clases.html',
+  styleUrl: './reservar-clases.css'
 })
 export class ClasesReservaComponent implements OnInit{
   state: ClasesReservaState = createInitialClasesReservaState();
@@ -77,6 +80,7 @@ export class ClasesReservaComponent implements OnInit{
 
   cargarAlumnos(id: number): void {
     loadAlumnosDeClase(this, id);
+    
   }
 
   reservar(id: number): void {
@@ -104,4 +108,16 @@ export class ClasesReservaComponent implements OnInit{
   trackByClase = (_: number, c: VistaClase) => {
     return c.id;
   };
+  getAvatar(alumno: any): string {
+  const avatar = alumno?.avatar;
+
+  // 🧱 Caso 1: no tiene avatar → usamos el de assets
+  if (!avatar) return 'assets/default-avatar.png';
+
+  // 🧱 Caso 2: ya viene con http:// o https:// → se usa tal cual
+  if (avatar.startsWith('http')) return avatar;
+
+  // 🧱 Caso 3: viene relativo (por ejemplo "/uploads/avatars/...") → lo completamos
+  return `${environment.base}/${avatar.replace(/^\/+/, '')}`;
+}
 }

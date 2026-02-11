@@ -155,3 +155,4 @@ export function deleteReserva(ctx: ReservarClaseContext, reservaId: number, clas
     },
   });
 }
+
