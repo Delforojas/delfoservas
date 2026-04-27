@@ -8,12 +8,13 @@ import { handleHttpError } from '../../shared/utils/http-error';
 import { showToast } from '../../shared/utils/test-messages';
 import { NavigationService } from '../../shared/services/navigation.service';
 import { HttpErrorResponse } from '@angular/common/http';
-
+import { HeaderComponent } from '../../shared/components/header.component';
+import { FooterComponent } from '../../shared/components/footer.compomonent';
 @Component({
  selector: 'app-login',
  standalone: true,
  templateUrl: './login.html',
- imports:[FormsModule, ReactiveFormsModule, RouterModule ],
+ imports:[FormsModule, ReactiveFormsModule, RouterModule ,HeaderComponent, FooterComponent ],
 
 
 })
