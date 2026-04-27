@@ -19,7 +19,7 @@ services:
       bash -c "
         until pg_isready -h db -U symfony -d symfony_db; do
           sleep 2;
-        done;s
+        done;
         
         if [ ! -f /var/www/app/vendor/autoload.php ]; then
           composer install;

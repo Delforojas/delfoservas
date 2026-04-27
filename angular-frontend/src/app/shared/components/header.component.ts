@@ -21,6 +21,11 @@ export class HeaderComponent implements OnInit {
       error: _ => this.user = null
     });
   }
+  isLoggedIn(): boolean {
+
+  return !!localStorage.getItem('token');
+
+}
   logout(): void {
     localStorage.removeItem('token');
     location.href = '/login';

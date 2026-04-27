@@ -12,7 +12,7 @@ import { UsuarioBonosComponent } from './modules/menu/bonos-usuario.component';
 import { UsuarioReservasComponent } from './modules/menu/reservas-usuario.component';
 import { UsuarioPagosComponent } from './modules/menu/pagos-usuario.component';
 import { ClasesReservaComponent } from './modules/menu/reservar-clase.component';
-
+import { DashboardLayoutComponent } from './layout/dashboard-layout/dashboard-layout';
 
 
 
@@ -23,7 +23,7 @@ export const routes: Routes = [
   {
 
     path: 'dashboard',
-    component: AppComponent,
+     component: DashboardLayoutComponent, 
     canActivate: [AuthGuard],
     children: [
       
